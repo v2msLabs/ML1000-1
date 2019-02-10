@@ -41,7 +41,7 @@ mainPalette = brewer.pal(8,"Dark2")
 
 ```{r global_options, include=FALSE}
 # make the images flow nicely
-knitr::opts_chunk$set(fig.pos = '!h')
+knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 ## Introduction
@@ -66,8 +66,8 @@ Column Name            | Column Description
 -----------------------| ------------------- 
 Date                   | Date of observation 
 Location               | Common name of the location of the weather station
-MinTemp                | Minimum temperature in degrees celsius
-MaxTemp                | Maximum temperature in degrees celsius
+MinTemp                | Minimum temperature in degrees Celsius
+MaxTemp                | Maximum temperature in degrees Celsius
 Rainfall               | Amount of rainfall recorded for the day in mm
 Evaporation            | So-called Class A pan evaporation (mm) in the 24 hours to 9am
 Sunshine               | Number of hours of bright sunshine in the day
@@ -81,8 +81,8 @@ Humidity9amHumidity    |Humidity (percent) at 9am
 Humidity3pmHumidity    | Humidity (percent) at 3pm
 Pressure9amAtmospheric | Pressure (hpa) reduced to mean sea level at 9am
 Pressure3pmAtmospheric | Pressure (hpa) reduced to mean sea level at 3pm
-Cloud9amFraction       | Area of sky obscured by cloud at 9am. This is measured in "oktas", which are a unit of eigths. It records how many eigths of the sky are obscured by cloud. A 0 measure indicates completely clear sky whilst an 8 indicates that it is completely overcast
-Cloud3pmFraction       | Area of sky obscured by cloud (in "oktas": eighths) at 3pm. See Cload9am for a description of the values
+Cloud9amFraction       | Area of sky obscured by cloud at 9am. This is measured in "oktas", which are a unit of eights. It records how many eights of the sky are obscured by cloud. A 0 measure indicates completely clear sky whilst an 8 indicates that it is completely overcast
+Cloud3pmFraction       | Area of sky obscured by cloud (in "oktas": eighths) at 3pm. See Cloud9am for a description of the values
 Temp9amTemperature     |Temperature (degrees C) at 9am
 Temp3pmTemperature     |Temperature (degrees C) at 3pm
 RainTodayBoolean       | Rainy today. 1 if precipitation (mm) in the 24 hours to 9am exceeds 1mm, otherwise 0
@@ -112,29 +112,50 @@ locations = read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
 # mapshot(map, file ="images/weatherStations.png")
 knitr::include_graphics("images/weatherStations.png")
 ```
-\newpage
 
 Let's review data summary
 
 ```{r} 
 summary(weatherData)
 ```
+
+Next set of plots renders distribution of a few selected features.
+
+```{r feature_distribution, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Observations Distribution"}
+
+tmp = weatherData %>%filter(complete.cases(.))
+
+p1 = tmp %>% ggplot(aes(x=Evaporation  )) + geom_density(fill=mainPalette[1], colour=mainPalette[1], alpha = 0.2)
+p2 = tmp %>% ggplot(aes(x=MaxTemp  )) + geom_density(fill=mainPalette[2], colour=mainPalette[2], alpha = 0.2)
+p3 = tmp %>% ggplot(aes(x=Pressure9am  )) + geom_density(fill=mainPalette[3], colour=mainPalette[3], alpha = 0.2)
+p4 = tmp %>% ggplot(aes(x=Cloud3pm  )) + geom_density(fill=mainPalette[4], colour=mainPalette[4], alpha = 0.2)
+p5 = tmp %>% ggplot(aes(x=Humidity9am  )) + geom_density(fill=mainPalette[5], colour=mainPalette[5], alpha = 0.2)
+p6 = tmp %>% ggplot(aes(x=WindGustSpeed  )) + geom_density(fill=mainPalette[6], colour=mainPalette[6], alpha = 0.2)
+p7 = tmp %>% ggplot(aes(x=Rainfall  )) + geom_density(fill=mainPalette[7], colour=mainPalette[7], alpha = 0.2) + scale_x_log10() 
+p8 = tmp %>% ggplot(aes(x= WindGustDir, colour = WindGustDir, fill = WindGustDir  )) +
+  geom_density(alpha = 0.2) + theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none")
+
+p9 = tmp %>% ggplot(aes(x=RainTomorrow  )) + geom_bar(fill=mainPalette[8], colour=mainPalette[8], alpha = 0.5)
+grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8,p9)
+
+rm(p1,p2,p3,p4,p5,p6,p7,p8,p9,tmp)
+```
+
 ### Missing Data
 
-Further analisys of data shows that many features are missing. Some data losses are very significant. We are going to identify what data is missing and if it is feasible to recover the data.
+Further analysis of data shows that many features are missing. Some data losses are very significant. We are going to identify what data is missing and if it is feasible to recover the data.
 
 ```{r}
 print(sort(colSums(is.na(weatherData)), decreasing = T))
 ```
 
-To speed up data processing and plot rendering we are going to use a data sample. For population of 142K obesrvations, 20K sample size would be sufficient for 99% confidence level with the condience interval 1
-
+ To speed up data processing and plot rendering we are going to use a data sample. For population of 142K observations, 20K sample size would be sufficient for 99% confidence level with the confidence interval 1.
 ```{r plot_aggr_missing, fig.align="center", fig.cap="Missing Data Summary"}
 weatherSample = sample_n(weatherData, 20000)
 aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars = F, varheight = T)
 ``` 
 
-As demonstrated in Figure \ref{fig:plot_aggr_missing} *Sunshine*, *Evaporation* and *Clouds* columns saffer the loss of data between **48%** and **38%**. This is significant! Sinse we are dealing with the weather patterns we should be observing cyclical data pattenrs. Let's review data stribution of features that damaged the most.
+As demonstrated in Figure \ref{fig:plot_aggr_missing} *Sunshine*, *Evaporation* and *Clouds* columns safer the loss of data between **48%** and **38%**. This is significant! Since we are dealing with the weather patterns we should be observing cyclical data patterns. Let's review data distribution of features that damaged the most.
 
 ```{r plot_margin1, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,fig.align="center", fig.cap="Date/Evaporation Margin Plot", fig.height=4}
 marginplot(weatherSample[, c("Date", "Evaporation")] , col = mainPalette, cex = 0.8, pch = 20)
@@ -144,17 +165,17 @@ marginplot(weatherSample[, c("Date", "Evaporation")] , col = mainPalette, cex = 
 marginplot(weatherSample[, c("Date", "Sunshine")] , col = mainPalette, pch = 20, cex = 0.8)
 ```
 
-```{r plot_margin3, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,fig.align="center", fig.cap="Date/ Pressure3pm Margin Plot", fig.height=4}
+```{r plot_margin3, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Date/ Pressure3pm Margin Plot", fig.height=4}
 marginplot(weatherSample[, c("Date", "Pressure9am")] , col = mainPalette, pch = 20, cex = 0.8)
 ```
-\newpage
 
-So what do the margin plots tell us? First of all let's take a look at *Date* axis. The *Date* has been converted to number to ensure continuous flow of the data . All features we picked exhibit cyclical pattern as expected. Along the vertical axis we obesrve the box plot of the respective feature. *Evaporaton* data is quite remarkable (Figure  \ref{fig: plot_margin1}); it has very narrow distribution and a lot of so-called outliers. Though forces of nature follow sesonal patters they often exhibit wdie ranhe of seasonal anomalies, which the plots highlight. The disribution of the missing data of a given feature is depicted along the horizontal axis. In all three cases the missing data is randomly distirubted along observed date range. Along the horizontal axis we may see box plots of the date and a given feature. *Presure9am* ((Figure  \ref{fig: plot_margin3})) distributed evenly across the observed date frame. *Evaporation* and *Sunshine* exibit more data lossess towards the end of the observed period  
 
-Let's examine one more dimention of the missing data, namely featues vs feature vs location
-\newpage
+So what do the margin plots tell us? First of all let's take a look at *Date* axis. The *Date* has been converted to number to ensure continuous flow of the data . All features we picked exhibit cyclical pattern as expected. Along the vertical axis we observe the box plot of the respective feature. *Evaporaton* data is quite remarkable (Figure  \ref{fig: plot_margin1}); it has very narrow distribution and a lot of so-called outliers. Though forces of nature follow seasonal patters they often exhibit wide range of seasonal anomalies, which the plots highlight. The distribution of the missing data of a given feature is depicted along the horizontal axis. In all three cases the missing data is randomly distributed along observed date range. Along the horizontal axis we may see box plots of the date and a given feature. *Presure9am* ((Figure  \ref{fig: plot_margin3})) distributed evenly across the observed date frame. *Evaporation* and *Sunshine* exhibit more data losses towards the end of the observed period  
 
-```{r plot_missLocation, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,fig.align="center", fig.cap="Missing Data By Location", fig.height= 9}
+Let's examine one more dimension of the missing data, namely features vs feature vs location
+
+
+```{r plot_missLocation, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Missing Data By Location", fig.height= 9}
 tmp = weatherData %>% group_by(Location) %>%
   select_if(function(x) any(is.na(x))) %>% 
   summarise_all(funs(sum(is.na(.))))  %>%  rowwise() %>% 
@@ -165,26 +186,126 @@ tmp = weatherData %>% group_by(Location) %>%
 ggplot(tmp, aes(x=Location, y=MissingObservations )) + geom_bar(stat = "identity", fill=mainPalette[2], colour=mainPalette[2]) +
  coord_flip() + theme(axis.text.x = element_text(angle = 45, hjust = 1))  
 
-avgPerLocation = round(mean(tmp$MissingCount), digits = 0)
+avgPerLocation = round(mean(tmp$MissingObservations), digits = 0)
 rm(tmp)
 ```
 
-Remarkably Firure \ref{fig:plot_missLocation} shows that **`r avgPerLocation`**  observations are missing on average per location. Though if we take a second look at the weather station map \ref{fig:map} we would see that Mount Gini (the station that miss the most data), Bendigo and Ballarat are close to Melbrun, where the staff has kept observing data on regular basis. Newcastle to Sydney and so on...
+Remarkably Figure \ref{fig:plot_missLocation} shows that **`r avgPerLocation`**  observations are missing on average per location. Though if we take a second look at the weather station map \ref{fig:map} we would see that Mount Gini (the station that miss the most data), Bendigo and Ballarat are close to Melbrun, where the staff has kept observing data on regular basis. Newcastle to Sydney and so on...
 
 ### Data correlation and other observations
 
-Let's examine how the features are correlated to each other. Knowing weather we can make an accurate prediction that the temparature features should be highly correlated, as well as pressure, wind speed, clouds and humidity groups 
-```{r plot_corr, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,fig.align="center", fig.cap="Data Correlation", out.width="1.1\\linewidth"}
+Let's examine how the features are correlated to each other. Knowing weather we can make an accurate prediction that the temperature features should be highly correlated, as well as pressure, wind speed, clouds and humidity groups 
+```{r plot_corr, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Data Correlation", out.width="1.1\\linewidth"}
 corrplot(cor(select_if(weatherData, is.numeric), use="pairwise.complete.obs"),
          method="color", type="upper",order="hclust", col = mainPalette, number.cex = .6,
          addCoef.col = "black", tl.col="black", tl.srt=45,sig.level = 0.4, insig = "blank", diag=FALSE )
 ```
 
-Figure \ref{fig:plot_corr} confirms our intial guess. This observation will help us to elminate redundant features later when we get to the point of selecting useful predictors for our model
+Figure \ref{fig:plot_corr} confirms our initial guess. This observation will help us to eliminate redundant features later when we get to the point of selecting useful predictors for our model
+
+#### Takeaways from Data Exploration Excersize
+
+* The data we are dealing with suffers major observation losses (Figure \ref{fig:plot_aggr_missing})
+* The least represented features are 
++ *Sunshine* **48%** 
++ *Evaporation* **43%**
++ *Cloud* group (**40%** and **38%** respectively)
+* The rest of the features exhibit medium to minor data losses, where *Pressure* group leads the way with 10% 
+* The missing data is distributed randomly over the observed time frame (Figures \ref{fig:plot_margin1}, \ref{fig:plot_margin2}, \ref{fig:plot_margin3})
+* We also witnessed that some weather stations recorded less data and some were almost prefect at record keeping (Figure \ref{fig:plot_missLocation}). Luckily many majority weather stations situate relatively close to each other (see figure \ref{fig:map}). Thus if a station has data gaps the neighboring station data could be used to approximate the missing data with plausible accuracy 
+* We have also noticed that many features are either positively or negatively correlated (Figure \ref{fig:plot_corr}), where 
++ *MaxTemp*, *Temp3pm* and *Temp9am*  exhibits correlation of **0.86** to **0.98**
++ *Pressure9am* and *Pressure3pm* have correlation coefficient of **0.96**
++ *Sunshine* and *Cloud* group correlated negatively with coefficient of **-0.7**
++ *Rainfall* feature is of particular interest since this is what we are trying to predict. Unfortunately it does not demonstrate any strong correlations with any other feature
+* Doing the data analysis we have also seen seasonal patterns and data that fall outside of the normal distribution range by far (outliers). Those are anomalies of nature.
+* The last but not least the target feature (the value we are trying to predict) is unbalanced. so we are dealing with unbalanced data set. See Figure \ref{fig:feature_distribution} *RainTomorrow* plot
 
 ## Data Preparation
 
+Data exploration confirmed that despite of significant data loss we should be able to impute data with high degree of plausibility
+
+### Datas Imputing
+
+Before we start dealing with missing observations let's do some feature engineering, which will 
++ improve imputation processing speed
++ improve model training performance and hopefully accuracy
+
+First of all let's get rid of *Date* column. Outside of the presentation it does not carry too mach information. What would be useful indeed is a feature that captures seasonal observation fluctuations. That would bee *month* and *day* combined, giving us year-round (365) days of observations
+
+Secondly we convert categorical features to numbers. But before we do so we would like to ponder about *Location*. We have couple options here. Either we convert the locations to the numbers or we can replace them with the real geographical coordinates. After some deliberation we can conclude that the coordinates will not add too much knowledge in the context of the model training. But they will certainly break this categorical feature (coordinates have 4,6 decimal places, which effectively make them continuous). So we stick with categories
+
+This is our original set:
+```{r}
+str(weatherData)
+```
+
+Transformation
+```{r}
+data = mutate(weatherData,MMDD = as.numeric( format(Date, "%m%d")),Location = unclass(Location), 
+              WindGustDir = unclass(WindGustDir),
+              WindDir9am = unclass(WindDir9am), WindDir3pm = unclass(WindDir3pm),
+              RainToday = unclass(RainToday)-1, RainTomorrow = unclass(RainTomorrow)-1)
+data =  subset(data, select = -Date)
+```
+Resulting data frame structure:
+```{r}
+str(data)
+```
+
+To impute the missing data we employ **MICE** package. Our imputation strategy is to employ **Predictive mean matching** model which is a robust, fast imputation algorithm that works with numeric values ( this is why we have converted all data to the numeric values)
+Lets do a dry run first to see what predictors and methods for each feature to cure *MICE* software chooses. As before we will be working with a 20K data sample. Imputation process on the whole set take about 3 hours and 20 minutes to complete!
+In addition we let *MICE* to choose predictors for us running **quickpred()** method
+
+```{r}
+meta = mice(data, maxit = 0, print = FALSE)
+weatherSample = sample_n(data, 20000)
+methods = meta$method
+predictors = quickpred(data) 
+```
+
+Let's review the methods chosen by the software making sure that they meet our requirements highlighted prior in the imputation strategy paragraph
+```{r}
+print(methods)
+```
+The code output above shows that 
+1 the features without missing data will not be imputed
+2 The imputation targets will all be treated with *Predictive mean matching* algorithm ("pmm")
+
+This is exactly what we need. Now let's review the predictors (*The command output is not included into report to save space *)
+```{r include=FALSE}
+print(predictors)
+```
+The matrix of predictors has the predictors in the columns and the features to be imputed in the rows. If the cell value equals has **1** the predictor will be employed in calculations for the respective imputation target. Surprisingly **MMDD** is not used widely to predict the missing data, nether do the **Location**. 
+
+Now  we are going to start the imputation process. **Note: it might take about 4 - 5 minutes even for a smaple**. We have disabled the output of the function as we do not want to pollute the report with irrelevant messages
+```{r}
+imputed = mice(weatherSample, pred = predictors, meth = methods, seed = 38019,
+               nnet.MaxNWts = 2000, printFlag = F)
+```
+Now it is time to analyze the imputed values. In general, a good imputed value is a value that could have been observed had it not been missing. The MAR assumption can never be tested from the observed data. To check whether the imputations created by **MICE** algorithm are plausible we employ density  charts and compare the distribution of the imputed values vs real observations. Let's do this (*again the plots take time, patience...*).
+
+```{r imputed_density,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Imputed Values Distribution vs Real Observations", out.width="1.1\\linewidth"}
+densityplot(x = imputed,data = ~MinTemp + MaxTemp + Rainfall + WindGustDir + WindGustSpeed + 
+            WindDir9am + WindDir3pm + WindSpeed9am + WindSpeed3pm + Humidity9am + Humidity3pm +  
+            Pressure9am + Pressure3pm + Temp9am + Temp3pm + RainToday,plot.points = F, col = mainPalette)
+
+```
+
+Figure \ref{fig:imputed_density} illustrates imputed value distribution for each imputed feature vs observed data. The fat green line renders the real data distribution and the thin lines of the other colors the distribution of imputed values after each imputation cycle (*there are five of them by default*). Where the last one is yellow. The yellow line should be shadowing the contour of the green one as close as possible, which give us an indication that the result of the imputation is plausible. Looking at the charts we can conclude that the imputation has been successful! Let's apply imputed values to our sample set and verify if there are any *NAs* left
+```{r}
+weatherSample = complete(imputed)
+print(colSums(is.na(weatherSample)))
+```
+Oustanding! There are no missing values. Now we move on to the next part - model training
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+# clean the memory
+rm(methods,meta,imputed,predictors)
+```
+
 # Modeling and Evalutation
+
+## Feature Selection
 
 ## Decision Tree Model
 
