@@ -319,26 +319,26 @@ aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars
 #> 
 #>  Variables sorted by number of missings: 
 #>       Variable   Count
-#>       Sunshine 0.47870
-#>    Evaporation 0.43130
-#>       Cloud3pm 0.40575
-#>       Cloud9am 0.37905
-#>    Pressure9am 0.09945
-#>    Pressure3pm 0.09890
-#>     WindDir9am 0.06935
-#>    WindGustDir 0.06555
-#>  WindGustSpeed 0.06505
-#>     WindDir3pm 0.02765
-#>    Humidity3pm 0.02535
-#>   WindSpeed3pm 0.01930
-#>        Temp3pm 0.01850
-#>    Humidity9am 0.01300
-#>       Rainfall 0.01080
-#>      RainToday 0.01080
-#>   WindSpeed9am 0.01055
-#>        Temp9am 0.00650
-#>        MinTemp 0.00455
-#>        MaxTemp 0.00180
+#>       Sunshine 0.47890
+#>    Evaporation 0.42935
+#>       Cloud3pm 0.40110
+#>       Cloud9am 0.37700
+#>    Pressure9am 0.09755
+#>    Pressure3pm 0.09725
+#>     WindDir9am 0.06600
+#>    WindGustDir 0.06515
+#>  WindGustSpeed 0.06465
+#>     WindDir3pm 0.02715
+#>    Humidity3pm 0.02595
+#>        Temp3pm 0.01950
+#>   WindSpeed3pm 0.01885
+#>    Humidity9am 0.01255
+#>   WindSpeed9am 0.00865
+#>       Rainfall 0.00795
+#>      RainToday 0.00795
+#>        Temp9am 0.00600
+#>        MinTemp 0.00445
+#>        MaxTemp 0.00235
 #>           Date 0.00000
 #>       Location 0.00000
 #>   RainTomorrow 0.00000
@@ -529,7 +529,7 @@ them with the real geographical coordinates. After some deliberation we
 can conclude that the coordinates will not add too much knowledge in the
 context of the model training. But they will certainly break this
 categorical feature (coordinates have 4,6 decimal places, which
-effectively make them continuous). So we stick with categories
+effectively make them continuous). So we stick with categories.
 
 This is our original set:
 
@@ -666,8 +666,8 @@ respective imputation target. Surprisingly \textbf{MMDD} is not used
 widely to predict the missing data, nether do the \textbf{Location}.
 
 Now we are going to start the imputation process. \textbf{Note: it might
-take about 4 - 5 minutes even for a smaple} We have disabled that output
-of the function as we do not want to pollute the report with rubbish
+take about 4 - 5 minutes even for a smaple}. We have disabled the output
+of the function as we do not want to pollute the report with irrelevant
 messages
 
 \begin{Schunk}
@@ -726,21 +726,182 @@ print(colSums(is.na(weatherSample)))
 \end{Soutput}
 \end{Schunk}
 
-Oustanding! There are no missing values. Now we move on to the next part
-- model training
-
-\begin{Schunk}
-\begin{Sinput}
-# clean the memory
-rm(methods,meta,imputed,predictors)
-\end{Sinput}
-\end{Schunk}
+Outstanding! There are no missing values. Now we move on to the next
+part - model training
 
 \hypertarget{modeling-and-evalutation}{%
 \section{Modeling and Evalutation}\label{modeling-and-evalutation}}
 
+Finally we have reached the stage where we can start training and
+evaluating classification models. At this point we have clear
+understanding of our data. We have gotten rid of the features that did
+not present much value. We have filled the gaps in our data set
+employing sophisticated imputation technique.
+
 \hypertarget{feature-selection}{%
 \subsection{Feature Selection}\label{feature-selection}}
+
+The weather observation data set originally had 24 features. We have
+removed \emph{RISK\_MM} and \emph{Date} as explained earlier and added
+\emph{MMDD}. Now the data set has 22 features and one label. Let's see
+if we can reduce the number of predictors without significant
+information loss. This would make our models faster and more
+interpretable for users. We shall keep in mind that at the data
+exploration phase we have discovered that many features are correlated
+(Figure \ref{fig:plot_corr}). hopefully this knowledge will help us
+identify and remove redundant features.
+
+Generally speaking feature evaluation methods can be separated into two
+groups: those that use the model information and those that do not.
+Clearly at this stage the models are not ready. Thus we will be
+exploring the methods that do not require model.
+
+This group of the method could be spit further as follows:
+
+\begin{itemize}
+\item
+  wrapper methods that evaluate multiple models adding and/or removing
+  predictors. These are some examples:
+\item
+  recursive feature elimination
+\item
+  genetic algorithms
+\item
+  simulated annealing
+\item
+  filter methods which evaluate the relevance of the predictors outside
+  of the predictive models.
+\end{itemize}
+
+The evaluation of various feature selection methods is not in the scope
+of this paper. Thus we opt for a recursive feature elimination method
+using accuracy as a target metric.
+
+Before we precede any further let's ensure that all categorical values
+get converted to factors. This is useful for dimentiality reduction
+algorithms and model training.
+
+\begin{Schunk}
+\begin{Sinput}
+weatherSample = mutate(weatherSample, Location = as.factor(unclass(Location)), WindGustDir = as.factor(unclass(WindGustDir)),
+              WindDir9am = as.factor(unclass(WindDir9am)), WindDir3pm = as.factor(unclass(WindDir3pm)),
+              RainToday = as.factor(unclass(RainToday)), RainTomorrow = as.factor(unclass(RainTomorrow)))
+\end{Sinput}
+\end{Schunk}
+
+Let's run feature selection algorithm
+
+\begin{Schunk}
+\begin{Sinput}
+predictors = subset(weatherSample,select = -RainTomorrow)
+label = weatherSample[,22]
+
+# run the RFE algorithm
+rfePrediction = rfe(predictors, label, sizes=c(1:22), 
+                    rfeControl = rfeControl(functions=rfFuncs, method="cv", number=3))
+print(rfePrediction)
+\end{Sinput}
+\begin{Soutput}
+#> 
+#> Recursive feature selection
+#> 
+#> Outer resampling method: Cross-Validated (3 fold) 
+#> 
+#> Resampling performance over subset size:
+#> 
+#>  Variables Accuracy  Kappa AccuracySD KappaSD Selected
+#>          1   0.8246 0.3697   0.006184 0.02093         
+#>          2   0.8238 0.4029   0.005341 0.01846         
+#>          3   0.8363 0.4626   0.005281 0.01611         
+#>          4   0.8407 0.5123   0.005726 0.01779         
+#>          5   0.8477 0.5344   0.005467 0.01799         
+#>          6   0.8499 0.5430   0.004719 0.01427         
+#>          7   0.8506 0.5448   0.005481 0.01816         
+#>          8   0.8513 0.5433   0.004741 0.01548         
+#>          9   0.8525 0.5489   0.005507 0.01359         
+#>         10   0.8505 0.5447   0.006654 0.02123         
+#>         11   0.8501 0.5476   0.003881 0.01026         
+#>         12   0.8518 0.5502   0.005392 0.01569         
+#>         13   0.8533 0.5542   0.005360 0.01558         
+#>         14   0.8543 0.5569   0.004677 0.01544         
+#>         15   0.8529 0.5518   0.003675 0.01413         
+#>         16   0.8528 0.5532   0.003679 0.01562         
+#>         17   0.8534 0.5547   0.002974 0.01497         
+#>         18   0.8542 0.5585   0.003763 0.01142         
+#>         19   0.8534 0.5542   0.003598 0.01229         
+#>         20   0.8546 0.5554   0.004635 0.01411         
+#>         21   0.8545 0.5549   0.004744 0.01550         
+#>         22   0.8555 0.5571   0.005470 0.01664        *
+#> 
+#> The top 5 variables (out of 22):
+#>    Humidity3pm, Sunshine, WindGustSpeed, Location, Pressure3pm
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_feature_selection-1} 
+
+}
+
+\caption[Number of Predictors vs Accuracy]{Number of Predictors vs Accuracy}\label{fig:plot_feature_selection}
+\end{figure}
+\end{Schunk}
+
+Figure \ref{fig:plot_feature_selection} shows that accuracy peaks at
+around 7 predictors and then around 12. It reaches maximum when all
+features are used, but the accuracy increases negligibly. Thus we can
+stick to the first 7. Here is the list of features ordered by
+importance:
+
+\begin{Schunk}
+\begin{Sinput}
+print(predictors(rfePrediction))
+\end{Sinput}
+\begin{Soutput}
+#>  [1] "Humidity3pm"   "Sunshine"      "WindGustSpeed" "Location"     
+#>  [5] "Pressure3pm"   "Cloud3pm"      "Rainfall"      "Pressure9am"  
+#>  [9] "WindDir3pm"    "WindGustDir"   "Humidity9am"   "MinTemp"      
+#> [13] "Cloud9am"      "WindSpeed3pm"  "WindDir9am"    "RainToday"    
+#> [17] "Temp9am"       "Temp3pm"       "Evaporation"   "WindSpeed9am" 
+#> [21] "MaxTemp"       "MMDD"
+\end{Soutput}
+\end{Schunk}
+
+\hypertarget{data-upsampling}{%
+\subsubsection{Data Upsampling}\label{data-upsampling}}
+
+There is one more step before we get to the model training. As shown in
+Figure \ref{fig:feature_distribution} our data set is unbalanced. This
+could cause model overfiting. So let's split the data into the training
+and testing sets and up-sample the training set
+
+\begin{Schunk}
+\begin{Sinput}
+set.seed(1608)
+splitIdx = createDataPartition(weatherSample$RainTomorrow, p=0.7, list = F)  # 70% training data
+trainData = weatherSample[splitIdx, ]
+testData = weatherSample[-splitIdx, ]
+
+set.seed(590045)
+columns = colnames(trainData)
+trainData = upSample(x = trainData[, columns[columns != "RainTomorrow"] ], y = trainData$RainTomorrow, list = F, yname = "RainTomorrow")
+# verify data balance in training balanced set
+print(table(trainData$RainTomorrow))
+\end{Sinput}
+\begin{Soutput}
+#> 
+#>     0     1 
+#> 10891 10891
+\end{Soutput}
+\end{Schunk}
+
+As we can see the training set is balanced.
+
+Thus we have prepared our training and test data sets. We have
+identified the most important features. We are ready to work on the
+prediction models
 
 \hypertarget{decision-tree-model}{%
 \subsection{Decision Tree Model}\label{decision-tree-model}}

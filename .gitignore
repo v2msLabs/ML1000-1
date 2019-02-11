@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 ML1000_1.Rproj
+./source/*.log
