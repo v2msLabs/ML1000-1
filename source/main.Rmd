@@ -34,13 +34,15 @@ library(lattice) # another data plotting library
 library(mapview) # saves map objects as file
 library(png) # deals with png file measurements
 library(knitr) #
+library(party) # classification tree
+library(klaR) # naive bayes
 
 # Clean all variables that might be left by other script to avoid collusion
 rm(list=ls(all=TRUE))
 # pick palettes
 mainPalette = brewer.pal(8,"Dark2")
 # set a sample size
-SampleSize = 20000
+SampleSize = 5000
 ```
 
 ```{r global_options, include=FALSE}
@@ -59,7 +61,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 # Data Analisys
 
-The data set we are going to use for our research contains daily weather observations from numerous Australian weather stations from 2007 till 2017. There are over 142000 records. It has been sourced from [Kagle](https://www.kaggle.com/jsphyg/weather-dataset-rattle-package)
+The data set we are going to use for our research contains daily weather observations from numerous Australian weather stations from 2007 till 2017. There are over 142000 records. It has been sourced from [Kaggle](https://www.kaggle.com/jsphyg/weather-dataset-rattle-package)
 
 
 ## Data Dictionary
@@ -174,7 +176,7 @@ marginplot(weatherSample[, c("Date", "Pressure9am")] , col = mainPalette, pch = 
 ```
 
 
-So what do the margin plots tell us? First of all let's take a look at *Date* axis. The *Date* has been converted to number to ensure continuous flow of the data . All features we picked exhibit cyclical pattern as expected. Along the vertical axis we observe the box plot of the respective feature. *Evaporaton* data is quite remarkable (Figure  \ref{fig: plot_margin1}); it has very narrow distribution and a lot of so-called outliers. Though forces of nature follow seasonal patters they often exhibit wide range of seasonal anomalies, which the plots highlight. The distribution of the missing data of a given feature is depicted along the horizontal axis. In all three cases the missing data is randomly distributed along observed date range. Along the horizontal axis we may see box plots of the date and a given feature. *Presure9am* ((Figure  \ref{fig: plot_margin3})) distributed evenly across the observed date frame. *Evaporation* and *Sunshine* exhibit more data losses towards the end of the observed period  
+So what do the margin plots tell us? First of all let's take a look at *Date* axis. The *Date* has been converted to number to ensure continuous flow of the data . All features we picked exhibit cyclical pattern as expected. Along the vertical axis we observe the box plot of the respective feature. *Evaporaton* data is quite remarkable (Figure  \ref{fig:plot_margin1}); it has very narrow distribution and a lot of so-called outliers. Though forces of nature follow seasonal patters they often exhibit wide range of seasonal anomalies, which the plots highlight. The distribution of the missing data of a given feature is depicted along the horizontal axis. In all three cases the missing data is randomly distributed along observed date range. Along the horizontal axis we may see box plots of the date and a given feature. *Presure9am* ((Figure  \ref{fig:plot_margin3})) distributed evenly across the observed date frame. *Evaporation* and *Sunshine* exhibit more data losses towards the end of the observed period  
 
 Let's examine one more dimension of the missing data, namely features vs feature vs location
 
@@ -247,8 +249,8 @@ str(weatherData)
 
 Transformation
 ```{r}
-data = mutate(weatherData,MMDD = as.numeric( format(Date, "%m%d")),Location = unclass(Location), 
-              WindGustDir = unclass(WindGustDir),
+data = mutate(weatherData,MMDD = as.numeric( format(Date, "%m%d")),Location = unclass(Location),   
+              WindGustDir = unclass(WindGustDir), 
               WindDir9am = unclass(WindDir9am), WindDir3pm = unclass(WindDir3pm),
               RainToday = unclass(RainToday)-1, RainTomorrow = unclass(RainTomorrow)-1)
 data =  subset(data, select = -Date)
@@ -332,9 +334,10 @@ The evaluation of various feature selection methods is not in the scope of this 
 Before we precede any further let's ensure that all categorical values get converted to factors. This is useful for dimentiality reduction algorithms and model training.  
 
 ```{r}
-weatherSample = mutate(weatherSample, Location = as.factor(unclass(Location)), WindGustDir = as.factor(unclass(WindGustDir)),
-              WindDir9am = as.factor(unclass(WindDir9am)), WindDir3pm = as.factor(unclass(WindDir3pm)),
-              RainToday = as.factor(unclass(RainToday)), RainTomorrow = as.factor(unclass(RainTomorrow)))
+weatherSample = mutate(weatherSample, Location = as.factor(unclass(Location)), 
+          WindGustDir = as.factor(unclass(WindGustDir)),
+          WindDir9am = as.factor(unclass(WindDir9am)), WindDir3pm = as.factor(unclass(WindDir3pm)),
+          RainToday = as.factor(unclass(RainToday)), RainTomorrow = as.factor(unclass(RainTomorrow)))
 ```
 
 Let's run feature selection algorithm
@@ -351,46 +354,214 @@ print(rfePrediction)
 ```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
 plot(rfePrediction, type=c("g", "o"))
 ```
-Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few times:  around 9 predictors, then around 14 and tops at 22.The accuracy gain between 14 and 22 is negligible. Here is the list of features ordered by importance:
+Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few times:  with 9 predictors, 14 and tops at 22.The accuracy gain between 9 and 22 is negligible. Here is the list of features ordered by importance. We take first nine for model training.
 ```{r}
 print(predictors(rfePrediction))
 ```
-```{r include=FALSE}
+
+```{r}
+selectedPredictors =  predictors(rfePrediction)[1:9]
 # remove useless variables
-rm(label,predictors,avgPerLocation,rfePrediction)
+rm(label,predictors,rfePrediction)
 ```
+
 ### Data Upsampling
 
-There is one more step before we get to the model training. As shown in Figure \ref{fig:feature_distribution} our data set is unbalanced. This could cause model overfiting. So let's split the data into the training and testing sets and up-sample the training set
-```{r}
+There is one more step before we get to the model training. As shown in Figure \ref{fig:feature_distribution} our data set is unbalanced. This could cause model over-fitting. So let's split the data into the training and testing sets and up-sample the training set
+```{r echo=FALSE}
 set.seed(1608)
-splitIdx = createDataPartition(weatherSample$RainTomorrow, p=0.7, list = F)  # 70% training data
-trainData = weatherSample[splitIdx, ]
-testData = weatherSample[-splitIdx, ]
+# keep only the selected features
+finalSample = weatherSample %>% select(c(selectedPredictors,"RainTomorrow"));
+
+splitIdx = createDataPartition(finalSample$RainTomorrow, p=0.7, list = F)  # 70% training data
+trainData = finalSample[splitIdx, ]
+testData = finalSample[-splitIdx, ]
 
 set.seed(590045)
 columns = colnames(trainData)
-trainData = upSample(x = trainData[, columns[columns != "RainTomorrow"] ], y = trainData$RainTomorrow, list = F, yname = "RainTomorrow")
-# verify data balance in training balanced set
+trainData = upSample(x = trainData[, columns[columns != "RainTomorrow"] ], 
+      y = trainData$RainTomorrow, list = F, yname = "RainTomorrow")
+
+rm(splitIdx, columns, finalSample)
 print(table(trainData$RainTomorrow))
 ```
 As we can see the training set is balanced.
 
 Thus we have prepared our training and test data sets. We have identified the most important features. We are ready to work on the prediction models
 
-## Decision Tree Model
+```{r include=FALSE}
+# seed for all models
+modelSeed = 4987
+# helper to compose training composition
+selectedPredictorsPlus = paste(selectedPredictors, collapse = " + ")
+```
+
+## Classification Tree Model
+
+```{r echo=FALSE}
+set.seed(modelSeed)
+trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
+testDataCopy = mutate(testData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
+ctrl = trainControl(method="cv", number = 5, 
+    # Estimate class probabilities
+    classProbs = T,
+    # Evaluate performance using the following function
+    summaryFunction = twoClassSummary)
+
+classTreeModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+   data = trainDataCopy, method = "ctree", metric="ROC", trControl = ctrl)
+
+pred.classTreeModel.prob = predict(classTreeModel, newdata = testDataCopy, type="prob")
+pred.classTreeModel.raw = predict(classTreeModel, newdata = testDataCopy )
+
+roc.classTreeModel = pROC::roc(testDataCopy$RainTomorrow, 
+                    as.vector(ifelse(pred.classTreeModel.prob[,"yes"] >0.5, 1,0)) )
+auc.classTreeModel = pROC::auc(roc.classTreeModel)
+
+classTreeModel
+```
+```{r}
+confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
+```
+```{r plot_classTree_ROC,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Classification Tree Model AUC and ROC Curve", out.width="1.1\\linewidth"}
+plot.roc(roc.classTreeModel, print.auc = T, auc.polygon = T, col = mainPalette[1] , print.thres = "best" )
+```
+```{r include=FALSE}
+rm(trainDataCopy,testDataCopy,ctrl)
+```
 
 ## Naive Bayes Model
 
+```{r echo=FALSE}
+# possible tuning grid
+# tuninGrid = data.frame(fL=c(0,0.5,1.0), usekernel = TRUE, adjust=c(0,0.5,1.0))
+set.seed(modelSeed)
+trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
+testDataCopy = mutate(testData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
+ctrl = trainControl(method="cv", number = 5, 
+    # Estimate class probabilities
+    classProbs = T,
+    # Evaluate performance using the following function
+    summaryFunction = twoClassSummary)
+
+naiveBayesModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+   data = trainDataCopy, method = "nb", metric="ROC", trControl = ctrl)
+
+pred.naiveBayesModel.prob = predict(naiveBayesModel, newdata = testDataCopy, type="prob")
+pred.naiveBayesModel.raw = predict(naiveBayesModel, newdata = testDataCopy )
+
+roc.naiveBayesModel = pROC::roc(testDataCopy$RainTomorrow, 
+                     as.vector(ifelse(pred.naiveBayesModel.prob[,"yes"] >0.5, 1,0)) )
+auc.naiveBayesModel = pROC::auc(roc.naiveBayesModel)
+
+naiveBayesModel
+```
+```{r}
+confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
+```
+```{r plot_nb_ROC,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Naive Bayes Model AUC and ROC Curve", out.width="1.1\\linewidth"}
+plot.roc(roc.naiveBayesModel, print.auc = T, auc.polygon = T, col = mainPalette[2] , print.thres = "best" )
+```
+```{r include=FALSE}
+rm(trainDataCopy,testDataCopy,ctrl)
+```
+
+
 ## Random Forest Model
+
+```{r echo=FALSE}
+set.seed(modelSeed)
+trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
+testDataCopy = mutate(testData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
+ctrl = trainControl(method = "cv", number = 2, # it takes forever for 10 - fold 
+    # Estimate class probabilities
+    classProbs = T,
+    # Evaluate performance using the following function
+    summaryFunction = twoClassSummary)
+
+randomForestModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+   data = trainDataCopy, method = "rf", metric="ROC", trControl = ctrl)
+
+pred.randomForestModel.prob = predict(randomForestModel, newdata = testDataCopy, type="prob")
+pred.randomForestModel.raw = predict(randomForestModel, newdata = testDataCopy )
+
+roc.randomForestModel = pROC::roc(testDataCopy$RainTomorrow,  
+                                  as.vector(ifelse(pred.randomForestModel.prob[,"yes"] >0.5, 1,0)) )
+auc.randomForestModel = pROC::auc(roc.randomForestModel)
+
+randomForestModel
+```
+```{r}
+confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
+```
+```{r plot_rf_ROC,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Random Forest Model AUC and ROC Curve", out.width="1.1\\linewidth"}
+plot.roc(roc.randomForestModel, print.auc = T, auc.polygon = T, col = mainPalette[3] , print.thres = "best" )
+```
+```{r include=FALSE}
+rm(trainDataCopy,testDataCopy,ctrl)
+```
+
 
 ## Logistic Regression Model
 
+Logistic regression prediction accuracy will benefit if the data is normalized  and are close to Gaussian distribution. Thus we apply addition transformation to the training data set. We will also be employing 5-fold cross validation resampling procedure to improve the model. In addition to the above we are going to convert categorical values ( factors) to numeric data type
+
+```{r include=FALSE}
+set.seed(modelSeed)
+
+# hard-coded transformations are not ideal!
+trainDataCopy =  mutate(trainData, Location = unclass(Location))
+testDataCopy =  mutate(testData, Location = unclass(Location)) 
+
+ctrl = trainControl(
+  # 5-fold CV
+  method="cv", number = 5,  
+  savePredictions = T)
+
+logRegModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
+        data = trainDataCopy, method="glm", family = binomial(link = "logit"), 
+        trControl = ctrl, preProc = c("BoxCox","center", "scale"))
+
+pred.logRegModel.raw = predict(logRegModel, newdata =  testDataCopy)
+pred.logRegModel.prob = predict(logRegModel, newdata =  testDataCopy, type = "prob")
+roc.logRegModel = pROC::roc(testDataCopy$RainTomorrow, as.vector(ifelse(pred.logRegModel.prob[,"1"] >0.5, 1,0)))
+auc.logRegModel = pROC::auc(roc.logRegModel)
+
+logRegModel
+```
+```{r}
+confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
+```
+```{r plot_logReg_ROC,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Logistic Regression Model AUC and ROC Curve", out.width="1.1\\linewidth"}
+plot.roc(roc.logRegModel, rint.auc = T, auc.polygon = T, col = mainPalette[4] , print.thres = "best" )
+```
+```{r include=FALSE}
+rm(trainDataCopy,testDataCopy,ctrl)
+```
+Confusion matrix and Figure \ref{fig:plot_logReg_ROC} demonstrate the logistic model performance on the balanced data set.
+Using the proportion of positive data points that are correctly considered as positive (true positives) and the proportion of negative data points that are mistakenly considered as positive (false negative), we generated a graphic that shows the trade off between the rate at which the model correctly predicts the rain tomorrow with the rate of incorrectly predicting the rain. The value around 0.80 indicates that the model does a good job in discriminating between the two categories.
+
+
 ## Model Comparison
 
+```{r plot_model_comp,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Model Accuracy Comparison", out.width="1.1\\linewidth"}
+modelsFace2Face = data.frame(model=c("logRegModel", "classTreeModel",
+        "naiveBayesModel", "randomForestModel"),
+        auc=c(auc.logRegModel, auc.classTreeModel, auc.naiveBayesModel, auc.randomForestModel))
+modelsFace2Face = modelsFace2Face[order(modelsFace2Face$auc, decreasing = T),]
+modelsFace2Face$model = factor(modelsFace2Face$model, levels = modelsFace2Face$model)
+
+ggplot(data = modelsFace2Face, aes(x=model, y=auc)) +
+  geom_bar(stat="identity", fill=mainPalette[3], colour=mainPalette[3], alpha = 0.5)
+```
 
 # Model Deployment
 
 # Conclusion
 
 # Bibliography
+
+# Note from the Authors
+
+This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts \citep{ivbsoftware_big-data-final}.
+
