@@ -125,10 +125,15 @@ knitr::include_graphics("images/weatherStations.png")
 
 Let's review data summary
 
-```{r} 
+```{r include=FALSE}
 summary(weatherData)
 ```
 
+Data sample
+
+```{r include=FALSE}
+head(weatherData)
+```
 Next set of plots renders distribution of a few selected features.
 
 ```{r feature_distribution, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Observations Distribution"}
@@ -247,7 +252,7 @@ First of all let's get rid of *Date* column. Outside of the presentation it does
 Secondly we convert categorical features to numbers. But before we do so we would like to ponder about *Location*. We have couple options here. Either we convert the locations to the numbers or we can replace them with the real geographical coordinates. After some deliberation we can conclude that the coordinates will not add too much knowledge in the context of the model training. But they will certainly break this categorical feature (coordinates have 4,6 decimal places, which effectively make them continuous). So we stick with categories.
 
 This is our original set:
-```{r}
+```{r include=FALSE}
 str(weatherData)
 ```
 
@@ -260,7 +265,7 @@ data = mutate(weatherData,MMDD = as.numeric( format(Date, "%m%d")),Location = un
 data =  subset(data, select = -Date)
 ```
 Resulting data frame structure:
-```{r}
+```{r include=FALSE}
 str(data)
 ```
 
@@ -276,7 +281,7 @@ predictors = quickpred(data)
 ```
 
 Let's review the methods chosen by the software making sure that they meet our requirements highlighted prior in the imputation strategy paragraph
-```{r}
+```{r include=FALSE}
 print(methods)
 ```
 The code output above shows that 
@@ -359,11 +364,11 @@ print(rfePrediction)
 plot(rfePrediction, type=c("g", "o"))
 ```
 Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few times:  with 9 predictors, 14 and tops at 22.The accuracy gain between 9 and 22 is negligible. Here is the list of features ordered by importance. We take first nine for model training.
-```{r}
+```{r include=FALSE}
 print(predictors(rfePrediction))
 ```
 
-```{r}
+```{r include=FALSE}
 l = length(predictors(rfePrediction))
 selectedPredictors =  predictors(rfePrediction)[1:ifelse(l<9,l,9)]
 # remove useless variables
@@ -402,7 +407,7 @@ modelSeed = 4987
 selectedPredictorsPlus = paste(selectedPredictors, collapse = " + ")
 ```
 
-## Classification Tree Model
+## Classification (Decision) Tree Model
 
 ```{r echo=FALSE}
 set.seed(modelSeed)
@@ -475,7 +480,7 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 ## Random Forest Model
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(modelSeed)
 trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
 testDataCopy = mutate(testData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
@@ -510,9 +515,9 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 ## Logistic Regression Model
 
-Logistic regression prediction accuracy will benefit if the data is normalized  and are close to Gaussian distribution. Thus we apply addition transformation to the training data set. We will also be employing 5-fold cross validation resampling procedure to improve the model. In addition to the above we are going to convert categorical values ( factors) to numeric data type
+Logistic regression is an efficient, interpretable and reasonably accurate method, which fits quickly with minimal tuning. Logistic regression prediction accuracy will benefit if the data is close to Gaussian distribution. Thus we apply addition transformation to the training data set. We will also be employing 5-fold cross validation resampling procedure to improve the model. In addition to the above we are going to convert **Location* categorical value to numeric data type. We could have used dummy encoding but having 49 locations this approach does not seem beneficial.
 
-```{r include=FALSE}
+```{r include=FALSE, message=FALSE, warning=FALSE}
 set.seed(modelSeed)
 
 # hard-coded transformations are not ideal!
@@ -533,7 +538,7 @@ ctrl = trainControl(
 
 logRegModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
         data = trainDataCopy, method="glm", family = binomial(link = "logit"), 
-        trControl = ctrl, preProc = c("BoxCox","center", "scale"))
+        trControl = ctrl, preProc = c("BoxCox"))
 
 pred.logRegModel.raw = predict(logRegModel, newdata =  testDataCopy)
 pred.logRegModel.prob = predict(logRegModel, newdata =  testDataCopy, type = "prob")
@@ -557,7 +562,9 @@ Using the proportion of positive data points that are correctly considered as po
 
 ## Model Comparison
 
-```{r plot_model_comp,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Model Accuracy Comparison", out.width="1.1\\linewidth"}
+Not it is time to compare the models side by side and pick a winner.
+
+```{r plot_model_comp, fig.align="center", fig.cap="Model Accuracy Comparison", message=FALSE, warning=FALSE, echo=FALSE, out.width="1.1\\linewidth"}
 modelsFace2Face = data.frame(model=c("logRegModel", "classTreeModel",
         "naiveBayesModel", "randomForestModel"),
         auc=c(auc.logRegModel, auc.classTreeModel, auc.naiveBayesModel, auc.randomForestModel))
@@ -566,7 +573,39 @@ modelsFace2Face$model = factor(modelsFace2Face$model, levels = modelsFace2Face$m
 
 ggplot(data = modelsFace2Face, aes(x=model, y=auc)) +
   geom_bar(stat="identity", fill=mainPalette[3], colour=mainPalette[3], alpha = 0.5)
+
+print(modelsFace2Face)
 ```
+
+Let's review model metrics.
+
+### AUC - ROC perfomance
+
+AUC stands for Area under the ROC Curve and ROC for Receiver operating characteristic curve. This is one of the most important KPIs of the classification algorithms. This two metrics measure how well the models distinguishing between the classes. separates positive and negative outcome. The higher AUC the better model predicts positive and negative outcome. 
+
+Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the higher overall accuracy (83%) but performs poorly predicting rainy days (59%), thus balanced accuracy is lower (about 75%). 
+
+Naive Bayes and Decision Tree are less accurate models in comparison with the Random Forest one but way more balanced demonstrating consistent power to predict rainy and sunny days with equal accuracy. They have balanced accuracy of 74% and 79% respectively.
+
+Logistic regression model scores the best having the highest AUC and all other metrics around 80%.
+
+### Model interpretibility
+
+Logistic Regression, Decision Tree and Naive Bayes are all highly interpreatable models. It is easy to explain to the business what impact each input parameter has. The decision tree could be even visualized ( if it is not too large). 
+
+Random Forest on the other hand is a black-box model, complex algorithm which is difficult to explain in simple terms.
+
+### Data Preparation
+
+Decision Tree, Random Forest and Naive Bayes can deal with missing data, outliers, numeric and alphanumeric values. In simple terms they are not very demanding for data quality. It would be interesting to see how they perform on the original data set without data cleaning. but this is subject of another research.
+
+Logistic regression does require conversion of alphanumeric values to numeric, struggles dealing with the outliers and performs best when dealing with the data that have normal distribution. 
+
+### Verdict (To be finalized)
+
+Despite sensitivity to data quality Logistic regression outperforms other models in all other categories.
+
+
 
 # Model Deployment
 
@@ -574,8 +613,8 @@ ggplot(data = modelsFace2Face, aes(x=model, y=auc)) +
 
 # Bibliography
 
-\newpage
+\newpage  
 # Note from the Authors
 
-This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts \citep{ivbsoftware_big-data-final}.
+This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts.
 
