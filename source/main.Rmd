@@ -52,13 +52,17 @@ SampleSize = 10000
 knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
-## Introduction
-
 
 ## Background
 
+Weather forecasting is a complex and often challenging skill that involves observing and processing vast amounts of data. Weather systems can range from small, short lived thunderstorms only a few kilometers in diameter that last a couple hours to large scale rain and snow storms up to a thousand kilometers in diameter and lasting for days.
+
+A very important component of modern weather forecasting is the use of numerical weather prediction (NWP) models. In the last years, the forecast quality of those models constantly improved, mostly due to major improvements in high performance computing. NWP focuses on taking current observations of weather and processing these data with computer models to forecast the future state of weather. Knowing the current state of the weather is just as important as the numerical computer models processing the data. Current weather observations serve as input to the numerical computer models through a process known as data assimilation to produce outputs of temperature, precipitation, and hundreds of other meteorological elements from the oceans to the top of the atmosphere. 
+
 
 ## Objective
+
+The objective of this research is to find a numerical weather prediction model that would provide accurate forecast of possibility of the rain next day having today weather pattern observations. In addition to accuracy the model should be easily interpretable and flexible enough to accept limited number of input features without diminishing its prediction power. 
 
 
 # Data Analisys
@@ -436,7 +440,7 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 ## Naive Bayes Model
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # possible tuning grid
 # tuninGrid = data.frame(fL=c(0,0.5,1.0), usekernel = TRUE, adjust=c(0,0.5,1.0))
 set.seed(modelSeed)
