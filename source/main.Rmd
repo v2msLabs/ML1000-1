@@ -431,6 +431,13 @@ rm(trainDataCopy,testDataCopy,ctrl)
 ```
 
 ## Naive Bayes Model
+Naïve Bayes classification is a kind of simple probabilistic classification methods based on Bayes’ theorem with the assumption of independence between features. 
+
+It is simple (both intuitively and computationally), fast, performs well with small amounts of training data, and scales well to large data sets. The greatest weakness of the naïve Bayes classifier is that it relies on an often-faulty assumption of equally important and independent features which results in biased posterior probabilities. Although this assumption is rarely met, in practice, this algorithm works surprisingly well and accurate; however, on average it rarely can compete with the accuracy of advanced tree-based methods (random forests & gradient boosting machines) but is definitely worth having in our toolkit.
+
+The Baive Bayes algorithm can be implemented using different packages (i.e. e1071, klaR, naivebayes) Here we are using the caret package.The caret package contains train() function which is helpful in setting up a grid of tuning parameters for a number of classification and regression routines, fits each model and calculates a resampling based performance measure.caret allows us to use the different naïve Bayes packages but in a common framework, and also allows for easy cross validation and tuning.
+
+Here we apply NaiveBayes Model with 5-fold cross validation to have better accuracy.
 
 ```{r echo=FALSE}
 # possible tuning grid
