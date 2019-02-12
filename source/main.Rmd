@@ -10,7 +10,9 @@ author:
   - name: Vadim Spirkov
     affiliation: York University School of Continuing Studies
 abstract: >
-  An abstract of less than 150 words.
+Many native cultures comprise an institution of “rainmakers” – people who would not as much invoke the rains, but anticipate them based on ethno-meteorology. The forecasting was based on skillful art of observing the natural environment as expressed in the timing or flowering of plants, hatching of insects, arrival of migratory birds, etc., which enables farmers to make adjustments in farming calendar and crop selection types in any given season. This indigenous knowledge was often passed down from one generation to the other. 
+
+We are going to employ the latest scientific methods, prediction algorithms to achieve the same very goal without thorough knowledge of forces of nature, hopefully with the same accuracy as the aboriginal people 
 output:
   rticles::rjournal_article:
     includes:
@@ -42,7 +44,7 @@ rm(list=ls(all=TRUE))
 # pick palettes
 mainPalette = brewer.pal(8,"Dark2")
 # set a sample size
-SampleSize = 5000
+SampleSize = 10000
 ```
 
 ```{r global_options, include=FALSE}
@@ -360,9 +362,10 @@ print(predictors(rfePrediction))
 ```
 
 ```{r}
-selectedPredictors =  predictors(rfePrediction)[1:9]
+l = length(predictors(rfePrediction))
+selectedPredictors =  predictors(rfePrediction)[1:ifelse(l<9,l,9)]
 # remove useless variables
-rm(label,predictors,rfePrediction)
+rm(label,predictors,rfePrediction,l)
 ```
 
 ### Data Upsampling
@@ -370,8 +373,9 @@ rm(label,predictors,rfePrediction)
 There is one more step before we get to the model training. As shown in Figure \ref{fig:feature_distribution} our data set is unbalanced. This could cause model over-fitting. So let's split the data into the training and testing sets and up-sample the training set
 ```{r echo=FALSE}
 set.seed(1608)
+
 # keep only the selected features
-finalSample = weatherSample %>% select(c(selectedPredictors,"RainTomorrow"));
+finalSample = weatherSample %>% dplyr::select(c(selectedPredictors,"RainTomorrow"));
 
 splitIdx = createDataPartition(finalSample$RainTomorrow, p=0.7, list = F)  # 70% training data
 trainData = finalSample[splitIdx, ]
@@ -510,8 +514,15 @@ Logistic regression prediction accuracy will benefit if the data is normalized  
 set.seed(modelSeed)
 
 # hard-coded transformations are not ideal!
-trainDataCopy =  mutate(trainData, Location = unclass(Location))
-testDataCopy =  mutate(testData, Location = unclass(Location)) 
+trainDataCopy = NULL
+testDataCopy = NULL
+if("Location" %in% colnames(trainData)) {
+  trainDataCopy = mutate(trainData, Location = unclass(Location))
+  testDataCopy = mutate(testData, Location = unclass(Location)) 
+} else {
+  trainDataCopy = subset(trainData)
+  testDataCopy = subset(testData )
+}  
 
 ctrl = trainControl(
   # 5-fold CV
@@ -561,6 +572,7 @@ ggplot(data = modelsFace2Face, aes(x=model, y=auc)) +
 
 # Bibliography
 
+\newpage
 # Note from the Authors
 
 This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts \citep{ivbsoftware_big-data-final}.

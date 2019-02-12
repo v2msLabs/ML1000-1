@@ -318,30 +318,30 @@ aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars
 \begin{Soutput}
 #> 
 #>  Variables sorted by number of missings: 
-#>       Variable       Count
-#>       Sunshine 0.476666667
-#>    Evaporation 0.433833333
-#>       Cloud3pm 0.398000000
-#>       Cloud9am 0.371666667
-#>    Pressure3pm 0.099833333
-#>    Pressure9am 0.099166667
-#>    WindGustDir 0.068000000
-#>     WindDir9am 0.067833333
-#>  WindGustSpeed 0.067500000
-#>     WindDir3pm 0.026666667
-#>    Humidity3pm 0.026666667
-#>        Temp3pm 0.020500000
-#>   WindSpeed3pm 0.019166667
-#>    Humidity9am 0.011333333
-#>       Rainfall 0.009166667
-#>   WindSpeed9am 0.009166667
-#>      RainToday 0.009166667
-#>        Temp9am 0.005666667
-#>        MinTemp 0.004166667
-#>        MaxTemp 0.002666667
-#>           Date 0.000000000
-#>       Location 0.000000000
-#>   RainTomorrow 0.000000000
+#>       Variable  Count
+#>       Sunshine 0.4765
+#>    Evaporation 0.4307
+#>       Cloud3pm 0.3993
+#>       Cloud9am 0.3748
+#>    Pressure3pm 0.0981
+#>    Pressure9am 0.0978
+#>     WindDir9am 0.0741
+#>    WindGustDir 0.0654
+#>  WindGustSpeed 0.0646
+#>    Humidity3pm 0.0264
+#>     WindDir3pm 0.0259
+#>        Temp3pm 0.0184
+#>   WindSpeed3pm 0.0183
+#>    Humidity9am 0.0138
+#>       Rainfall 0.0110
+#>      RainToday 0.0110
+#>   WindSpeed9am 0.0091
+#>        Temp9am 0.0060
+#>        MinTemp 0.0048
+#>        MaxTemp 0.0020
+#>           Date 0.0000
+#>       Location 0.0000
+#>   RainTomorrow 0.0000
 \end{Soutput}
 \end{Schunk}
 
@@ -811,31 +811,31 @@ print(rfePrediction)
 #> Resampling performance over subset size:
 #> 
 #>  Variables Accuracy  Kappa AccuracySD  KappaSD Selected
-#>          1   0.8220 0.3579  0.0075375 0.050475         
-#>          2   0.8068 0.3694  0.0037996 0.016869         
-#>          3   0.8268 0.4286  0.0122984 0.070036         
-#>          4   0.8413 0.4893  0.0138904 0.062262         
-#>          5   0.8405 0.4975  0.0041185 0.045392         
-#>          6   0.8447 0.5092  0.0024217 0.043001         
-#>          7   0.8460 0.5262  0.0035618 0.025266         
-#>          8   0.8462 0.5361  0.0030817 0.021785         
-#>          9   0.8457 0.5345  0.0036273 0.013533         
-#>         10   0.8468 0.5368  0.0022905 0.007530         
-#>         11   0.8477 0.5341  0.0037683 0.018350         
-#>         12   0.8482 0.5386  0.0040639 0.014088        *
-#>         13   0.8437 0.5297  0.0061410 0.016993         
-#>         14   0.8442 0.5290  0.0035464 0.009578         
-#>         15   0.8435 0.5293  0.0047030 0.012035         
-#>         16   0.8448 0.5341  0.0042348 0.002200         
-#>         17   0.8440 0.5306  0.0047032 0.011647         
-#>         18   0.8433 0.5306  0.0027894 0.007575         
-#>         19   0.8465 0.5359  0.0035306 0.010462         
-#>         20   0.8472 0.5354  0.0009869 0.013526         
-#>         21   0.8453 0.5306  0.0026765 0.008085         
-#>         22   0.8480 0.5362  0.0038381 0.002994         
+#>          1   0.8296 0.3712   0.005503 0.015389         
+#>          2   0.8138 0.3809   0.005559 0.006866         
+#>          3   0.8300 0.4463   0.009185 0.017079         
+#>          4   0.8384 0.4945   0.007918 0.025167         
+#>          5   0.8481 0.5328   0.009928 0.028622         
+#>          6   0.8501 0.5392   0.008946 0.024177         
+#>          7   0.8532 0.5467   0.010644 0.031833         
+#>          8   0.8557 0.5565   0.007065 0.018593         
+#>          9   0.8563 0.5534   0.007582 0.013759        *
+#>         10   0.8527 0.5468   0.007113 0.015276         
+#>         11   0.8518 0.5438   0.006777 0.018905         
+#>         12   0.8544 0.5492   0.008728 0.024885         
+#>         13   0.8531 0.5430   0.006871 0.017090         
+#>         14   0.8540 0.5446   0.008272 0.018118         
+#>         15   0.8511 0.5398   0.007560 0.017842         
+#>         16   0.8529 0.5454   0.007392 0.018842         
+#>         17   0.8524 0.5449   0.007487 0.024293         
+#>         18   0.8527 0.5461   0.007066 0.022966         
+#>         19   0.8533 0.5476   0.008760 0.025445         
+#>         20   0.8540 0.5483   0.008623 0.023708         
+#>         21   0.8542 0.5459   0.006517 0.017888         
+#>         22   0.8523 0.5394   0.007097 0.019002         
 #> 
-#> The top 5 variables (out of 12):
-#>    Humidity3pm, Sunshine, WindGustSpeed, Pressure3pm, Rainfall
+#> The top 5 variables (out of 9):
+#>    Humidity3pm, Sunshine, WindGustSpeed, Location, Pressure3pm
 \end{Soutput}
 \end{Schunk}
 
@@ -853,17 +853,26 @@ print(rfePrediction)
 Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few
 times: with 9 predictors, 14 and tops at 22.The accuracy gain between 9
 and 22 is negligible. Here is the list of features ordered by
-importance:
+importance. We take first nine for model training.
 
 \begin{Schunk}
 \begin{Sinput}
 print(predictors(rfePrediction))
 \end{Sinput}
 \begin{Soutput}
-#>  [1] "Humidity3pm"   "Sunshine"      "WindGustSpeed" "Pressure3pm"  
-#>  [5] "Rainfall"      "Cloud3pm"      "Location"      "Pressure9am"  
-#>  [9] "Humidity9am"   "RainToday"     "MinTemp"       "Temp3pm"
+#> [1] "Humidity3pm"   "Sunshine"      "WindGustSpeed" "Location"     
+#> [5] "Pressure3pm"   "Cloud3pm"      "Pressure9am"   "Rainfall"     
+#> [9] "Humidity9am"
 \end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+l = length(predictors(rfePrediction))
+selectedPredictors =  predictors(rfePrediction)[1:ifelse(l<9,l,9)]
+# remove useless variables
+rm(label,predictors,rfePrediction,l)
+\end{Sinput}
 \end{Schunk}
 
 \hypertarget{data-upsampling}{%
@@ -878,7 +887,7 @@ training and testing sets and up-sample the training set
 \begin{Soutput}
 #> 
 #>    0    1 
-#> 3275 3275
+#> 5473 5473
 \end{Soutput}
 \end{Schunk}
 
@@ -891,11 +900,1874 @@ prediction models
 \hypertarget{classification-tree-model}{%
 \subsection{Classification Tree Model}\label{classification-tree-model}}
 
+\begin{Schunk}
+\begin{Soutput}
+#> Conditional Inference Tree 
+#> 
+#> 10946 samples
+#>     9 predictor
+#>     2 classes: 'no', 'yes' 
+#> 
+#> No pre-processing
+#> Resampling: Cross-Validated (5 fold) 
+#> Summary of sample sizes: 8757, 8756, 8758, 8756, 8757 
+#> Resampling results across tuning parameters:
+#> 
+#>   mincriterion  ROC        Sens       Spec     
+#>   0.01          0.8832146  0.7833022  0.8298997
+#>   0.50          0.8778256  0.7741586  0.8222255
+#>   0.99          0.8609156  0.7615595  0.8013872
+#> 
+#> ROC was used to select the optimal model using the largest value.
+#> The final value used for the model was mincriterion = 0.01.
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
+\end{Sinput}
+\begin{Soutput}
+#> Confusion Matrix and Statistics
+#> 
+#>           Reference
+#> Prediction   no  yes
+#>        no  1779  189
+#>        yes  566  465
+#>                                           
+#>                Accuracy : 0.7482          
+#>                  95% CI : (0.7323, 0.7637)
+#>     No Information Rate : 0.7819          
+#>     P-Value [Acc > NIR] : 1               
+#>                                           
+#>                   Kappa : 0.3888          
+#>  Mcnemar's Test P-Value : <2e-16          
+#>                                           
+#>             Sensitivity : 0.7586          
+#>             Specificity : 0.7110          
+#>          Pos Pred Value : 0.9040          
+#>          Neg Pred Value : 0.4510          
+#>              Prevalence : 0.7819          
+#>          Detection Rate : 0.5932          
+#>    Detection Prevalence : 0.6562          
+#>       Balanced Accuracy : 0.7348          
+#>                                           
+#>        'Positive' Class : no              
+#> 
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_classTree_ROC-1} 
+
+}
+
+\caption[Classification Tree Model AUC and ROC Curve]{Classification Tree Model AUC and ROC Curve}\label{fig:plot_classTree_ROC}
+\end{figure}
+\end{Schunk}
+
 \hypertarget{naive-bayes-model}{%
 \subsection{Naive Bayes Model}\label{naive-bayes-model}}
 
+\begin{Schunk}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 24
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 86
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 109
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 132
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 136
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 154
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 155
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 371
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 422
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 558
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 574
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 589
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 651
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 702
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 721
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 789
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 826
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 876
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 908
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 974
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1002
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1035
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1048
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1134
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1156
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1184
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1235
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1248
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1316
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1369
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1388
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1401
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1423
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1443
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1547
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1736
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1773
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1879
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1891
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1957
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1984
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2024
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2050
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2054
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2097
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2169
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2182
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 24
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 86
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 109
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 132
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 136
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 154
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 155
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 371
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 422
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 558
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 574
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 589
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 651
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 702
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 721
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 789
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 826
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 876
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 908
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 974
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1002
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1035
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1048
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1134
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1156
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1184
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1235
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1248
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1316
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1369
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1388
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1401
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1423
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1443
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1547
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1736
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1773
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1879
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1891
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1957
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1984
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2024
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2050
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2054
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2097
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2169
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2182
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 10
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 47
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 72
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 79
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 94
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 127
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 144
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 190
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 211
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 236
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 319
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 335
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 343
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 347
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 350
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 351
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 401
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 408
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 443
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 450
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 518
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 525
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 532
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 533
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 601
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 651
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 661
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 682
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 700
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 738
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 757
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 792
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 808
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 820
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 862
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 871
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 887
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 941
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 949
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 960
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1107
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1156
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1179
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1238
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1278
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1310
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1315
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1316
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1340
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1493
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1622
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1682
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1695
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1708
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1942
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1979
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2002
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2066
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2169
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 10
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 47
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 72
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 79
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 94
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 127
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 144
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 190
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 211
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 236
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 319
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 335
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 343
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 347
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 350
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 351
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 401
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 408
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 443
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 450
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 518
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 525
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 532
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 533
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 601
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 651
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 661
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 682
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 700
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 738
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 757
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 792
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 808
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 820
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 862
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 871
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 887
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 941
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 949
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 960
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1107
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1156
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1179
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1238
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1278
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1310
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1315
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1316
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1340
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1493
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1622
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1682
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1695
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1708
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1942
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1979
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2002
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2066
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2169
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 39
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 69
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 79
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 223
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 260
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 261
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 276
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 282
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 296
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 385
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 438
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 493
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 531
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 559
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 811
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 902
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 984
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1088
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1172
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1180
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1301
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1379
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1431
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1433
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1522
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1558
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1637
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1762
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1852
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1861
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1911
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1912
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1988
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2135
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2152
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2178
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 39
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 69
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 79
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 223
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 260
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 261
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 276
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 282
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 296
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 385
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 438
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 493
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 531
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 559
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 811
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 902
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 984
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1088
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1172
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1180
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1301
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1379
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1431
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1433
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1522
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1558
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1637
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1762
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1852
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1861
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1911
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1912
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1988
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2135
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2152
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2178
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 26
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 143
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 246
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 301
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 571
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 772
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 789
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 814
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 836
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1143
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1164
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1179
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1195
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1313
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1360
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1464
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1484
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1624
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1817
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1869
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1880
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1939
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1951
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2006
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2092
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2171
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 26
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 143
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 246
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 301
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 571
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 772
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 789
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 814
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 836
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1143
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1164
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1179
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1195
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1313
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1360
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1464
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1484
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1624
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1817
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1869
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1880
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1939
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1951
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2006
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2092
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2171
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 110
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 195
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 237
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 252
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 324
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 355
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 377
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 460
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 520
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 525
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 540
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 544
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 687
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 737
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 759
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 765
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 825
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 837
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 930
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 991
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1065
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1077
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1086
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1174
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1241
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1259
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1269
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1321
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1367
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1549
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1655
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1770
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1775
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1838
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1876
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1930
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2075
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2110
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2186
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 110
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 195
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 237
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 252
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 324
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 355
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 377
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 460
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 520
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 525
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 540
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 544
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 687
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 737
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 759
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 765
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 825
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 837
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 930
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 991
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1065
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1077
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1086
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1174
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1241
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1259
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1269
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1321
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1367
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1549
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1655
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1770
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1775
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1838
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1876
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 1930
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2075
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2110
+\end{Soutput}
+\begin{Soutput}
+#> Warning in FUN(X[[i]], ...): Numerical 0 probability for all classes with
+#> observation 2186
+\end{Soutput}
+\begin{Soutput}
+#> Naive Bayes 
+#> 
+#> 10946 samples
+#>     9 predictor
+#>     2 classes: 'no', 'yes' 
+#> 
+#> No pre-processing
+#> Resampling: Cross-Validated (5 fold) 
+#> Summary of sample sizes: 8757, 8756, 8758, 8756, 8757 
+#> Resampling results across tuning parameters:
+#> 
+#>   usekernel  ROC        Sens       Spec     
+#>   FALSE      0.7429773  0.5130689  0.8101642
+#>    TRUE      0.8546820  0.6846370  0.8375648
+#> 
+#> Tuning parameter 'fL' was held constant at a value of 0
+#> Tuning
+#>  parameter 'adjust' was held constant at a value of 1
+#> ROC was used to select the optimal model using the largest value.
+#> The final values used for the model were fL = 0, usekernel = TRUE
+#>  and adjust = 1.
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
+\end{Sinput}
+\begin{Soutput}
+#> Confusion Matrix and Statistics
+#> 
+#>           Reference
+#> Prediction   no  yes
+#>        no  1574  115
+#>        yes  771  539
+#>                                           
+#>                Accuracy : 0.7046          
+#>                  95% CI : (0.6879, 0.7209)
+#>     No Information Rate : 0.7819          
+#>     P-Value [Acc > NIR] : 1               
+#>                                           
+#>                   Kappa : 0.3638          
+#>  Mcnemar's Test P-Value : <2e-16          
+#>                                           
+#>             Sensitivity : 0.6712          
+#>             Specificity : 0.8242          
+#>          Pos Pred Value : 0.9319          
+#>          Neg Pred Value : 0.4115          
+#>              Prevalence : 0.7819          
+#>          Detection Rate : 0.5248          
+#>    Detection Prevalence : 0.5632          
+#>       Balanced Accuracy : 0.7477          
+#>                                           
+#>        'Positive' Class : no              
+#> 
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_nb_ROC-1} 
+
+}
+
+\caption[Naive Bayes Model AUC and ROC Curve]{Naive Bayes Model AUC and ROC Curve}\label{fig:plot_nb_ROC}
+\end{figure}
+\end{Schunk}
+
 \hypertarget{random-forest-model}{%
 \subsection{Random Forest Model}\label{random-forest-model}}
+
+\begin{Schunk}
+\begin{Soutput}
+#> Random Forest 
+#> 
+#> 10946 samples
+#>     9 predictor
+#>     2 classes: 'no', 'yes' 
+#> 
+#> No pre-processing
+#> Resampling: Cross-Validated (2 fold) 
+#> Summary of sample sizes: 5473, 5473 
+#> Resampling results across tuning parameters:
+#> 
+#>   mtry  ROC        Sens       Spec     
+#>    2    0.8913179  0.7949943  0.8238607
+#>   29    0.9649512  0.8658873  0.9342221
+#>   56    0.9626592  0.8594914  0.9347701
+#> 
+#> ROC was used to select the optimal model using the largest value.
+#> The final value used for the model was mtry = 29.
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
+\end{Sinput}
+\begin{Soutput}
+#> Confusion Matrix and Statistics
+#> 
+#>           Reference
+#> Prediction   no  yes
+#>        no  2143  271
+#>        yes  202  383
+#>                                           
+#>                Accuracy : 0.8423          
+#>                  95% CI : (0.8287, 0.8552)
+#>     No Information Rate : 0.7819          
+#>     P-Value [Acc > NIR] : < 2.2e-16       
+#>                                           
+#>                   Kappa : 0.5192          
+#>  Mcnemar's Test P-Value : 0.001768        
+#>                                           
+#>             Sensitivity : 0.9139          
+#>             Specificity : 0.5856          
+#>          Pos Pred Value : 0.8877          
+#>          Neg Pred Value : 0.6547          
+#>              Prevalence : 0.7819          
+#>          Detection Rate : 0.7146          
+#>    Detection Prevalence : 0.8049          
+#>       Balanced Accuracy : 0.7497          
+#>                                           
+#>        'Positive' Class : no              
+#> 
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_rf_ROC-1} 
+
+}
+
+\caption[Random Forest Model AUC and ROC Curve]{Random Forest Model AUC and ROC Curve}\label{fig:plot_rf_ROC}
+\end{figure}
+\end{Schunk}
 
 \hypertarget{logistic-regression-model}{%
 \subsection{Logistic Regression Model}\label{logistic-regression-model}}
@@ -909,32 +2781,32 @@ values ( factors) to numeric data type
 
 \begin{Schunk}
 \begin{Sinput}
-confusionMatrix(data = logRegModel.pred, testDataCopy$RainTomorrow)
+confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
 \end{Sinput}
 \begin{Soutput}
 #> Confusion Matrix and Statistics
 #> 
 #>           Reference
 #> Prediction    0    1
-#>          0 1169   73
-#>          1  234  323
+#>          0 1861  150
+#>          1  484  504
 #>                                           
-#>                Accuracy : 0.8293          
-#>                  95% CI : (0.8112, 0.8465)
-#>     No Information Rate : 0.7799          
-#>     P-Value [Acc > NIR] : 1.098e-07       
+#>                Accuracy : 0.7886          
+#>                  95% CI : (0.7735, 0.8031)
+#>     No Information Rate : 0.7819          
+#>     P-Value [Acc > NIR] : 0.1946          
 #>                                           
-#>                   Kappa : 0.5663          
-#>  Mcnemar's Test P-Value : < 2.2e-16       
+#>                   Kappa : 0.4765          
+#>  Mcnemar's Test P-Value : <2e-16          
 #>                                           
-#>             Sensitivity : 0.8332          
-#>             Specificity : 0.8157          
-#>          Pos Pred Value : 0.9412          
-#>          Neg Pred Value : 0.5799          
-#>              Prevalence : 0.7799          
-#>          Detection Rate : 0.6498          
-#>    Detection Prevalence : 0.6904          
-#>       Balanced Accuracy : 0.8244          
+#>             Sensitivity : 0.7936          
+#>             Specificity : 0.7706          
+#>          Pos Pred Value : 0.9254          
+#>          Neg Pred Value : 0.5101          
+#>              Prevalence : 0.7819          
+#>          Detection Rate : 0.6205          
+#>    Detection Prevalence : 0.6706          
+#>       Balanced Accuracy : 0.7821          
 #>                                           
 #>        'Positive' Class : 0               
 #> 
@@ -962,14 +2834,19 @@ the model correctly predicts the rain tomorrow with the rate of
 incorrectly predicting the rain. The value around 0.80 indicates that
 the model does a good job in discriminating between the two categories.
 
-\begin{Schunk}
-\begin{Sinput}
-rm(trainDataCopy, testDataCopy, fittedVal)
-\end{Sinput}
-\end{Schunk}
-
 \hypertarget{model-comparison}{%
 \subsection{Model Comparison}\label{model-comparison}}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_model_comp-1} 
+
+}
+
+\caption[Model Accuracy Comparison]{Model Accuracy Comparison}\label{fig:plot_model_comp}
+\end{figure}
+\end{Schunk}
 
 \hypertarget{model-deployment}{%
 \section{Model Deployment}\label{model-deployment}}
@@ -979,6 +2856,22 @@ rm(trainDataCopy, testDataCopy, fittedVal)
 
 \hypertarget{bibliography}{%
 \section{Bibliography}\label{bibliography}}
+
+\newpage
+
+\hypertarget{note-from-the-authors}{%
+\section{Note from the Authors}\label{note-from-the-authors}}
+
+This file was generated using
+\href{https://github.com/rstudio/rticles}{\emph{The R Journal} style
+article template}, additional information on how to prepare articles for
+submission is here -
+\href{https://journal.r-project.org/share/author-guide.pdf}{Instructions
+for Authors}. The article itself is an executable R Markdown file that
+could be
+\href{https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/}{downloaded
+from Github} with all the necessary artifacts
+\citep{ivbsoftware_big-data-final}.
 
 
 \address{%
