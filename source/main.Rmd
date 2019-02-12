@@ -97,7 +97,7 @@ Temp9amTemperature     |Temperature (degrees C) at 9am
 Temp3pmTemperature     |Temperature (degrees C) at 3pm
 RainTodayBoolean       | Rainy today. 1 if precipitation (mm) in the 24 hours to 9am exceeds 1mm, otherwise 0
 RISK_MM                | Amount of rain. A kind of measure of the "risk". This column is redundant and will be dropped
-**RainTomorrowThe**    | **Target variable. Will it rain tomorrow?**
+**RainTomorrow**       |   **Target variable. Will it rain tomorrow?**
 
 
 ## Data Exploration
