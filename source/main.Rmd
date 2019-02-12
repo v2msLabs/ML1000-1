@@ -407,7 +407,8 @@ selectedPredictorsPlus = paste(selectedPredictors, collapse = " + ")
 ```
 
 ## Classification (Decision) Tree Model
-Decision trees tend to be the method of choice for predictive modeling.A classification tree is used to predict qualitative data.We are using 5-fold cross validation resampling procedure to improve the model.
+
+Decision trees tend to be the method of choice for predictive modeling. A classification tree is used to predict qualitative data.
 ```{r echo=FALSE}
 set.seed(modelSeed)
 trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
