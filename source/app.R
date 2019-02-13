@@ -10,7 +10,7 @@ data <- c("Adelaide","Albany","Albury","AliceSprings","BadgerysCreek","Ballarat"
 regions <<- list("Adelaide" = "Adelaide","Albany" = "Albany")
 weatherData = read.csv("../data/weatherAUS.csv", header = TRUE, na.strings = c("NA","","#NA"),sep=",")
 regions <- unique(weatherData$Location)
-#knitr::include_graphics("images/weatherStations.png")
+###knitr::include_graphics("images/weatherStations.png")
 ui <- fluidPage(
   
   # App title ----
