@@ -482,6 +482,9 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 
 ## Random Forest Model
+Random Forest is also considered as a very handy and easy to use algorithm, because it’s default hyperparameters often produce a good prediction result.
+Random Forest adds additional randomness to the model, while growing the trees. Instead of searching for the most important feature while splitting a node, it searches for the best feature among a random subset of features. This results in a wide diversity that generally results in a better model.
+The main limitation of Random Forest is that a large number of trees can make the algorithm to slow and ineffective for real-time predictions. In general, these algorithms are fast to train, but quite slow to create predictions once they are trained.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(modelSeed)
@@ -492,10 +495,10 @@ ctrl = trainControl(method = "cv", number = 2, # it takes forever for 10 - fold
     classProbs = T,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
-
+ptm_rf <- proc.time()
 randomForestModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "rf", metric="ROC", trControl = ctrl)
-
+proc.time() - ptm_rf
 pred.randomForestModel.prob = predict(randomForestModel, newdata = testDataCopy, type="prob")
 pred.randomForestModel.raw = predict(randomForestModel, newdata = testDataCopy )
 
