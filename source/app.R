@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyBS)
 
 
 # Define UI for slider demo app ----
@@ -15,33 +16,46 @@ ui <- fluidPage(
   
   # App title ----
   titlePanel("Australian Regional Weather"),
+  headerPanel("Predict Rainfall for tomorrow"),
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
+    
     # Sidebar to demonstrate various slider options ----
     sidebarPanel(
+      
       #6 Input: location value ----
       selectInput('Location', 'Location', regions),
+      bsTooltip("Location", "Select one region from the list of available regions to predict rainfall for tomorrow",
+                "right", options = list(container = "body")),
       
       
-            #1 Input: Simple Humidity3pm ----
+      #1 Input: Simple Humidity3pm ----
       sliderInput("Humidity3pm", "Humidity3pm:",
                   min = 0, max = 100,
                   value = 60),
+      bsTooltip("Humidity3pm", "Set the humidity observed at 3pm",
+                "right", options = list(container = "body")),
       
       #2 Input: Sunshine ----
       sliderInput("Sunshine", "Sunshine:",
                   min = 0, max = 15,
                   value = 10, step = 5),
+      bsTooltip("Sunshine", "Set the level of Sunshine",
+                "right", options = list(container = "body")),
       
       #3 Input: Cloud3pm ----
       sliderInput("Cloud3pm", "Cloud3pm:",
                   min = 0, max = 8,
                   value = 5),
+      bsTooltip("Cloud3pm", "Set the clouds observed at 3pm",
+                "right", options = list(container = "body")),
       
       #4 Input: WindGustSpeed value ----
       sliderInput("WindGustSpeed", "Wind Gust Speed:",
                   min = 7, max = 115,
                   value = 75, step = 5),
+      bsTooltip("WindGustSpeed", "Set the Wind Gust Speed",
+                "right", options = list(container = "body")),
       
       #5 Input: Rainfall value ----
       sliderInput("Rainfall", "Rainfall:",
@@ -60,7 +74,9 @@ ui <- fluidPage(
       #9 Input: Cloud9am ----
       sliderInput("Cloud9am", "Cloud9am:",
                   min = 1, max = 1000,
-                  value = 0.5, step = 0.1)
+                  value = 0.5, step = 0.1),
+      br(),
+      actionButton("predictButton", "Predict Rainfall")
     ),
     # Main panel for displaying outputs ----
     mainPanel(
