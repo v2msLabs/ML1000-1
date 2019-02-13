@@ -10,7 +10,8 @@ author:
   - name: Vadim Spirkov
     affiliation: York University School of Continuing Studies
 abstract: >
-  An abstract of less than 150 words.
+  Many native cultures comprise an institution of “rainmakers” – people who would not as much invoke the rains, but anticipate them based on ethno-meteorology. The forecasting was based on skillful art of observing the natural environment as expressed in the timing or flowering of plants, hatching of insects, arrival of migratory birds, etc., which enables farmers to make adjustments in farming calendar and crop selection types in any given season. This indigenous knowledge was often passed down from one generation to the other. We are going to employ the latest scientific methods, prediction algorithms to achieve the same very goal without thorough knowledge of forces of nature, hopefully with the same accuracy as the aboriginal people
+
 output:
   rticles::rjournal_article:
     includes:
@@ -42,7 +43,7 @@ rm(list=ls(all=TRUE))
 # pick palettes
 mainPalette = brewer.pal(8,"Dark2")
 # set a sample size
-SampleSize = 5000
+SampleSize = 10000
 ```
 
 ```{r global_options, include=FALSE}
@@ -50,13 +51,16 @@ SampleSize = 5000
 knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
-## Introduction
-
 
 ## Background
 
+Weather forecasting is a complex and often challenging skill that involves observing and processing vast amounts of data. Weather systems can range from small, short lived thunderstorms only a few kilometers in diameter that last a couple hours to large scale rain and snow storms up to a thousand kilometers in diameter and lasting for days.
+
+A very important component of modern weather forecasting is the use of numerical weather prediction (NWP) models. In the last years, the forecast quality of those models constantly improved, mostly due to major improvements in high performance computing. NWP focuses on taking current observations of weather and processing these data with computer models to forecast the future state of weather. Knowing the current state of the weather is just as important as the numerical computer models processing the data. Current weather observations serve as input to the numerical computer models through a process known as data assimilation to produce outputs of temperature, precipitation, and hundreds of other meteorological elements from the oceans to the top of the atmosphere.
 
 ## Objective
+
+The objective of this research is to find a numerical weather prediction model that would provide accurate forecast of possibility of the rain next day having today weather pattern observations. In addition to accuracy the model should be easily interpretable and flexible enough to accept limited number of input features without diminishing its prediction power. 
 
 
 # Data Analisys
@@ -121,10 +125,15 @@ knitr::include_graphics("images/weatherStations.png")
 
 Let's review data summary
 
-```{r} 
+```{r include=FALSE}
 summary(weatherData)
 ```
 
+Data sample
+
+```{r include=FALSE}
+head(weatherData)
+```
 Next set of plots renders distribution of a few selected features.
 
 ```{r feature_distribution, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Observations Distribution"}
@@ -243,7 +252,7 @@ First of all let's get rid of *Date* column. Outside of the presentation it does
 Secondly we convert categorical features to numbers. But before we do so we would like to ponder about *Location*. We have couple options here. Either we convert the locations to the numbers or we can replace them with the real geographical coordinates. After some deliberation we can conclude that the coordinates will not add too much knowledge in the context of the model training. But they will certainly break this categorical feature (coordinates have 4,6 decimal places, which effectively make them continuous). So we stick with categories.
 
 This is our original set:
-```{r}
+```{r include=FALSE}
 str(weatherData)
 ```
 
@@ -256,7 +265,7 @@ data = mutate(weatherData,MMDD = as.numeric( format(Date, "%m%d")),Location = un
 data =  subset(data, select = -Date)
 ```
 Resulting data frame structure:
-```{r}
+```{r include=FALSE}
 str(data)
 ```
 
@@ -272,7 +281,7 @@ predictors = quickpred(data)
 ```
 
 Let's review the methods chosen by the software making sure that they meet our requirements highlighted prior in the imputation strategy paragraph
-```{r}
+```{r include=FALSE}
 print(methods)
 ```
 The code output above shows that 
@@ -355,14 +364,15 @@ print(rfePrediction)
 plot(rfePrediction, type=c("g", "o"))
 ```
 Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few times:  with 9 predictors, 14 and tops at 22.The accuracy gain between 9 and 22 is negligible. Here is the list of features ordered by importance. We take first nine for model training.
-```{r}
+```{r include=FALSE}
 print(predictors(rfePrediction))
 ```
 
-```{r}
-selectedPredictors =  predictors(rfePrediction)[1:9]
+```{r include=FALSE}
+l = length(predictors(rfePrediction))
+selectedPredictors =  predictors(rfePrediction)[1:ifelse(l<9,l,9)]
 # remove useless variables
-rm(label,predictors,rfePrediction)
+rm(label,predictors,rfePrediction,l)
 ```
 
 ### Data Upsampling
@@ -370,8 +380,9 @@ rm(label,predictors,rfePrediction)
 There is one more step before we get to the model training. As shown in Figure \ref{fig:feature_distribution} our data set is unbalanced. This could cause model over-fitting. So let's split the data into the training and testing sets and up-sample the training set
 ```{r echo=FALSE}
 set.seed(1608)
+
 # keep only the selected features
-finalSample = weatherSample %>% select(c(selectedPredictors,"RainTomorrow"));
+finalSample = weatherSample %>% dplyr::select(c(selectedPredictors,"RainTomorrow"));
 
 splitIdx = createDataPartition(finalSample$RainTomorrow, p=0.7, list = F)  # 70% training data
 trainData = finalSample[splitIdx, ]
@@ -396,7 +407,7 @@ modelSeed = 4987
 selectedPredictorsPlus = paste(selectedPredictors, collapse = " + ")
 ```
 
-## Classification Tree Model
+## Classification (Decision) Tree Model
 
 ```{r echo=FALSE}
 set.seed(modelSeed)
@@ -432,7 +443,7 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 ## Naive Bayes Model
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # possible tuning grid
 # tuninGrid = data.frame(fL=c(0,0.5,1.0), usekernel = TRUE, adjust=c(0,0.5,1.0))
 set.seed(modelSeed)
@@ -468,8 +479,11 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 
 ## Random Forest Model
+Random Forest is also considered as a very handy and easy to use algorithm, because it’s default hyperparameters often produce a good prediction result.
+Random Forest adds additional randomness to the model, while growing the trees. Instead of searching for the most important feature while splitting a node, it searches for the best feature among a random subset of features. This results in a wide diversity that generally results in a better model.
+The main limitation of Random Forest is that a large number of trees can make the algorithm to slow and ineffective for real-time predictions. In general, these algorithms are fast to train, but quite slow to create predictions once they are trained.
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(modelSeed)
 trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
 testDataCopy = mutate(testData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
@@ -478,10 +492,10 @@ ctrl = trainControl(method = "cv", number = 2, # it takes forever for 10 - fold
     classProbs = T,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
-
+ptm_rf <- proc.time()
 randomForestModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "rf", metric="ROC", trControl = ctrl)
-
+proc.time() - ptm_rf
 pred.randomForestModel.prob = predict(randomForestModel, newdata = testDataCopy, type="prob")
 pred.randomForestModel.raw = predict(randomForestModel, newdata = testDataCopy )
 
@@ -504,14 +518,21 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 ## Logistic Regression Model
 
-Logistic regression prediction accuracy will benefit if the data is normalized  and are close to Gaussian distribution. Thus we apply addition transformation to the training data set. We will also be employing 5-fold cross validation resampling procedure to improve the model. In addition to the above we are going to convert categorical values ( factors) to numeric data type
+Logistic regression is an efficient, interpretable and reasonably accurate method, which fits quickly with minimal tuning. Logistic regression prediction accuracy will benefit if the data is close to Gaussian distribution. Thus we apply addition transformation to the training data set. We will also be employing 5-fold cross validation resampling procedure to improve the model. In addition to the above we are going to convert **Location* categorical value to numeric data type. We could have used dummy encoding but having 49 locations this approach does not seem beneficial.
 
-```{r include=FALSE}
+```{r include=FALSE, message=FALSE, warning=FALSE}
 set.seed(modelSeed)
 
 # hard-coded transformations are not ideal!
-trainDataCopy =  mutate(trainData, Location = unclass(Location))
-testDataCopy =  mutate(testData, Location = unclass(Location)) 
+trainDataCopy = NULL
+testDataCopy = NULL
+if("Location" %in% colnames(trainData)) {
+  trainDataCopy = mutate(trainData, Location = unclass(Location))
+  testDataCopy = mutate(testData, Location = unclass(Location)) 
+} else {
+  trainDataCopy = subset(trainData)
+  testDataCopy = subset(testData )
+}  
 
 ctrl = trainControl(
   # 5-fold CV
@@ -520,7 +541,7 @@ ctrl = trainControl(
 
 logRegModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
         data = trainDataCopy, method="glm", family = binomial(link = "logit"), 
-        trControl = ctrl, preProc = c("BoxCox","center", "scale"))
+        trControl = ctrl, preProc = c("BoxCox"))
 
 pred.logRegModel.raw = predict(logRegModel, newdata =  testDataCopy)
 pred.logRegModel.prob = predict(logRegModel, newdata =  testDataCopy, type = "prob")
@@ -544,7 +565,9 @@ Using the proportion of positive data points that are correctly considered as po
 
 ## Model Comparison
 
-```{r plot_model_comp,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Model Accuracy Comparison", out.width="1.1\\linewidth"}
+Not it is time to compare the models side by side and pick a winner.
+
+```{r plot_model_comp, fig.align="center", fig.cap="Model Accuracy Comparison", message=FALSE, warning=FALSE, echo=FALSE, out.width="1.1\\linewidth"}
 modelsFace2Face = data.frame(model=c("logRegModel", "classTreeModel",
         "naiveBayesModel", "randomForestModel"),
         auc=c(auc.logRegModel, auc.classTreeModel, auc.naiveBayesModel, auc.randomForestModel))
@@ -553,7 +576,39 @@ modelsFace2Face$model = factor(modelsFace2Face$model, levels = modelsFace2Face$m
 
 ggplot(data = modelsFace2Face, aes(x=model, y=auc)) +
   geom_bar(stat="identity", fill=mainPalette[3], colour=mainPalette[3], alpha = 0.5)
+
+print(modelsFace2Face)
 ```
+
+Let's review model metrics.
+
+### AUC - ROC perfomance
+
+AUC stands for Area under the ROC Curve and ROC for Receiver operating characteristic curve. This is one of the most important KPIs of the classification algorithms. This two metrics measure how well the models distinguishing between the classes. separates positive and negative outcome. The higher AUC the better model predicts positive and negative outcome. 
+
+Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the higher overall accuracy (83%) but performs poorly predicting rainy days (59%), thus balanced accuracy is lower (about 75%). 
+
+Naive Bayes and Decision Tree are less accurate models in comparison with the Random Forest one but way more balanced demonstrating consistent power to predict rainy and sunny days with equal accuracy. They have balanced accuracy of 74% and 79% respectively.
+
+Logistic regression model scores the best having the highest AUC and all other metrics around 80%.
+
+### Model interpretibility
+
+Logistic Regression, Decision Tree and Naive Bayes are all highly interpreatable models. It is easy to explain to the business what impact each input parameter has. The decision tree could be even visualized ( if it is not too large). 
+
+Random Forest on the other hand is a black-box model, complex algorithm which is difficult to explain in simple terms.
+
+### Data Preparation
+
+Decision Tree, Random Forest and Naive Bayes can deal with missing data, outliers, numeric and alphanumeric values. In simple terms they are not very demanding for data quality. It would be interesting to see how they perform on the original data set without data cleaning. but this is subject of another research.
+
+Logistic regression does require conversion of alphanumeric values to numeric, struggles dealing with the outliers and performs best when dealing with the data that have normal distribution. 
+
+### Verdict (To be finalized)
+
+Despite sensitivity to data quality Logistic regression outperforms other models in all other categories.
+
+
 
 # Model Deployment
 
@@ -561,7 +616,8 @@ ggplot(data = modelsFace2Face, aes(x=model, y=auc)) +
 
 # Bibliography
 
+\newpage  
 # Note from the Authors
 
-This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts \citep{ivbsoftware_big-data-final}.
+This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts.
 

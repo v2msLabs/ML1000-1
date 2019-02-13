@@ -5,19 +5,52 @@
 \maketitle
 
 \abstract{%
-An abstract of less than 150 words.
+Many native cultures comprise an institution of ``rainmakers'' -- people
+who would not as much invoke the rains, but anticipate them based on
+ethno-meteorology. The forecasting was based on skillful art of
+observing the natural environment as expressed in the timing or
+flowering of plants, hatching of insects, arrival of migratory birds,
+etc., which enables farmers to make adjustments in farming calendar and
+crop selection types in any given season. This indigenous knowledge was
+often passed down from one generation to the other. We are going to
+employ the latest scientific methods, prediction algorithms to achieve
+the same very goal without thorough knowledge of forces of nature,
+hopefully with the same accuracy as the aboriginal people
 }
 
 % Any extra LaTeX you need in the preamble
 
-\hypertarget{introduction}{%
-\subsection{Introduction}\label{introduction}}
-
 \hypertarget{background}{%
 \subsection{Background}\label{background}}
 
+Weather forecasting is a complex and often challenging skill that
+involves observing and processing vast amounts of data. Weather systems
+can range from small, short lived thunderstorms only a few kilometers in
+diameter that last a couple hours to large scale rain and snow storms up
+to a thousand kilometers in diameter and lasting for days.
+
+A very important component of modern weather forecasting is the use of
+numerical weather prediction (NWP) models. In the last years, the
+forecast quality of those models constantly improved, mostly due to
+major improvements in high performance computing. NWP focuses on taking
+current observations of weather and processing these data with computer
+models to forecast the future state of weather. Knowing the current
+state of the weather is just as important as the numerical computer
+models processing the data. Current weather observations serve as input
+to the numerical computer models through a process known as data
+assimilation to produce outputs of temperature, precipitation, and
+hundreds of other meteorological elements from the oceans to the top of
+the atmosphere.
+
 \hypertarget{objective}{%
 \subsection{Objective}\label{objective}}
+
+The objective of this research is to find a numerical weather prediction
+model that would provide accurate forecast of possibility of the rain
+next day having today weather pattern observations. In addition to
+accuracy the model should be easily interpretable and flexible enough to
+accept limited number of input features without diminishing its
+prediction power.
 
 \hypertarget{data-analisys}{%
 \section{Data Analisys}\label{data-analisys}}
@@ -204,61 +237,7 @@ view of the weather station locations
 
 Let's review data summary
 
-\begin{Schunk}
-\begin{Sinput}
-summary(weatherData)
-\end{Sinput}
-\begin{Soutput}
-#>       Date                Location         MinTemp         MaxTemp     
-#>  Min.   :2007-11-01   Canberra:  3418   Min.   :-8.50   Min.   :-4.80  
-#>  1st Qu.:2011-01-06   Sydney  :  3337   1st Qu.: 7.60   1st Qu.:17.90  
-#>  Median :2013-05-27   Perth   :  3193   Median :12.00   Median :22.60  
-#>  Mean   :2013-04-01   Darwin  :  3192   Mean   :12.19   Mean   :23.23  
-#>  3rd Qu.:2015-06-12   Hobart  :  3188   3rd Qu.:16.80   3rd Qu.:28.20  
-#>  Max.   :2017-06-25   Brisbane:  3161   Max.   :33.90   Max.   :48.10  
-#>                       (Other) :122704   NA's   :637     NA's   :322    
-#>     Rainfall       Evaporation        Sunshine      WindGustDir   
-#>  Min.   :  0.00   Min.   :  0.00   Min.   : 0.00   W      : 9780  
-#>  1st Qu.:  0.00   1st Qu.:  2.60   1st Qu.: 4.90   SE     : 9309  
-#>  Median :  0.00   Median :  4.80   Median : 8.50   E      : 9071  
-#>  Mean   :  2.35   Mean   :  5.47   Mean   : 7.62   N      : 9033  
-#>  3rd Qu.:  0.80   3rd Qu.:  7.40   3rd Qu.:10.60   SSE    : 8993  
-#>  Max.   :371.00   Max.   :145.00   Max.   :14.50   (Other):86677  
-#>  NA's   :1406     NA's   :60843    NA's   :67816   NA's   : 9330  
-#>  WindGustSpeed      WindDir9am      WindDir3pm     WindSpeed9am 
-#>  Min.   :  6.00   N      :11393   SE     :10663   Min.   :  0   
-#>  1st Qu.: 31.00   SE     : 9162   W      : 9911   1st Qu.:  7   
-#>  Median : 39.00   E      : 9024   S      : 9598   Median : 13   
-#>  Mean   : 39.98   SSE    : 8966   WSW    : 9329   Mean   : 14   
-#>  3rd Qu.: 48.00   NW     : 8552   SW     : 9182   3rd Qu.: 19   
-#>  Max.   :135.00   (Other):85083   (Other):89732   Max.   :130   
-#>  NA's   :9270     NA's   :10013   NA's   : 3778   NA's   :1348  
-#>   WindSpeed3pm    Humidity9am      Humidity3pm      Pressure9am    
-#>  Min.   : 0.00   Min.   :  0.00   Min.   :  0.00   Min.   : 980.5  
-#>  1st Qu.:13.00   1st Qu.: 57.00   1st Qu.: 37.00   1st Qu.:1012.9  
-#>  Median :19.00   Median : 70.00   Median : 52.00   Median :1017.6  
-#>  Mean   :18.64   Mean   : 68.84   Mean   : 51.48   Mean   :1017.7  
-#>  3rd Qu.:24.00   3rd Qu.: 83.00   3rd Qu.: 66.00   3rd Qu.:1022.4  
-#>  Max.   :87.00   Max.   :100.00   Max.   :100.00   Max.   :1041.0  
-#>  NA's   :2630    NA's   :1774     NA's   :3610     NA's   :14014   
-#>   Pressure3pm        Cloud9am        Cloud3pm        Temp9am     
-#>  Min.   : 977.1   Min.   :0.00    Min.   :0.0     Min.   :-7.20  
-#>  1st Qu.:1010.4   1st Qu.:1.00    1st Qu.:2.0     1st Qu.:12.30  
-#>  Median :1015.2   Median :5.00    Median :5.0     Median :16.70  
-#>  Mean   :1015.3   Mean   :4.44    Mean   :4.5     Mean   :16.99  
-#>  3rd Qu.:1020.0   3rd Qu.:7.00    3rd Qu.:7.0     3rd Qu.:21.60  
-#>  Max.   :1039.6   Max.   :9.00    Max.   :9.0     Max.   :40.20  
-#>  NA's   :13981    NA's   :53657   NA's   :57094   NA's   :904    
-#>     Temp3pm      RainToday     RainTomorrow
-#>  Min.   :-5.40   No  :109332   No :110316  
-#>  1st Qu.:16.60   Yes : 31455   Yes: 31877  
-#>  Median :21.10   NA's:  1406               
-#>  Mean   :21.69                             
-#>  3rd Qu.:26.40                             
-#>  Max.   :46.70                             
-#>  NA's   :2726
-\end{Soutput}
-\end{Schunk}
+Data sample
 
 Next set of plots renders distribution of a few selected features.
 
@@ -318,30 +297,30 @@ aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars
 \begin{Soutput}
 #> 
 #>  Variables sorted by number of missings: 
-#>       Variable       Count
-#>       Sunshine 0.476666667
-#>    Evaporation 0.433833333
-#>       Cloud3pm 0.398000000
-#>       Cloud9am 0.371666667
-#>    Pressure3pm 0.099833333
-#>    Pressure9am 0.099166667
-#>    WindGustDir 0.068000000
-#>     WindDir9am 0.067833333
-#>  WindGustSpeed 0.067500000
-#>     WindDir3pm 0.026666667
-#>    Humidity3pm 0.026666667
-#>        Temp3pm 0.020500000
-#>   WindSpeed3pm 0.019166667
-#>    Humidity9am 0.011333333
-#>       Rainfall 0.009166667
-#>   WindSpeed9am 0.009166667
-#>      RainToday 0.009166667
-#>        Temp9am 0.005666667
-#>        MinTemp 0.004166667
-#>        MaxTemp 0.002666667
-#>           Date 0.000000000
-#>       Location 0.000000000
-#>   RainTomorrow 0.000000000
+#>       Variable  Count
+#>       Sunshine 0.4760
+#>    Evaporation 0.4326
+#>       Cloud3pm 0.4038
+#>       Cloud9am 0.3843
+#>    Pressure3pm 0.0946
+#>    Pressure9am 0.0945
+#>     WindDir9am 0.0694
+#>    WindGustDir 0.0682
+#>  WindGustSpeed 0.0678
+#>     WindDir3pm 0.0254
+#>    Humidity3pm 0.0237
+#>        Temp3pm 0.0173
+#>   WindSpeed3pm 0.0167
+#>    Humidity9am 0.0133
+#>       Rainfall 0.0099
+#>   WindSpeed9am 0.0099
+#>      RainToday 0.0099
+#>        Temp9am 0.0069
+#>        MinTemp 0.0048
+#>        MaxTemp 0.0022
+#>           Date 0.0000
+#>       Location 0.0000
+#>   RainTomorrow 0.0000
 \end{Soutput}
 \end{Schunk}
 
@@ -533,38 +512,6 @@ effectively make them continuous). So we stick with categories.
 
 This is our original set:
 
-\begin{Schunk}
-\begin{Sinput}
-str(weatherData)
-\end{Sinput}
-\begin{Soutput}
-#> 'data.frame':    142193 obs. of  23 variables:
-#>  $ Date         : Date, format: "2008-12-01" "2008-12-02" ...
-#>  $ Location     : Factor w/ 49 levels "Adelaide","Albany",..: 3 3 3 3 3 3 3 3 3 3 ...
-#>  $ MinTemp      : num  13.4 7.4 12.9 9.2 17.5 14.6 14.3 7.7 9.7 13.1 ...
-#>  $ MaxTemp      : num  22.9 25.1 25.7 28 32.3 29.7 25 26.7 31.9 30.1 ...
-#>  $ Rainfall     : num  0.6 0 0 0 1 0.2 0 0 0 1.4 ...
-#>  $ Evaporation  : num  NA NA NA NA NA NA NA NA NA NA ...
-#>  $ Sunshine     : num  NA NA NA NA NA NA NA NA NA NA ...
-#>  $ WindGustDir  : Factor w/ 16 levels "E","ENE","ESE",..: 14 15 16 5 14 15 14 14 7 14 ...
-#>  $ WindGustSpeed: int  44 44 46 24 41 56 50 35 80 28 ...
-#>  $ WindDir9am   : Factor w/ 16 levels "E","ENE","ESE",..: 14 7 14 10 2 14 13 11 10 9 ...
-#>  $ WindDir3pm   : Factor w/ 16 levels "E","ENE","ESE",..: 15 16 16 1 8 14 14 14 8 11 ...
-#>  $ WindSpeed9am : int  20 4 19 11 7 19 20 6 7 15 ...
-#>  $ WindSpeed3pm : int  24 22 26 9 20 24 24 17 28 11 ...
-#>  $ Humidity9am  : int  71 44 38 45 82 55 49 48 42 58 ...
-#>  $ Humidity3pm  : int  22 25 30 16 33 23 19 19 9 27 ...
-#>  $ Pressure9am  : num  1008 1011 1008 1018 1011 ...
-#>  $ Pressure3pm  : num  1007 1008 1009 1013 1006 ...
-#>  $ Cloud9am     : int  8 NA NA NA 7 NA 1 NA NA NA ...
-#>  $ Cloud3pm     : int  NA NA 2 NA 8 NA NA NA NA NA ...
-#>  $ Temp9am      : num  16.9 17.2 21 18.1 17.8 20.6 18.1 16.3 18.3 20.1 ...
-#>  $ Temp3pm      : num  21.8 24.3 23.2 26.5 29.7 28.9 24.6 25.5 30.2 28.2 ...
-#>  $ RainToday    : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 2 ...
-#>  $ RainTomorrow : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 2 1 ...
-\end{Soutput}
-\end{Schunk}
-
 Transformation
 
 \begin{Schunk}
@@ -578,38 +525,6 @@ data =  subset(data, select = -Date)
 \end{Schunk}
 
 Resulting data frame structure:
-
-\begin{Schunk}
-\begin{Sinput}
-str(data)
-\end{Sinput}
-\begin{Soutput}
-#> 'data.frame':    142193 obs. of  23 variables:
-#>  $ Location     : int  3 3 3 3 3 3 3 3 3 3 ...
-#>  $ MinTemp      : num  13.4 7.4 12.9 9.2 17.5 14.6 14.3 7.7 9.7 13.1 ...
-#>  $ MaxTemp      : num  22.9 25.1 25.7 28 32.3 29.7 25 26.7 31.9 30.1 ...
-#>  $ Rainfall     : num  0.6 0 0 0 1 0.2 0 0 0 1.4 ...
-#>  $ Evaporation  : num  NA NA NA NA NA NA NA NA NA NA ...
-#>  $ Sunshine     : num  NA NA NA NA NA NA NA NA NA NA ...
-#>  $ WindGustDir  : int  14 15 16 5 14 15 14 14 7 14 ...
-#>  $ WindGustSpeed: int  44 44 46 24 41 56 50 35 80 28 ...
-#>  $ WindDir9am   : int  14 7 14 10 2 14 13 11 10 9 ...
-#>  $ WindDir3pm   : int  15 16 16 1 8 14 14 14 8 11 ...
-#>  $ WindSpeed9am : int  20 4 19 11 7 19 20 6 7 15 ...
-#>  $ WindSpeed3pm : int  24 22 26 9 20 24 24 17 28 11 ...
-#>  $ Humidity9am  : int  71 44 38 45 82 55 49 48 42 58 ...
-#>  $ Humidity3pm  : int  22 25 30 16 33 23 19 19 9 27 ...
-#>  $ Pressure9am  : num  1008 1011 1008 1018 1011 ...
-#>  $ Pressure3pm  : num  1007 1008 1009 1013 1006 ...
-#>  $ Cloud9am     : int  8 NA NA NA 7 NA 1 NA NA NA ...
-#>  $ Cloud3pm     : int  NA NA 2 NA 8 NA NA NA NA NA ...
-#>  $ Temp9am      : num  16.9 17.2 21 18.1 17.8 20.6 18.1 16.3 18.3 20.1 ...
-#>  $ Temp3pm      : num  21.8 24.3 23.2 26.5 29.7 28.9 24.6 25.5 30.2 28.2 ...
-#>  $ RainToday    : num  0 0 0 0 0 0 0 0 0 1 ...
-#>  $ RainTomorrow : num  0 0 0 0 0 0 0 0 1 0 ...
-#>  $ MMDD         : num  1201 1202 1203 1204 1205 ...
-\end{Soutput}
-\end{Schunk}
 
 To impute the missing data we employ \textbf{MICE} package. Our
 imputation strategy is to employ \textbf{Predictive mean matching} model
@@ -633,24 +548,6 @@ predictors = quickpred(data)
 Let's review the methods chosen by the software making sure that they
 meet our requirements highlighted prior in the imputation strategy
 paragraph
-
-\begin{Schunk}
-\begin{Sinput}
-print(methods)
-\end{Sinput}
-\begin{Soutput}
-#>      Location       MinTemp       MaxTemp      Rainfall   Evaporation 
-#>            ""         "pmm"         "pmm"         "pmm"         "pmm" 
-#>      Sunshine   WindGustDir WindGustSpeed    WindDir9am    WindDir3pm 
-#>         "pmm"         "pmm"         "pmm"         "pmm"         "pmm" 
-#>  WindSpeed9am  WindSpeed3pm   Humidity9am   Humidity3pm   Pressure9am 
-#>         "pmm"         "pmm"         "pmm"         "pmm"         "pmm" 
-#>   Pressure3pm      Cloud9am      Cloud3pm       Temp9am       Temp3pm 
-#>         "pmm"         "pmm"         "pmm"         "pmm"         "pmm" 
-#>     RainToday  RainTomorrow          MMDD 
-#>         "pmm"            ""            ""
-\end{Soutput}
-\end{Schunk}
 
 The code output above shows that 1 the features without missing data
 will not be imputed 2 The imputation targets will all be treated with
@@ -810,32 +707,32 @@ print(rfePrediction)
 #> 
 #> Resampling performance over subset size:
 #> 
-#>  Variables Accuracy  Kappa AccuracySD  KappaSD Selected
-#>          1   0.8220 0.3579  0.0075375 0.050475         
-#>          2   0.8068 0.3694  0.0037996 0.016869         
-#>          3   0.8268 0.4286  0.0122984 0.070036         
-#>          4   0.8413 0.4893  0.0138904 0.062262         
-#>          5   0.8405 0.4975  0.0041185 0.045392         
-#>          6   0.8447 0.5092  0.0024217 0.043001         
-#>          7   0.8460 0.5262  0.0035618 0.025266         
-#>          8   0.8462 0.5361  0.0030817 0.021785         
-#>          9   0.8457 0.5345  0.0036273 0.013533         
-#>         10   0.8468 0.5368  0.0022905 0.007530         
-#>         11   0.8477 0.5341  0.0037683 0.018350         
-#>         12   0.8482 0.5386  0.0040639 0.014088        *
-#>         13   0.8437 0.5297  0.0061410 0.016993         
-#>         14   0.8442 0.5290  0.0035464 0.009578         
-#>         15   0.8435 0.5293  0.0047030 0.012035         
-#>         16   0.8448 0.5341  0.0042348 0.002200         
-#>         17   0.8440 0.5306  0.0047032 0.011647         
-#>         18   0.8433 0.5306  0.0027894 0.007575         
-#>         19   0.8465 0.5359  0.0035306 0.010462         
-#>         20   0.8472 0.5354  0.0009869 0.013526         
-#>         21   0.8453 0.5306  0.0026765 0.008085         
-#>         22   0.8480 0.5362  0.0038381 0.002994         
+#>  Variables Accuracy  Kappa AccuracySD KappaSD Selected
+#>          1   0.8231 0.3732   0.002468 0.01553         
+#>          2   0.8146 0.3843   0.005100 0.02274         
+#>          3   0.8283 0.4546   0.007749 0.02330         
+#>          4   0.8302 0.4752   0.012749 0.04676         
+#>          5   0.8327 0.4899   0.007866 0.02774         
+#>          6   0.8407 0.5218   0.007640 0.02944         
+#>          7   0.8467 0.5377   0.003886 0.02030         
+#>          8   0.8490 0.5438   0.006280 0.02311         
+#>          9   0.8476 0.5377   0.005532 0.02489         
+#>         10   0.8476 0.5376   0.004424 0.02519         
+#>         11   0.8486 0.5409   0.004924 0.02723         
+#>         12   0.8519 0.5514   0.002697 0.01732        *
+#>         13   0.8495 0.5461   0.001724 0.02027         
+#>         14   0.8486 0.5445   0.003151 0.02161         
+#>         15   0.8484 0.5458   0.002949 0.01751         
+#>         16   0.8496 0.5484   0.002086 0.01604         
+#>         17   0.8509 0.5497   0.002641 0.01616         
+#>         18   0.8511 0.5518   0.001401 0.01339         
+#>         19   0.8507 0.5504   0.002615 0.01296         
+#>         20   0.8514 0.5503   0.001546 0.01198         
+#>         21   0.8516 0.5502   0.003429 0.01777         
+#>         22   0.8512 0.5488   0.003117 0.01604         
 #> 
 #> The top 5 variables (out of 12):
-#>    Humidity3pm, Sunshine, WindGustSpeed, Pressure3pm, Rainfall
+#>    Humidity3pm, Sunshine, WindGustSpeed, Location, Cloud3pm
 \end{Soutput}
 \end{Schunk}
 
@@ -853,18 +750,7 @@ print(rfePrediction)
 Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few
 times: with 9 predictors, 14 and tops at 22.The accuracy gain between 9
 and 22 is negligible. Here is the list of features ordered by
-importance:
-
-\begin{Schunk}
-\begin{Sinput}
-print(predictors(rfePrediction))
-\end{Sinput}
-\begin{Soutput}
-#>  [1] "Humidity3pm"   "Sunshine"      "WindGustSpeed" "Pressure3pm"  
-#>  [5] "Rainfall"      "Cloud3pm"      "Location"      "Pressure9am"  
-#>  [9] "Humidity9am"   "RainToday"     "MinTemp"       "Temp3pm"
-\end{Soutput}
-\end{Schunk}
+importance. We take first nine for model training.
 
 \hypertarget{data-upsampling}{%
 \subsubsection{Data Upsampling}\label{data-upsampling}}
@@ -878,7 +764,7 @@ training and testing sets and up-sample the training set
 \begin{Soutput}
 #> 
 #>    0    1 
-#> 3275 3275
+#> 5432 5432
 \end{Soutput}
 \end{Schunk}
 
@@ -888,53 +774,264 @@ Thus we have prepared our training and test data sets. We have
 identified the most important features. We are ready to work on the
 prediction models
 
-\hypertarget{classification-tree-model}{%
-\subsection{Classification Tree Model}\label{classification-tree-model}}
+\hypertarget{classification-decision-tree-model}{%
+\subsection{Classification (Decision) Tree
+Model}\label{classification-decision-tree-model}}
+
+\begin{Schunk}
+\begin{Soutput}
+#> Conditional Inference Tree 
+#> 
+#> 10864 samples
+#>     9 predictor
+#>     2 classes: 'no', 'yes' 
+#> 
+#> No pre-processing
+#> Resampling: Cross-Validated (5 fold) 
+#> Summary of sample sizes: 8692, 8690, 8691, 8692, 8691 
+#> Resampling results across tuning parameters:
+#> 
+#>   mincriterion  ROC        Sens       Spec     
+#>   0.01          0.8929945  0.7916029  0.8317392
+#>   0.50          0.8890711  0.7816611  0.8337681
+#>   0.99          0.8782693  0.7814832  0.8022821
+#> 
+#> ROC was used to select the optimal model using the largest value.
+#> The final value used for the model was mincriterion = 0.01.
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
+\end{Sinput}
+\begin{Soutput}
+#> Confusion Matrix and Statistics
+#> 
+#>           Reference
+#> Prediction   no  yes
+#>        no  1837  187
+#>        yes  490  485
+#>                                           
+#>                Accuracy : 0.7743          
+#>                  95% CI : (0.7589, 0.7891)
+#>     No Information Rate : 0.7759          
+#>     P-Value [Acc > NIR] : 0.5966          
+#>                                           
+#>                   Kappa : 0.4405          
+#>  Mcnemar's Test P-Value : <2e-16          
+#>                                           
+#>             Sensitivity : 0.7894          
+#>             Specificity : 0.7217          
+#>          Pos Pred Value : 0.9076          
+#>          Neg Pred Value : 0.4974          
+#>              Prevalence : 0.7759          
+#>          Detection Rate : 0.6125          
+#>    Detection Prevalence : 0.6749          
+#>       Balanced Accuracy : 0.7556          
+#>                                           
+#>        'Positive' Class : no              
+#> 
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_classTree_ROC-1} 
+
+}
+
+\caption[Classification Tree Model AUC and ROC Curve]{Classification Tree Model AUC and ROC Curve}\label{fig:plot_classTree_ROC}
+\end{figure}
+\end{Schunk}
 
 \hypertarget{naive-bayes-model}{%
 \subsection{Naive Bayes Model}\label{naive-bayes-model}}
 
+\begin{Schunk}
+\begin{Soutput}
+#> Naive Bayes 
+#> 
+#> 10864 samples
+#>     9 predictor
+#>     2 classes: 'no', 'yes' 
+#> 
+#> No pre-processing
+#> Resampling: Cross-Validated (5 fold) 
+#> Summary of sample sizes: 8692, 8690, 8691, 8692, 8691 
+#> Resampling results across tuning parameters:
+#> 
+#>   usekernel  ROC        Sens       Spec     
+#>   FALSE      0.7469454  0.5716072  0.7711680
+#>    TRUE      0.8669656  0.6923751  0.8562226
+#> 
+#> Tuning parameter 'fL' was held constant at a value of 0
+#> Tuning
+#>  parameter 'adjust' was held constant at a value of 1
+#> ROC was used to select the optimal model using the largest value.
+#> The final values used for the model were fL = 0, usekernel = TRUE
+#>  and adjust = 1.
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
+\end{Sinput}
+\begin{Soutput}
+#> Confusion Matrix and Statistics
+#> 
+#>           Reference
+#> Prediction   no  yes
+#>        no  1624  128
+#>        yes  703  544
+#>                                           
+#>                Accuracy : 0.7229          
+#>                  95% CI : (0.7065, 0.7389)
+#>     No Information Rate : 0.7759          
+#>     P-Value [Acc > NIR] : 1               
+#>                                           
+#>                   Kappa : 0.389           
+#>  Mcnemar's Test P-Value : <2e-16          
+#>                                           
+#>             Sensitivity : 0.6979          
+#>             Specificity : 0.8095          
+#>          Pos Pred Value : 0.9269          
+#>          Neg Pred Value : 0.4362          
+#>              Prevalence : 0.7759          
+#>          Detection Rate : 0.5415          
+#>    Detection Prevalence : 0.5842          
+#>       Balanced Accuracy : 0.7537          
+#>                                           
+#>        'Positive' Class : no              
+#> 
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_nb_ROC-1} 
+
+}
+
+\caption[Naive Bayes Model AUC and ROC Curve]{Naive Bayes Model AUC and ROC Curve}\label{fig:plot_nb_ROC}
+\end{figure}
+\end{Schunk}
+
 \hypertarget{random-forest-model}{%
 \subsection{Random Forest Model}\label{random-forest-model}}
+
+\begin{Schunk}
+\begin{Soutput}
+#> Random Forest 
+#> 
+#> 10864 samples
+#>     9 predictor
+#>     2 classes: 'no', 'yes' 
+#> 
+#> No pre-processing
+#> Resampling: Cross-Validated (2 fold) 
+#> Summary of sample sizes: 5432, 5432 
+#> Resampling results across tuning parameters:
+#> 
+#>   mtry  ROC        Sens       Spec     
+#>    2    0.8972216  0.7873711  0.8438881
+#>   29    0.9664085  0.8630339  0.9401694
+#>   56    0.9638440  0.8599043  0.9401694
+#> 
+#> ROC was used to select the optimal model using the largest value.
+#> The final value used for the model was mtry = 29.
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
+\end{Sinput}
+\begin{Soutput}
+#> Confusion Matrix and Statistics
+#> 
+#>           Reference
+#> Prediction   no  yes
+#>        no  2093  274
+#>        yes  234  398
+#>                                           
+#>                Accuracy : 0.8306          
+#>                  95% CI : (0.8167, 0.8439)
+#>     No Information Rate : 0.7759          
+#>     P-Value [Acc > NIR] : 7.273e-14       
+#>                                           
+#>                   Kappa : 0.5023          
+#>  Mcnemar's Test P-Value : 0.08357         
+#>                                           
+#>             Sensitivity : 0.8994          
+#>             Specificity : 0.5923          
+#>          Pos Pred Value : 0.8842          
+#>          Neg Pred Value : 0.6297          
+#>              Prevalence : 0.7759          
+#>          Detection Rate : 0.6979          
+#>    Detection Prevalence : 0.7893          
+#>       Balanced Accuracy : 0.7459          
+#>                                           
+#>        'Positive' Class : no              
+#> 
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_rf_ROC-1} 
+
+}
+
+\caption[Random Forest Model AUC and ROC Curve]{Random Forest Model AUC and ROC Curve}\label{fig:plot_rf_ROC}
+\end{figure}
+\end{Schunk}
 
 \hypertarget{logistic-regression-model}{%
 \subsection{Logistic Regression Model}\label{logistic-regression-model}}
 
-Logistic regression prediction accuracy will benefit if the data is
-normalized and are close to Gaussian distribution. Thus we apply
-addition transformation to the training data set. We will also be
-employing 5-fold cross validation resampling procedure to improve the
-model. In addition to the above we are going to convert categorical
-values ( factors) to numeric data type
+Logistic regression is an efficient, interpretable and reasonably
+accurate method, which fits quickly with minimal tuning. Logistic
+regression prediction accuracy will benefit if the data is close to
+Gaussian distribution. Thus we apply addition transformation to the
+training data set. We will also be employing 5-fold cross validation
+resampling procedure to improve the model. In addition to the above we
+are going to convert **Location* categorical value to numeric data type.
+We could have used dummy encoding but having 49 locations this approach
+does not seem beneficial.
 
 \begin{Schunk}
 \begin{Sinput}
-confusionMatrix(data = logRegModel.pred, testDataCopy$RainTomorrow)
+confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
 \end{Sinput}
 \begin{Soutput}
 #> Confusion Matrix and Statistics
 #> 
 #>           Reference
 #> Prediction    0    1
-#>          0 1169   73
-#>          1  234  323
+#>          0 1859  167
+#>          1  468  505
 #>                                           
-#>                Accuracy : 0.8293          
-#>                  95% CI : (0.8112, 0.8465)
-#>     No Information Rate : 0.7799          
-#>     P-Value [Acc > NIR] : 1.098e-07       
+#>                Accuracy : 0.7883          
+#>                  95% CI : (0.7732, 0.8028)
+#>     No Information Rate : 0.7759          
+#>     P-Value [Acc > NIR] : 0.05426         
 #>                                           
-#>                   Kappa : 0.5663          
-#>  Mcnemar's Test P-Value : < 2.2e-16       
+#>                   Kappa : 0.4748          
+#>  Mcnemar's Test P-Value : < 2e-16         
 #>                                           
-#>             Sensitivity : 0.8332          
-#>             Specificity : 0.8157          
-#>          Pos Pred Value : 0.9412          
-#>          Neg Pred Value : 0.5799          
-#>              Prevalence : 0.7799          
-#>          Detection Rate : 0.6498          
-#>    Detection Prevalence : 0.6904          
-#>       Balanced Accuracy : 0.8244          
+#>             Sensitivity : 0.7989          
+#>             Specificity : 0.7515          
+#>          Pos Pred Value : 0.9176          
+#>          Neg Pred Value : 0.5190          
+#>              Prevalence : 0.7759          
+#>          Detection Rate : 0.6199          
+#>    Detection Prevalence : 0.6756          
+#>       Balanced Accuracy : 0.7752          
 #>                                           
 #>        'Positive' Class : 0               
 #> 
@@ -962,14 +1059,85 @@ the model correctly predicts the rain tomorrow with the rate of
 incorrectly predicting the rain. The value around 0.80 indicates that
 the model does a good job in discriminating between the two categories.
 
-\begin{Schunk}
-\begin{Sinput}
-rm(trainDataCopy, testDataCopy, fittedVal)
-\end{Sinput}
-\end{Schunk}
-
 \hypertarget{model-comparison}{%
 \subsection{Model Comparison}\label{model-comparison}}
+
+Not it is time to compare the models side by side and pick a winner.
+
+\begin{Schunk}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_model_comp-1} 
+
+}
+
+\caption[Model Accuracy Comparison]{Model Accuracy Comparison}\label{fig:plot_model_comp}
+\end{figure}
+\begin{Soutput}
+#>               model       auc
+#> 1       logRegModel 0.7751854
+#> 2    classTreeModel 0.7555773
+#> 3   naiveBayesModel 0.7537090
+#> 4 randomForestModel 0.7445784
+\end{Soutput}
+\end{Schunk}
+
+Let's review model metrics.
+
+\hypertarget{auc---roc-perfomance}{%
+\subsubsection{AUC - ROC perfomance}\label{auc---roc-perfomance}}
+
+AUC stands for Area under the ROC Curve and ROC for Receiver operating
+characteristic curve. This is one of the most important KPIs of the
+classification algorithms. This two metrics measure how well the models
+distinguishing between the classes. separates positive and negative
+outcome. The higher AUC the better model predicts positive and negative
+outcome.
+
+Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC},
+\ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data
+show that on the test data set the Random Forest model has the higher
+overall accuracy (83\%) but performs poorly predicting rainy days
+(59\%), thus balanced accuracy is lower (about 75\%).
+
+Naive Bayes and Decision Tree are less accurate models in comparison
+with the Random Forest one but way more balanced demonstrating
+consistent power to predict rainy and sunny days with equal accuracy.
+They have balanced accuracy of 74\% and 79\% respectively.
+
+Logistic regression model scores the best having the highest AUC and all
+other metrics around 80\%.
+
+\hypertarget{model-interpretibility}{%
+\subsubsection{Model interpretibility}\label{model-interpretibility}}
+
+Logistic Regression, Decision Tree and Naive Bayes are all highly
+interpreatable models. It is easy to explain to the business what impact
+each input parameter has. The decision tree could be even visualized (
+if it is not too large).
+
+Random Forest on the other hand is a black-box model, complex algorithm
+which is difficult to explain in simple terms.
+
+\hypertarget{data-preparation-1}{%
+\subsubsection{Data Preparation}\label{data-preparation-1}}
+
+Decision Tree, Random Forest and Naive Bayes can deal with missing data,
+outliers, numeric and alphanumeric values. In simple terms they are not
+very demanding for data quality. It would be interesting to see how they
+perform on the original data set without data cleaning. but this is
+subject of another research.
+
+Logistic regression does require conversion of alphanumeric values to
+numeric, struggles dealing with the outliers and performs best when
+dealing with the data that have normal distribution.
+
+\hypertarget{verdict-to-be-finalized}{%
+\subsubsection{Verdict (To be
+finalized)}\label{verdict-to-be-finalized}}
+
+Despite sensitivity to data quality Logistic regression outperforms
+other models in all other categories.
 
 \hypertarget{model-deployment}{%
 \section{Model Deployment}\label{model-deployment}}
@@ -979,6 +1147,21 @@ rm(trainDataCopy, testDataCopy, fittedVal)
 
 \hypertarget{bibliography}{%
 \section{Bibliography}\label{bibliography}}
+
+\newpage
+
+\hypertarget{note-from-the-authors}{%
+\section{Note from the Authors}\label{note-from-the-authors}}
+
+This file was generated using
+\href{https://github.com/rstudio/rticles}{\emph{The R Journal} style
+article template}, additional information on how to prepare articles for
+submission is here -
+\href{https://journal.r-project.org/share/author-guide.pdf}{Instructions
+for Authors}. The article itself is an executable R Markdown file that
+could be
+\href{https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/}{downloaded
+from Github} with all the necessary artifacts.
 
 
 \address{%
