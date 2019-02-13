@@ -25,6 +25,8 @@ ui <- bootstrapPage( theme = "styles.css",
 
     titlePanel("title" = "Rain in Australia"),
     
+    h3("Predict rain tomorrow moving a few sliders today!"),
+    
     #6 Input: location value ----
     selectInput('Location', 'Location', regions),
     bsTooltip("Location", "Select one region from the list of available regions to predict rainfall for tomorrow",
@@ -42,7 +44,7 @@ ui <- bootstrapPage( theme = "styles.css",
     sliderInput("Sunshine", "Sunshine (hrs/day):",
                 min = 0, max = 15,
                 value = 10, step = 5),
-    bsTooltip("Sunshine", "How many ours of sunshine?",
+    bsTooltip("Sunshine", "How many hours of sunshine?",
               "right", options = list(container = "body")),
     
     #3 Input: Cloud3pm ----

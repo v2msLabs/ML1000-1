@@ -12,6 +12,7 @@ div.outer {
 }
 
 .control-panel {
+  width: 350px;
   left:30px;
   margin-top:30px;
   background-color: white;
