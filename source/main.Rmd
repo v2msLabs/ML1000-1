@@ -416,7 +416,7 @@ selectedPredictorsPlus = paste(selectedPredictors, collapse = " + ")
 
 ## Classification (Decision) Tree Model
 
-Decision trees tend to be the method of choice for predictive modeling. A classification tree is used to predict qualitative data.
+Decision Tree algorithm is simple to understand, interpret and visualize. Effort required for data preparation is minimal. This is probably why the Decision Tree model tends to be the method of choice for predictive modeling of many.
 ```{r echo=FALSE}
 set.seed(modelSeed)
 trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
@@ -450,6 +450,7 @@ rm(trainDataCopy,testDataCopy,ctrl)
 ```
 
 ## Naive Bayes Model
+
 Naïve Bayes classification is a kind of simple probabilistic classification methods based on Bayes’ theorem with the assumption of independence between features. 
 
 It is simple (both intuitively and computationally), fast, performs well with small amounts of training data, and scales well to large data sets. The greatest weakness of the naïve Bayes classifier is that it relies on an often-faulty assumption of equally important and independent features which results in biased posterior probabilities. Although this assumption is rarely met, in practice, this algorithm works surprisingly well and accurate; however, on average it rarely can compete with the accuracy of advanced tree-based methods (random forests & gradient boosting machines) but is definitely worth having in our toolkit.
@@ -490,9 +491,8 @@ rm(trainDataCopy,testDataCopy,ctrl)
 
 
 ## Random Forest Model
-Random Forest is also considered as a very handy and easy to use algorithm, because it’s default hyperparameters often produce a good prediction result.
-Random Forest adds additional randomness to the model, while growing the trees. Instead of searching for the most important feature while splitting a node, it searches for the best feature among a random subset of features. This results in a wide diversity that generally results in a better model.
-The main limitation of Random Forest is that a large number of trees can make the algorithm to slow and ineffective for real-time predictions. In general, these algorithms are fast to train, but quite slow to create predictions once they are trained.
+
+Random Forest is also considered as a very handy and easy to use algorithm, because it’s default hyperparameters often produce a good prediction result. Random Forest adds additional randomness to the model, while growing the trees. Instead of searching for the most important feature while splitting a node, it searches for the best feature among a random subset of features. This results in a wide diversity that generally results in a better model. The main limitation of Random Forest is that a large number of trees can make the algorithm to slow and ineffective for real-time predictions. In general, these algorithms are fast to train, but quite slow to create predictions once they are trained.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 set.seed(modelSeed)
@@ -647,4 +647,3 @@ We consider the project to be a success. Being easily understood, with a balance
 # Note from the Authors
 
 This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts.
-
