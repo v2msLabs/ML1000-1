@@ -504,19 +504,6 @@ roc.randomForestModel = pROC::roc(testDataCopy$RainTomorrow,
 auc.randomForestModel = pROC::auc(roc.randomForestModel)
 
 randomForestModel
-
-
-ptm <- proc.time()
-randomForestModel_ranger = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
-   data = trainDataCopy, method = "ranger", trControl = ctrl)
-proc.time() - ptm
-randomForestModel_ranger
-pred.randomForestModel_ranger.prob = predict(randomForestModel_ranger, newdata = testDataCopy, type="prob")
-pred.randomForestModel_ranger.raw = predict(randomForestModel_ranger, newdata = testDataCopy )
-confusionMatrix(data = pred.randomForestModel_ranger.raw, testDataCopy$RainTomorrow)
-
-#ranger method takes less time than the rf method for the randomforest
-#if we tune then rf is much faster than ranger
 ```
 ```{r}
 confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
