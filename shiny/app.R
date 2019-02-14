@@ -3,6 +3,10 @@ library(shinyBS)
 library(leaflet)
 library(dplyr)
 
+# read data
+locationsData <- read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
+# named vector
+locations <- setNames(unclass(locationsData$Location), c(levels(locationsData$Location)) )
 
 ui <- bootstrapPage( theme = "styles.css",
   div( class = "outer",
@@ -73,15 +77,12 @@ ui <- bootstrapPage( theme = "styles.css",
 
 # Define server logic for slider examples ----
 server <- function(input, output) {
-  locationsData = read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
-  # named vector
-  locations = setNames(unclass(locationsData$Location), c(levels(locationsData$Location)) )
   # colors: sunshine: fill, color. rain: fill, color
   colors = c("#FFE700","#00b253","#b7dfe7","#A3BED6")
   
-  output$locations <- reactive({ 
-    locations
-  })
+  # output$locations <- reactive({ 
+  #   locations
+  # })
   
 
   # Reactive expression to create data frame of all input values ----
@@ -95,10 +96,6 @@ server <- function(input, output) {
                "Location",
                "Pressure3pm"
       ),
-      ## get locaton coordinates
-      l =  names(locations)[which(locations == input$Location)],
-      print(l),
-      
       Value = as.character(c(input$Humidity3pm,
                              input$Sunshine,
                              input$Cloud3pm,
