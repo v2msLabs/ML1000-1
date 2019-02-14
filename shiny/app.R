@@ -3,18 +3,6 @@ library(shinyBS)
 library(leaflet)
 
 
-# Define UI for slider demo app ----
-# following variables for input and RainTomorrow for output
-#"Humidity3pm"   "Sunshine"      "Cloud3pm"      "WindGustSpeed" "Rainfall"      "Location"     
-#"Pressure3pm"   "Pressure9am"   "Cloud9am"  "RainTomorrow"
-#"Adelaide","Albany","Albury","AliceSprings","BadgerysCreek","Ballarat","Bendigo","Brisbane","Cairns","Canberra","Cobar","CoffsHarbour","Dartmoor","Darwin","GoldCoast","Hobart","Katherine","Launceston","Melbourne","MelbourneAirport","Mildura","Moree","MountGambier","MountGinini","Newcastle","Nhil","NorahHead","NorfolkIsland","Nuriootpa","PearceRAAF","Penrith","Perth","PerthAirport","Portland","Richmond","Sale","SalmonGums","Sydney","SydneyAirport","Townsville","Tuggeranong","Uluru","WaggaWagga","Walpole","Watsonia","Williamtown","Witchcliffe","Wollongong","Woomera"
-data <- c("Adelaide","Albany","Albury","AliceSprings","BadgerysCreek","Ballarat","Bendigo","Brisbane","Cairns","Canberra","Cobar","CoffsHarbour","Dartmoor","Darwin","GoldCoast","Hobart","Katherine","Launceston","Melbourne","MelbourneAirport","Mildura","Moree","MountGambier","MountGinini","Newcastle","Nhil","NorahHead","NorfolkIsland","Nuriootpa","PearceRAAF","Penrith","Perth","PerthAirport","Portland","Richmond","Sale","SalmonGums","Sydney","SydneyAirport","Townsville","Tuggeranong","Uluru","WaggaWagga","Walpole","Watsonia","Williamtown","Witchcliffe","Wollongong","Woomera")
-regions <<- list("Adelaide" = "Adelaide","Albany" = "Albany")
-weatherData = read.csv("../data/weatherAUS.csv", header = TRUE, na.strings = c("NA","","#NA"),sep=",")
-regions <- unique(weatherData$Location)
-###knitr::include_graphics("images/weatherStations.png")
-
-
 ui <- bootstrapPage( theme = "styles.css",
   div( class = "outer",
 
@@ -28,7 +16,7 @@ ui <- bootstrapPage( theme = "styles.css",
     h3("Predict rain tomorrow moving a few sliders today!"),
     
     #6 Input: location value ----
-    selectInput('Location', 'Location', regions),
+    selectInput('Location', 'Location', locations),
     bsTooltip("Location", "Select one region from the list of available regions to predict rainfall for tomorrow",
               "right", options = list(container = "body")),
     
@@ -84,7 +72,14 @@ ui <- bootstrapPage( theme = "styles.css",
 
 # Define server logic for slider examples ----
 server <- function(input, output) {
+  locationsData = read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
+  # named vector
+  locations = setNames(unclass(locationsData$Location), c(levels(locationsData$Location)) )
   
+  output$locations <- reactive({ 
+    locations
+  })
+     
   # Reactive expression to create data frame of all input values ----
   sliderValues <- reactive({
     data.frame(
@@ -113,12 +108,12 @@ server <- function(input, output) {
     sliderValues()
   })
   
+  
+  
   # draw a map
   output$map <- renderLeaflet({
-    # The code that generates the map has been excluded for performance sake
-    locations = read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
     map = leaflet() %>% setView(lng = 133.8836, lat = -23.69748, zoom = 5 ) %>% addTiles() %>% 
-      addCircleMarkers(data = locations, lng = ~Longtitude, lat = ~Latitude, label =~Location,  
+      addCircleMarkers(data = locationsData, lng = ~Longtitude, lat = ~Latitude, label =~Location,  
                        labelOptions = labelOptions(noHide = T, textOnly = T))
   })
   
