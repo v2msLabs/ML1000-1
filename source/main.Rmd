@@ -26,7 +26,6 @@ library(gridExtra) # arrange grids
 library(dplyr)  # data manipuation
 library(mice)  # data imputing
 library(corrplot) # correlation matrix plotting/printing
-library(caret) # predictive models
 library(pROC) # to measure model performance
 library(leaflet) # maps
 library(RColorBrewer) # color palettes
@@ -38,6 +37,7 @@ library(knitr) #
 library(party) # classification tree
 library(klaR) # naive bayes
 library(xtable) # tabular data formatting 
+library(caret) # predictive models
 
 # Clean all variables that might be left by other script to avoid collusion
 rm(list=ls(all=TRUE))
