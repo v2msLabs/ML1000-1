@@ -373,7 +373,9 @@ print(rfePrediction)
 ```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
 plot(rfePrediction, type=c("g", "o"))
 ```
+
 Figure \ref{fig:plot_feature_selection} illustrates that the accuracy practically flattens out when a number of predictors reaches 9. The accuracy improves a bit more when a number of features reaches 15 but the gain is negligible. Here is the list of features ordered by importance. We take first nine for model training.
+
 ```{r echo=FALSE}
 print(predictors(rfePrediction))
 ```
@@ -517,6 +519,8 @@ roc.randomForestModel = pROC::roc(testDataCopy$RainTomorrow,
                                   as.vector(ifelse(pred.randomForestModel.prob[,"yes"] >0.5, 1,0)) )
 auc.randomForestModel = pROC::auc(roc.randomForestModel)
 randomForestModel
+# save the model. Do it once.
+save(randomForestModel, file="../data/randomForesrModel.Rdata")
 ```
 ```{r}
 confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
@@ -562,8 +566,8 @@ auc.logRegModel = pROC::auc(roc.logRegModel)
 
 logRegModel
 # save the model. Do it once.
-save(logRegModel, file="../data/logRegModel.Rdata")
-saveRDS(logRegModel, file="../data/logRegModel.rda")
+# save(logRegModel, file="../data/logRegModel.Rdata")
+# saveRDS(logRegModel, file="../data/logRegModel.rda")
 ```
 ```{r}
 confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
@@ -605,7 +609,8 @@ Naive Bayes has lesser overall accuracy in comparison with the Random Forest one
 
 Logistic regression model scores the best having the highest AUC and all other metrics. It's balanced accuracy is over 80%.
 
-The descision tree performance is close to the other models with the balanced accuracy of 76%.
+The Descision Tree performance is close to the other models with the balanced accuracy of 76%.
+
 
 #### Model interpretibility
 
