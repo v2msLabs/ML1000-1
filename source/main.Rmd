@@ -10,7 +10,7 @@ author:
   - name: Vadim Spirkov
     affiliation: York University School of Continuing Studies
 abstract: >
-  Many native cultures comprise an institution of “rainmakers” – people who would not as much invoke the rains, but anticipate them based on ethno-meteorology. The forecasting was based on skillful art of observing the natural environment as expressed in the timing or flowering of plants, hatching of insects, arrival of migratory birds, etc., which enables farmers to make adjustments in farming calendar and crop selection types in any given season. This indigenous knowledge was often passed down from one generation to the other. We are going to employ CRISP-DM framework along with the latest scientific methods and prediction algorithms to achieve the same very goal without thorough knowledge of forces of nature, hopefully with the same accuracy as the aboriginal people.
+  Many native cultures comprise an institution of “rainmakers” – people who would not as much invoke the rains, but anticipate them based on ethno-meteorology. The forecasting was based on skillful art of observing the natural environment as expressed in the timing or flowering of plants, hatching of insects, arrival of migratory birds, etc., which enables farmers to make adjustments in farming calendar and crop selection types in any given season. This indigenous knowledge was often passed down from one generation to the other. We are going to employ CRISP-DM framework (Ref: \cite{mining}) along with the latest scientific methods and prediction algorithms to achieve the same very goal without thorough knowledge of forces of nature, hopefully with the same accuracy as the aboriginal people.
 
 output:
   rticles::rjournal_article:
@@ -26,7 +26,6 @@ library(gridExtra) # arrange grids
 library(dplyr)  # data manipuation
 library(mice)  # data imputing
 library(corrplot) # correlation matrix plotting/printing
-library(caret) # predictive models
 library(pROC) # to measure model performance
 library(leaflet) # maps
 library(RColorBrewer) # color palettes
@@ -38,6 +37,7 @@ library(knitr) #
 library(party) # classification tree
 library(klaR) # naive bayes
 library(xtable) # tabular data formatting 
+library(caret) # predictive models
 
 # Clean all variables that might be left by other script to avoid collusion
 rm(list=ls(all=TRUE))
@@ -49,7 +49,7 @@ options(xtable.comment = FALSE)
 # pick palettes
 mainPalette = brewer.pal(8,"Dark2")
 # set a sample size
-SampleSize = 3000
+SampleSize = 30000
 
 ```
 
@@ -63,14 +63,14 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 Weather forecasting is a complex and often challenging skill that involves observing and processing vast amounts of data. Weather systems can range from small, short lived thunderstorms only a few kilometers in diameter that last a couple hours to large scale rain and snow storms up to a thousand kilometers in diameter and lasting for days.
 
-A very important component of modern weather forecasting is the use of numerical weather prediction (NWP) models. In the last years, the forecast quality of those models constantly improved, mostly due to major improvements in high performance computing. NWP focuses on taking current observations of weather and processing these data with computer models to forecast the future state of weather. Knowing the current state of the weather is just as important as the numerical computer models processing the data. Current weather observations serve as input to the numerical computer models through a process known as data assimilation to produce outputs of temperature, precipitation, and hundreds of other meteorological elements from the oceans to the top of the atmosphere.
+A very important component of modern weather forecasting is the use of numerical weather prediction (NWP) models. In the last years, the forecast quality of those models constantly improved, mostly due to major improvements in high performance computing. NWP focuses on taking current observations of weather and processing these data with computer models to forecast the future state of weather. Knowing the current state of the weather is just as important as the numerical computer models processing the data. Current weather observations serve as input to the numerical computer models through a process known as data assimilation to produce outputs of temperature, precipitation, and hundreds of other meteorological elements from the oceans to the top of the atmosphere. \cite{ams}
 
 ## Objective
 
 The objective of this research is to find a supervised, binary classification model that would provide accurate forecast of the rain in Australia next day, having today's weather observations and historical data. In addition to being accurate the model should be easily interpretable and flexible enough to accept limited number of input features without diminishing its prediction power. 
 
 
-# Data Analisys
+# Data Analysis
 
 The data set we are going to use for our research contains daily weather observations from numerous Australian weather stations collected from 2007 till 2017. There are over 142000 records. It has been sourced from [Kaggle](https://www.kaggle.com/jsphyg/weather-dataset-rattle-package)
 
@@ -146,7 +146,7 @@ print (xtable(weatherData[1:10,13:23],
   scalebox = .6)
 ```
 
-Next set of plots renders distribution of a few important features. Overall all the features of the data set could be split into a few groups: temperature observations, humidity, wind speed, wind direction, cloud coverage, preassure, evaporation and sunshine. We picked one parameter from each group assuming that they represent well the remaining group attributes.
+Next set of plots renders distribution of a few important features. Overall all the features of the data set could be split into a few groups: temperature observations, humidity, wind speed, wind direction, cloud coverage, pressure, evaporation and sunshine. We picked one parameter from each group assuming that they represent well the remaining group attributes.
 
 ```{r feature_distribution, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap=" Distribution of Important Features"}
 
@@ -172,8 +172,8 @@ rm(p1,p2,p3,p4,p5,p6,p7,p8,p9,tmp)
 
 Data summary shows that some features miss data. Some data losses are very significant. We are going to identify what data is missing and if it is feasible to recover the missing data.
 
-```{r message=FALSE, warning=FALSE, paged.print=FALSE, results='asis'}
-print(sort(colSums(is.na(weatherData)), decreasing = T), scalebox = .9)
+```{r message=FALSE, warning=FALSE}
+sort(colSums(is.na(weatherData)), decreasing = T)
 ```
 
  To speed up data processing and plot rendering we are going to use a data sample. For population of 142K observations, 30K sample size would be sufficient for 99% confidence level with the confidence interval 1.
@@ -182,7 +182,7 @@ weatherSample = sample_n(weatherData, SampleSize)
 aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars = F, varheight = T)
 ``` 
 
-As demonstrated in Figure \ref{fig:plot_aggr_missing} *Sunshine*, *Evaporation* and *Clouds* attributes safer the loss of data between **48%** and **38%**. This is significant! Since we are dealing with the weather we should be observing cyclical patterns. The next group of plots illustrate missing data distribution for the most damaged features.
+As demonstrated in Figure \ref{fig:plot_aggr_missing} *Sunshine*, *Evaporation* and *Clouds* attributes suffer the loss of data between **48%** and **38%**. This is significant! Since we are dealing with the weather we should be observing cyclical patterns. The next group of plots illustrate missing data distribution for the most damaged features. We employ VIM (Ref: \cite{vim}) package to plot the missing data.
 
 ```{r plot_margin1, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,fig.align="center", fig.cap="Date/Evaporation Margin Plot", fig.height=4}
 marginplot(weatherSample[, c("Date", "Evaporation")] , col = mainPalette, cex = 0.8, pch = 20)
@@ -199,7 +199,7 @@ marginplot(weatherSample[, c("Date", "Pressure9am")] , col = mainPalette, pch = 
 
 So what do the margin plots tell us? First of all let's take a look at *Date* axis. The *Date* has been converted to number to ensure continuous flow of the data. All features we picked exhibit cyclical pattern as expected. Along the vertical axis we observe the box plot of the respective feature. *Evaporaton* data is quite remarkable (Figure \ref{fig:plot_margin1}); it has very narrow distribution and a lot of so-called outliers. Though the forces of nature follow seasonal patters they often exhibit wide range of seasonal anomalies, which the plots highlight. Thus we opt to keep the data as is. The distribution of the missing data of a given feature is depicted along the horizontal axis. In all three cases the missing data is randomly distributed over the observed date range. Along the horizontal axis we may see the box plots of the date and a given feature. Pressure readings at 9 AM *Presure9am* (Figure  \ref{fig:plot_margin3}) distributed evenly across the observed date range. *Evaporation* and *Sunshine* exhibit more data losses towards the end of the observed period.
 
-The next plot examines another dimension of the missing data, namely missing date gouped by location.
+The next plot examines another dimension of the missing data, namely missing date grouped by location.
 
 ```{r plot_missLocation, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Missing Data By Location", fig.height= 9}
 tmp = weatherData %>% group_by(Location) %>%
@@ -252,17 +252,18 @@ Figure \ref{fig:plot_corr} confirms our initial guess. This observation will hel
 
 Data exploration confirmed that despite significant data loss we should be able to impute missing data with high degree of accuracy.
 
-### Datas Imputing
+### Data Imputing
 
-To impute the missing data we employ **MICE** package. Our imputation strategy is to employ **Predictive mean matching** model. It is a robust, fast imputation algorithm that works with numeric values. Prior to applying the algorithm we have to do some data transformations, which will
-* increase imputation processing speed.
-* improve model training performance and hopefully accuracy.
+To impute the missing data we employ **MICE** package (Ref: \cite{mice}). Our imputation strategy is to employ **Predictive mean matching** model. It is a robust, fast imputation algorithm that works with numeric values. Prior to applying the algorithm we have to do some data transformations, which will
+
+* Increase imputation processing speed.
+* Improve model training performance and hopefully accuracy.
 
 First of all let's get rid of *Date* column. Outside of the presentation it does not carry too mach information. What would be useful indeed is a feature that captures seasonal fluctuations. That would bee *month* and *day* combined, giving us year-round (365) days of observations.
 
 Secondly we convert *Location* categorical feature (Factor) to plain numeric column. Indeed there are 49 locations. If we dummy-encode locations how much would it improve the performance of the imputation algorithm and the processing speed (we are talking about 49 new columns...)? We believe it is more harmful than helpful. Thus we go for numeric presentation. Another topic for pondering is whether we shall employ weather station coordinates... After some deliberation we can conclude that the coordinates will not add much knowledge in the context of the model training. But they will certainly break the categorical nature of the locations. Each coordinates have 4 - 6 decimal places, which effectively makes them continuous. So we stick with numeric presentation of the locations.
 
-We also convert other factor data types to numbers in order to make *MICE* pick **Predictive mean matching** model (vs *Multinomial logit* model, that  exhibits poor speed and low perfomance dealing with the categorical features of 20 levels or more). 
+We also convert other factor data types to numbers in order to make *MICE* pick **Predictive mean matching** model (vs *Multinomial logit* model, that  exhibits poor speed and low performance dealing with the categorical features of 20 levels or more). 
 
 This is our original set.
 ```{r echo=FALSE}
@@ -292,9 +293,10 @@ methods = meta$method
 predictors = quickpred(data) 
 print(methods)
 ```
-The code output above shows that:
-1. the features without missing data will not be imputed.
-2. The imputation targets will all be treated with *Predictive mean matching* algorithm ("pmm").
+The code output above shows that  
+
+* the features without missing data will not be imputed.
+* the imputation targets will all be treated with *Predictive mean matching* algorithm ("pmm").
 
 This is exactly what we need. Now let's review the predictors (*Code output is not included into report to save space *).
 ```{r include=FALSE}
@@ -338,6 +340,7 @@ The weather observation data set originally had 24 features. We have removed *RI
 Generally speaking feature evaluation methods can be separated into two groups: those that use the model information and those that do not. Clearly at this stage of our research the models are not ready. Thus we will be exploring the methods that do not require model.
 
 This group of the method could be spit further as follows:
+
 * wrapper methods that evaluate multiple models adding and/or removing predictors. These are some examples:
   + recursive feature elimination
   + genetic algorithms
@@ -345,9 +348,9 @@ This group of the method could be spit further as follows:
 
 * filter methods which evaluate the relevance of the predictors outside of the predictive models. 
 
-The evaluation of various feature selection methods is not in the scope of this paper. Thus we opt for a recursive feature elimination method using accuracy as a target metric. 
+The evaluation of various feature selection methods is not in the scope of this paper. Thus we opt for a recursive feature elimination method (Ref: Caret \cite{caret}) using accuracy as a target metric. 
 
-Before we precede any further let's ensure that all categorical values get converted back to the factors. This is useful for dimentiality reduction algorithms and model training.  
+Before we proceed any further let's ensure that all categorical values get converted back to the factors. This is useful for dimentiality reduction algorithms and model training.  
 
 ```{r}
 weatherSample = mutate(weatherSample, Location = as.factor(unclass(Location)), 
@@ -370,18 +373,20 @@ print(rfePrediction)
 ```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
 plot(rfePrediction, type=c("g", "o"))
 ```
-Figure \ref{fig:plot_feature_selection} suggests that the accuracy peaks a few times:  with 9 predictors then 14 and tops at 22.The accuracy gain between 9 and 22 is negligible. Here is the list of features ordered by importance. We take first nine for model training.
+
+Figure \ref{fig:plot_feature_selection} illustrates that the accuracy practically flattens out when a number of predictors reaches 9. The accuracy improves a bit more when a number of features reaches 15 but the gain is negligible. Here is the list of features ordered by importance. We take first nine for model training.
+
 ```{r echo=FALSE}
 print(predictors(rfePrediction))
 ```
 
 ```{r include=FALSE}
-l = length(predictors(rfePrediction))
-selectedPredictors =  predictors(rfePrediction)[1:ifelse(l<9,l,9)]
+len = length(predictors(rfePrediction))
+selectedPredictors =  predictors(rfePrediction)[1:ifelse(len < 9, len, 9)]
 # remove useless variables
-rm(label,predictors,rfePrediction,l)
+rm(label,predictors,rfePrediction,len)
 ```
-It is counterintuitive that none of the temparture readings made it to the top, nether did our synthetic *MMDD* feature. Biases destroyed! 
+It is counterintuitive that none of the temperature readings made it to the top, nether did our synthetic *MMDD* feature. Biases destroyed! 
 
 ### Data Upsampling
 
@@ -427,7 +432,7 @@ ctrl = trainControl(method="cv", number = 5,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 
-classTreeModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+classTreeModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "ctree", metric="ROC", trControl = ctrl)
 
 pred.classTreeModel.prob = predict(classTreeModel, newdata = testDataCopy, type="prob")
@@ -467,7 +472,7 @@ ctrl = trainControl(method="cv", number = 5,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 
-naiveBayesModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+naiveBayesModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "nb", metric="ROC", trControl = ctrl)
 
 pred.naiveBayesModel.prob = predict(naiveBayesModel, newdata = testDataCopy, type="prob")
@@ -498,13 +503,13 @@ Random Forest is also considered as a very handy and easy to use algorithm, beca
 set.seed(modelSeed)
 trainDataCopy = mutate(trainData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
 testDataCopy = mutate(testData, RainTomorrow = as.factor(ifelse(RainTomorrow==0, "no", "yes")))
-ctrl = trainControl(method = "cv", number = 2, # it takes forever for 10 - fold 
+ctrl = trainControl(method = "cv", number = 3, # it takes forever for 10 - fold 
     # Estimate class probabilities
     classProbs = T,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 ptm_rf <- proc.time()
-randomForestModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+randomForestModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "rf", metric="ROC", trControl = ctrl)
 proc.time() - ptm_rf
 pred.randomForestModel.prob = predict(randomForestModel, newdata = testDataCopy, type="prob")
@@ -513,7 +518,6 @@ pred.randomForestModel.raw = predict(randomForestModel, newdata = testDataCopy )
 roc.randomForestModel = pROC::roc(testDataCopy$RainTomorrow,  
                                   as.vector(ifelse(pred.randomForestModel.prob[,"yes"] >0.5, 1,0)) )
 auc.randomForestModel = pROC::auc(roc.randomForestModel)
-
 randomForestModel
 ```
 ```{r}
@@ -549,7 +553,7 @@ ctrl = trainControl(
   method="cv", number = 5,  
   savePredictions = T)
 
-logRegModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
+logRegModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
         data = trainDataCopy, method="glm", family = binomial(link = "logit"), 
         trControl = ctrl, preProc = c("BoxCox"))
 
@@ -559,6 +563,9 @@ roc.logRegModel = pROC::roc(testDataCopy$RainTomorrow, as.vector(ifelse(pred.log
 auc.logRegModel = pROC::auc(roc.logRegModel)
 
 logRegModel
+# save the model. Do it once.
+# save(logRegModel, file="../data/logRegModel.Rdata")
+# saveRDS(logRegModel, file="../data/logRegModel.rda")
 ```
 ```{r}
 confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
@@ -594,11 +601,14 @@ print(modelsFace2Face)
 
 AUC stands for Area under the ROC Curve and ROC for Receiver operating characteristic curve. This is one of the most important KPIs of the classification algorithms. These two metrics measure how well the models distinguishing between the classes. The higher AUC the better model predicts positive and negative outcome. 
 
-Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the higher overall accuracy (83%) but performs poorly predicting rainy days (59%), thus the balanced accuracy is lower (about 75%). 
+Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the highest overall accuracy (85%) but performs poorly predicting rainy days (63%), thus the balanced accuracy is lower (about 76%). 
 
-Naive Bayes and Decision Tree are less accurate models in comparison with the Random Forest one but way more balanced demonstrating consistent power to predict rainy and sunny days with almost equal accuracy. They have balanced accuracy of 74% and 79% respectively.
+Naive Bayes has lesser overall accuracy in comparison with the Random Forest one but is more balanced, demonstrating consistent power to predict rainy and sunny days with almost equal accuracy. It has balanced accuracy of 78%.
 
-Logistic regression model scores the best having the highest AUC and all other metrics around 80%.
+Logistic regression model scores the best having the highest AUC and all other metrics. It's balanced accuracy is over 80%.
+
+The Descision Tree performance is close to the other models with the balanced accuracy of 76%.
+
 
 #### Model interpretibility
 
@@ -612,9 +622,9 @@ Decision Tree, Random Forest and Naive Bayes can deal with missing data, outlier
 
 Logistic regression does require conversion of alphanumeric values to numeric, struggles dealing with the outliers and performs best when fitted with the data that have normal distribution. 
 
-#### Verdict (To be finalized)
+#### Verdict
 
-Despite sensitivity to data quality Logistic Regression outperforms other models in all other major categories.
+Despite sensitivity to data quality Logistic Regression outperforms other models in all other major categories. This is our choice!
 
 
 # Model Deployment
@@ -632,18 +642,19 @@ We commenced our research analyzing and understanding available data and geograp
 
 When the data preparation phase was finished we picked and analysed four different classification models: Decision Tree, Naive Bayes, Random Forest and Logistic Regression. We conducted comparative analysis of the models, reviewed their strength and weaknesses. We fitted each model using K-fold cross-validation technique. Subsequently we evaluated performance of each model applying them to the test data set and comparing AUC - ROC and balanced accuracy metrics. 
 
-Finally we moved to identifying a winning model. In order to so we reviewed each model from different angles namely: 
+Finally we moved to identifying a winning model. In order to so we reviewed each model from different angles namely:
+
 * performance
 * interpretability
 * data quality sensitivity and data preparation effort
+
 The winning model scored the highest in the majority of the categories. It was Logistic Regression, which we employed to build a Shiny App Web application.
 
 We consider the project to be a success. Being easily understood, with a balanced accuracy of 80% we conclude than our model could be applied for a short-term rain forecast. The last but not least we are confident that the model can predict the rain better than aboriginal "rainmakers". 
-
+\newpage
 
 \bibliography{RJreferences}
 
-\newpage  
 # Note from the Authors
 
 This file was generated using [_The R Journal_ style article template](https://github.com/rstudio/rticles), additional information on how to prepare articles for submission is here - [Instructions for Authors](https://journal.r-project.org/share/author-guide.pdf). The article itself is an executable R Markdown file that could be [downloaded from Github](https://github.com/ivbsoftware/big-data-final-2/blob/master/docs/R_Journal/big-data-final-2/) with all the necessary artifacts.
