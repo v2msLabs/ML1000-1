@@ -5,9 +5,16 @@ library(dplyr)
 
 # read data
 locationsData <- read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
-# named vector
+# named vector of laction IDs
 locations <- setNames(unclass(locationsData$Location), c(levels(locationsData$Location)) )
 
+# colors usd to highlight location: sunshine: fill, color. rain: fill, color
+colors = c("#FFE700","#00b253","#b7dfe7","#A3BED6")
+
+# current station
+currStation = locationsData[1,]
+
+# UI code
 ui <- bootstrapPage( theme = "styles.css",
   div( class = "outer",
 
@@ -75,17 +82,9 @@ ui <- bootstrapPage( theme = "styles.css",
   
 ))
 
-# Define server logic for slider examples ----
+# Server Code
 server <- function(input, output) {
-  # colors: sunshine: fill, color. rain: fill, color
-  colors = c("#FFE700","#00b253","#b7dfe7","#A3BED6")
-  
-  # output$locations <- reactive({ 
-  #   locations
-  # })
-  
-
-  # Reactive expression to create data frame of all input values ----
+ # Reactive expression to create data frame of all input values ----
   sliderValues <- reactive({
     data.frame(
       Name = c("Humidity3pm",
@@ -119,8 +118,9 @@ server <- function(input, output) {
   output$map <- renderLeaflet({
     map = leaflet() %>% setView(lng = 133.8836, lat = -23.69748, zoom = 5 ) %>% addTiles() %>% 
       addCircleMarkers(data = locationsData, lng = ~Longtitude, lat = ~Latitude, label =~Location, 
-                       color = colors[2], fillColor = colors[1], radius = 30,
-                       labelOptions = labelOptions(noHide = T, textOnly = F))
+                       color = colors[2], fillColor = colors[1], radius = 30, 
+                       layerId =paste0(locationsData$Location,locationsData$Latitude,locationsData$Longtitude),
+                       labelOptions = labelOptions(noHide = T, textOnly = F, className = "map-label"))
   })
   
   # react on ocation change event
@@ -136,7 +136,20 @@ server <- function(input, output) {
       dist <- 0.8
       lat <- station$Latitude[1]
       lng <- station$Longtitude[1]
-      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+      nm <- station$Location[1]
+      stationId = paste0(currStation$Location,currStation$Latitude,currStation$Longtitude);
+      # remove highlights from previous station add regular visualization 
+      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist) %>%
+        removeMarker(stationId) %>%
+        addCircleMarkers(lng = currStation$Longtitude, lat = currStation$Latitude,  
+                         color = colors[2], fillColor = colors[1], radius = 30,
+                         layerId = stationId, labelOptions = labelOptions(noHide = T, textOnly = F, className = "map-label"),
+                         label =currStation$Location)  %>%       
+        addCircleMarkers(lng = lng, lat = lat,  
+                         color = colors[2], fillColor = colors[2], radius = 40,
+                         label = nm, labelOptions = labelOptions(noHide = T, textOnly = F, className = "selected-map-label"),
+                         layerId =paste0(nm,lat,lng)) 
+     currStation <<- station
     }
   })
   

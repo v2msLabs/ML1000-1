@@ -27,3 +27,14 @@ div.outer {
   padding: 0 20px 20px 20px;
   opacity: 0.85;
 }
+
+.selected-map-label {
+  font-weight:bold;
+  font-size:16px!important;
+  background-color:black;
+  color:white;
+}
+
+.map-label {
+  font-size:12px!important;
+}
