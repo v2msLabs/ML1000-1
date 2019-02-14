@@ -50,7 +50,6 @@ options(xtable.comment = FALSE)
 mainPalette = brewer.pal(8,"Dark2")
 # set a sample size
 SampleSize = 30000
-
 ```
 
 ```{r global_options, include=FALSE}
@@ -298,7 +297,7 @@ The code output above shows that
 * the features without missing data will not be imputed.
 * the imputation targets will all be treated with *Predictive mean matching* algorithm ("pmm").
 
-This is exactly what we need. Now let's review the predictors (*Code output is not included into report to save space *).
+This is exactly what we need. Now let's review the predictors (*Code output is not included into report to save space*).
 ```{r include=FALSE}
 print(predictors)
 ```
@@ -419,7 +418,7 @@ modelSeed = 4987
 selectedPredictorsPlus = paste(selectedPredictors, collapse = " + ")
 ```
 
-## Classification (Decision) Tree Model
+## Decision Tree Model
 
 Decision Tree algorithm is simple to understand, interpret and visualize. Effort required for data preparation is minimal. This is probably why the Decision Tree model tends to be the method of choice for predictive modeling of many.
 ```{r echo=FALSE}
@@ -432,23 +431,23 @@ ctrl = trainControl(method="cv", number = 5,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 
-classTreeModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+decisionTreeModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "ctree", metric="ROC", trControl = ctrl)
 
-pred.classTreeModel.prob = predict(classTreeModel, newdata = testDataCopy, type="prob")
-pred.classTreeModel.raw = predict(classTreeModel, newdata = testDataCopy )
+pred.decisionTreeModel.prob = predict(decisionTreeModel, newdata = testDataCopy, type="prob")
+pred.decisionTreeModel.raw = predict(decisionTreeModel, newdata = testDataCopy )
 
-roc.classTreeModel = pROC::roc(testDataCopy$RainTomorrow, 
-                    as.vector(ifelse(pred.classTreeModel.prob[,"yes"] >0.5, 1,0)) )
-auc.classTreeModel = pROC::auc(roc.classTreeModel)
+roc.decisionTreeModel = pROC::roc(testDataCopy$RainTomorrow, 
+                    as.vector(ifelse(pred.decisionTreeModel.prob[,"yes"] >0.5, 1,0)) )
+auc.decisionTreeModel = pROC::auc(roc.decisionTreeModel)
 
-classTreeModel
+decisionTreeModel
 ```
 ```{r}
-confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
+confusionMatrix(data = pred.decisionTreeModel.raw, testDataCopy$RainTomorrow)
 ```
-```{r plot_classTree_ROC,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Classification Tree Model AUC and ROC Curve", out.width="1.1\\linewidth"}
-plot.roc(roc.classTreeModel, print.auc = T, auc.polygon = T, col = mainPalette[1] , print.thres = "best" )
+```{r plot_decTree_ROC,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Classification Tree Model AUC and ROC Curve", out.width="1.1\\linewidth"}
+plot.roc(roc.decisionTreeModel, print.auc = T, auc.polygon = T, col = mainPalette[1] , print.thres = "best" )
 ```
 ```{r include=FALSE}
 rm(trainDataCopy,testDataCopy,ctrl)
@@ -481,7 +480,6 @@ pred.naiveBayesModel.raw = predict(naiveBayesModel, newdata = testDataCopy )
 roc.naiveBayesModel = pROC::roc(testDataCopy$RainTomorrow, 
                      as.vector(ifelse(pred.naiveBayesModel.prob[,"yes"] >0.5, 1,0)) )
 auc.naiveBayesModel = pROC::auc(roc.naiveBayesModel)
-
 naiveBayesModel
 ```
 ```{r}
@@ -565,7 +563,6 @@ auc.logRegModel = pROC::auc(roc.logRegModel)
 logRegModel
 # save the model. Do it once.
 # save(logRegModel, file="../data/logRegModel.Rdata")
-# saveRDS(logRegModel, file="../data/logRegModel.rda")
 ```
 ```{r}
 confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
@@ -585,9 +582,9 @@ Confusion matrix and Figure \ref{fig:plot_logReg_ROC} demonstrate the logistic m
 Now it is time to compare the models side by side and pick a winner.
 
 ```{r plot_model_comp, fig.align="center", fig.cap="Model AUC Comparison", message=FALSE, warning=FALSE, echo=FALSE, out.width="1.1\\linewidth"}
-modelsFace2Face = data.frame(model=c("logRegModel", "classTreeModel",
+modelsFace2Face = data.frame(model=c("logRegModel", "decisionTreeModel",
         "naiveBayesModel", "randomForestModel"),
-        auc=c(auc.logRegModel, auc.classTreeModel, auc.naiveBayesModel, auc.randomForestModel))
+        auc=c(auc.logRegModel, auc.decisionTreeModel, auc.naiveBayesModel, auc.randomForestModel))
 modelsFace2Face = modelsFace2Face[order(modelsFace2Face$auc, decreasing = T),]
 modelsFace2Face$model = factor(modelsFace2Face$model, levels = modelsFace2Face$model)
 
@@ -601,13 +598,13 @@ print(modelsFace2Face)
 
 AUC stands for Area under the ROC Curve and ROC for Receiver operating characteristic curve. This is one of the most important KPIs of the classification algorithms. These two metrics measure how well the models distinguishing between the classes. The higher AUC the better model predicts positive and negative outcome. 
 
-Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the highest overall accuracy (85%) but performs poorly predicting rainy days (63%), thus the balanced accuracy is lower (about 76%). 
+Figures \ref{fig:plot_decTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set all the models demonstrated very close resuts. Random Forest has the highest overall accuracy (85%) but performs poorly predicting rainy days (65%), thus the balanced accuracy is lower (about 78%). 
 
-Naive Bayes has lesser overall accuracy in comparison with the Random Forest one but is more balanced, demonstrating consistent power to predict rainy and sunny days with almost equal accuracy. It has balanced accuracy of 78%.
+Naive Bayes has lesser overall accuracy in comparison with the Random Forest but is more balanced, demonstrating consistent power to predict rainy and sunny days with almost equal accuracy. It scored over 78% on the  balanced accuracy.
 
-Logistic regression model scores the best having the highest AUC and all other metrics. It's balanced accuracy is over 80%.
+Logistic regression model scores the best having the highest AUC and all other metrics. It's balanced accuracy is 80%.
 
-The Descision Tree performance is close to the other models with the balanced accuracy of 76%.
+The Decision Tree performance is close to the other models with the balanced accuracy of 76%.
 
 
 #### Model interpretibility
