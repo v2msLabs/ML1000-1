@@ -1,6 +1,7 @@
 library(shiny)
 library(shinyBS)
 library(leaflet)
+library(dplyr)
 
 
 ui <- bootstrapPage( theme = "styles.css",
@@ -75,11 +76,14 @@ server <- function(input, output) {
   locationsData = read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
   # named vector
   locations = setNames(unclass(locationsData$Location), c(levels(locationsData$Location)) )
+  # colors: sunshine: fill, color. rain: fill, color
+  colors = c("#FFE700","#00b253","#b7dfe7","#A3BED6")
   
   output$locations <- reactive({ 
     locations
   })
-     
+  
+
   # Reactive expression to create data frame of all input values ----
   sliderValues <- reactive({
     data.frame(
@@ -91,6 +95,10 @@ server <- function(input, output) {
                "Location",
                "Pressure3pm"
       ),
+      ## get locaton coordinates
+      l =  names(locations)[which(locations == input$Location)],
+      print(l),
+      
       Value = as.character(c(input$Humidity3pm,
                              input$Sunshine,
                              input$Cloud3pm,
@@ -113,8 +121,26 @@ server <- function(input, output) {
   # draw a map
   output$map <- renderLeaflet({
     map = leaflet() %>% setView(lng = 133.8836, lat = -23.69748, zoom = 5 ) %>% addTiles() %>% 
-      addCircleMarkers(data = locationsData, lng = ~Longtitude, lat = ~Latitude, label =~Location,  
-                       labelOptions = labelOptions(noHide = T, textOnly = T))
+      addCircleMarkers(data = locationsData, lng = ~Longtitude, lat = ~Latitude, label =~Location, 
+                       color = colors[2], fillColor = colors[1], radius = 30,
+                       labelOptions = labelOptions(noHide = T, textOnly = F))
+  })
+  
+  # react on ocation change event
+  locationChanged <- reactive({
+    station <-locationsData %>% filter(Location == names(locations)[which(locations == input$Location)])
+  })
+  
+    # Observe location changes
+  observe({
+    station <- locationChanged()
+    if (nrow(station) > 0) {
+      map <- leafletProxy("map")
+      dist <- 0.8
+      lat <- station$Latitude[1]
+      lng <- station$Longtitude[1]
+      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+    }
   })
   
 }
