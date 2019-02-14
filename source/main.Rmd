@@ -519,8 +519,6 @@ roc.randomForestModel = pROC::roc(testDataCopy$RainTomorrow,
                                   as.vector(ifelse(pred.randomForestModel.prob[,"yes"] >0.5, 1,0)) )
 auc.randomForestModel = pROC::auc(roc.randomForestModel)
 randomForestModel
-# save the model. Do it once.
-save(randomForestModel, file="../data/randomForesrModel.Rdata")
 ```
 ```{r}
 confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
