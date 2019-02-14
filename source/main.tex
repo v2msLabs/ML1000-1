@@ -406,49 +406,26 @@ aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars
 #> 
 #>  Variables sorted by number of missings: 
 #>       Variable       Count
-<<<<<<< HEAD
-#>       Sunshine 0.478666667
-#>    Evaporation 0.428733333
-#>       Cloud3pm 0.400200000
-#>       Cloud9am 0.376800000
-#>    Pressure9am 0.098200000
-#>    Pressure3pm 0.098166667
-#>     WindDir9am 0.070966667
-#>    WindGustDir 0.065833333
-#>  WindGustSpeed 0.065400000
-#>     WindDir3pm 0.026166667
-#>    Humidity3pm 0.025666667
-#>        Temp3pm 0.018733333
-#>   WindSpeed3pm 0.018000000
-#>    Humidity9am 0.012200000
-#>       Rainfall 0.010133333
-#>      RainToday 0.010133333
-#>   WindSpeed9am 0.008933333
-#>        Temp9am 0.005900000
-#>        MinTemp 0.004700000
-#>        MaxTemp 0.002266667
-=======
-#>       Sunshine 0.480066667
-#>    Evaporation 0.430066667
-#>       Cloud3pm 0.404066667
-#>       Cloud9am 0.378533333
-#>    Pressure9am 0.099433333
-#>    Pressure3pm 0.098866667
-#>     WindDir9am 0.072700000
-#>    WindGustDir 0.063800000
-#>  WindGustSpeed 0.063500000
-#>     WindDir3pm 0.025500000
-#>    Humidity3pm 0.024000000
-#>        Temp3pm 0.018000000
-#>   WindSpeed3pm 0.017366667
-#>    Humidity9am 0.012866667
-#>   WindSpeed9am 0.010033333
-#>       Rainfall 0.009866667
-#>      RainToday 0.009866667
-#>        Temp9am 0.006866667
-#>        MinTemp 0.004133333
-#>        MaxTemp 0.002166667
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#>       Sunshine 0.477500000
+#>    Evaporation 0.429600000
+#>       Cloud3pm 0.401966667
+#>       Cloud9am 0.379733333
+#>    Pressure9am 0.100133333
+#>    Pressure3pm 0.099833333
+#>     WindDir9am 0.071866667
+#>    WindGustDir 0.065633333
+#>  WindGustSpeed 0.065033333
+#>     WindDir3pm 0.027733333
+#>    Humidity3pm 0.025900000
+#>        Temp3pm 0.019400000
+#>   WindSpeed3pm 0.019100000
+#>    Humidity9am 0.013400000
+#>       Rainfall 0.010633333
+#>   WindSpeed9am 0.010633333
+#>      RainToday 0.010633333
+#>        Temp9am 0.006966667
+#>        MinTemp 0.004566667
+#>        MaxTemp 0.002600000
 #>           Date 0.000000000
 #>       Location 0.000000000
 #>   RainTomorrow 0.000000000
@@ -634,7 +611,6 @@ be able to impute missing data with high degree of accuracy.
 
 \hypertarget{data-imputing}{%
 \subsubsection{Data Imputing}\label{data-imputing}}
-<<<<<<< HEAD
 
 To impute the missing data we employ \textbf{MICE} package (Ref:
 \cite{mice}). Our imputation strategy is to employ \textbf{Predictive
@@ -642,15 +618,6 @@ mean matching} model. It is a robust, fast imputation algorithm that
 works with numeric values. Prior to applying the algorithm we have to do
 some data transformations, which will
 
-=======
-
-To impute the missing data we employ \textbf{MICE} package (Ref:
-\cite{mice}). Our imputation strategy is to employ \textbf{Predictive
-mean matching} model. It is a robust, fast imputation algorithm that
-works with numeric values. Prior to applying the algorithm we have to do
-some data transformations, which will
-
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 \begin{itemize}
 \tightlist
 \item
@@ -797,7 +764,7 @@ The code output above shows that
 \end{itemize}
 
 This is exactly what we need. Now let's review the predictors
-(\emph{Code output is not included into report to save space }).
+(\emph{Code output is not included into report to save space}).
 
 The matrix of predictors has the predictors in the columns and the
 features to be imputed in the rows. If the cell value equals \textbf{1}
@@ -955,59 +922,31 @@ print(rfePrediction)
 #> 
 #> Resampling performance over subset size:
 #> 
-<<<<<<< HEAD
 #>  Variables Accuracy  Kappa AccuracySD  KappaSD Selected
-#>          1   0.8239 0.3962  0.0019800 0.010263         
-#>          2   0.8250 0.4157  0.0007035 0.008486         
-#>          3   0.8332 0.4653  0.0086453 0.020116         
-#>          4   0.8413 0.5223  0.0048532 0.016212         
-#>          5   0.8489 0.5463  0.0026914 0.009575         
-#>          6   0.8497 0.5486  0.0019925 0.008716         
-#>          7   0.8516 0.5550  0.0034123 0.011395         
-#>          8   0.8522 0.5588  0.0026354 0.010375         
-#>          9   0.8559 0.5721  0.0028881 0.010820         
-#>         10   0.8552 0.5715  0.0017251 0.007309         
-#>         11   0.8547 0.5719  0.0026369 0.008775         
-#>         12   0.8562 0.5743  0.0033018 0.011060         
-#>         13   0.8557 0.5722  0.0045096 0.014191         
-#>         14   0.8559 0.5731  0.0029471 0.008654         
-#>         15   0.8558 0.5738  0.0026397 0.011328         
-#>         16   0.8553 0.5711  0.0021236 0.007330         
-#>         17   0.8554 0.5712  0.0035871 0.011682         
-#>         18   0.8568 0.5734  0.0043802 0.013652        *
-#>         19   0.8562 0.5717  0.0022864 0.008480         
-#>         20   0.8566 0.5724  0.0034128 0.011871         
-#>         21   0.8556 0.5686  0.0030669 0.010513         
-#>         22   0.8558 0.5675  0.0035224 0.012731         
+#>          1   0.8239 0.3824   0.003156 0.005120         
+#>          2   0.8229 0.4016   0.001930 0.002715         
+#>          3   0.8348 0.4591   0.002117 0.009350         
+#>          4   0.8350 0.4963   0.001992 0.008231         
+#>          5   0.8430 0.5209   0.004011 0.015115         
+#>          6   0.8448 0.5269   0.003188 0.011539         
+#>          7   0.8473 0.5344   0.003765 0.014302         
+#>          8   0.8476 0.5361   0.005006 0.012184         
+#>          9   0.8505 0.5451   0.004431 0.011577         
+#>         10   0.8505 0.5476   0.003219 0.003521         
+#>         11   0.8516 0.5535   0.004804 0.010157         
+#>         12   0.8525 0.5548   0.006170 0.014015         
+#>         13   0.8528 0.5549   0.003915 0.012523         
+#>         14   0.8519 0.5515   0.005151 0.015502         
+#>         15   0.8526 0.5537   0.006482 0.016001         
+#>         16   0.8520 0.5537   0.004650 0.014008         
+#>         17   0.8517 0.5515   0.005014 0.016318         
+#>         18   0.8523 0.5517   0.004277 0.013635         
+#>         19   0.8526 0.5526   0.004095 0.012150         
+#>         20   0.8527 0.5520   0.004366 0.013160         
+#>         21   0.8538 0.5547   0.003837 0.010955         
+#>         22   0.8542 0.5539   0.004900 0.014628        *
 #> 
-#> The top 5 variables (out of 18):
-=======
-#>  Variables Accuracy  Kappa AccuracySD   KappaSD Selected
-#>          1   0.8222 0.3637  0.0011843 0.0101001         
-#>          2   0.8199 0.3988  0.0016592 0.0056501         
-#>          3   0.8340 0.4657  0.0015812 0.0048497         
-#>          4   0.8365 0.5089  0.0023167 0.0073183         
-#>          5   0.8495 0.5511  0.0027508 0.0074323         
-#>          6   0.8518 0.5584  0.0018462 0.0034028         
-#>          7   0.8529 0.5617  0.0025567 0.0063235         
-#>          8   0.8534 0.5613  0.0021811 0.0057340         
-#>          9   0.8548 0.5706  0.0006963 0.0026149         
-#>         10   0.8548 0.5732  0.0010901 0.0042301         
-#>         11   0.8546 0.5763  0.0021745 0.0034522         
-#>         12   0.8545 0.5754  0.0012722 0.0014192         
-#>         13   0.8548 0.5735  0.0024236 0.0035326         
-#>         14   0.8559 0.5748  0.0008293 0.0016683         
-#>         15   0.8557 0.5748  0.0016647 0.0041027         
-#>         16   0.8550 0.5720  0.0019736 0.0051695         
-#>         17   0.8551 0.5702  0.0002076 0.0017029         
-#>         18   0.8563 0.5732  0.0011045 0.0018910         
-#>         19   0.8567 0.5728  0.0012873 0.0030990         
-#>         20   0.8575 0.5749  0.0008371 0.0025849        *
-#>         21   0.8556 0.5684  0.0004431 0.0007374         
-#>         22   0.8569 0.5712  0.0001857 0.0006245         
-#> 
-#> The top 5 variables (out of 20):
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#> The top 5 variables (out of 22):
 #>    Humidity3pm, Sunshine, WindGustSpeed, Location, Pressure3pm
 \end{Soutput}
 \end{Schunk}
@@ -1024,32 +963,19 @@ print(rfePrediction)
 \end{Schunk}
 
 Figure \ref{fig:plot_feature_selection} illustrates that the accuracy
-<<<<<<< HEAD
 practically flattens out when a number of predictors reaches 9. The
 accuracy improves a bit more when a number of features reaches 15 but
 the gain is negligible. Here is the list of features ordered by
 importance. We take first nine for model training.
-=======
-practically flattens out when a number of predictors reaches 10. The
-accuracy improves a bit more when a number of features reaches 15 but
-the gain is negligible. Here is the list of features ordered by
-importance. We take first ten for model training.
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 
 \begin{Schunk}
 \begin{Soutput}
 #>  [1] "Humidity3pm"   "Sunshine"      "WindGustSpeed" "Location"     
-<<<<<<< HEAD
-#>  [5] "Pressure3pm"   "Cloud3pm"      "Rainfall"      "Pressure9am"  
-#>  [9] "WindDir3pm"    "Humidity9am"   "WindGustDir"   "MinTemp"      
-#> [13] "Cloud9am"      "WindSpeed3pm"  "WindDir9am"    "Temp3pm"      
-#> [17] "RainToday"     "Temp9am"
-=======
-#>  [5] "Pressure3pm"   "Rainfall"      "Cloud3pm"      "Pressure9am"  
-#>  [9] "WindDir3pm"    "WindGustDir"   "Humidity9am"   "WindDir9am"   
-#> [13] "MinTemp"       "Cloud9am"      "WindSpeed3pm"  "RainToday"    
-#> [17] "Temp9am"       "Temp3pm"       "Evaporation"   "WindSpeed9am"
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#>  [5] "Pressure3pm"   "Cloud3pm"      "Pressure9am"   "Rainfall"     
+#>  [9] "WindDir3pm"    "Humidity9am"   "Cloud9am"      "WindGustDir"  
+#> [13] "MinTemp"       "WindSpeed3pm"  "WindDir9am"    "Temp9am"      
+#> [17] "RainToday"     "Temp3pm"       "MMDD"          "WindSpeed9am" 
+#> [21] "Evaporation"   "MaxTemp"
 \end{Soutput}
 \end{Schunk}
 
@@ -1086,11 +1012,7 @@ print(table(trainData$RainTomorrow))
 \begin{Soutput}
 #> 
 #>     0     1 
-<<<<<<< HEAD
-#> 16228 16228
-=======
-#> 16224 16224
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#> 16303 16303
 \end{Soutput}
 \end{Schunk}
 
@@ -1100,9 +1022,8 @@ Thus we have prepared our training and test data sets. We have
 identified the most important features. We are ready to work on the
 prediction models.
 
-\hypertarget{classification-decision-tree-model}{%
-\subsection{Classification (Decision) Tree
-Model}\label{classification-decision-tree-model}}
+\hypertarget{decision-tree-model}{%
+\subsection{Decision Tree Model}\label{decision-tree-model}}
 
 Decision Tree algorithm is simple to understand, interpret and
 visualize. Effort required for data preparation is minimal. This is
@@ -1113,34 +1034,19 @@ for predictive modeling of many.
 \begin{Soutput}
 #> Conditional Inference Tree 
 #> 
-<<<<<<< HEAD
-#> 32456 samples
+#> 32606 samples
 #>     9 predictor
-=======
-#> 32448 samples
-#>    10 predictor
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 #>     2 classes: 'no', 'yes' 
 #> 
 #> No pre-processing
 #> Resampling: Cross-Validated (5 fold) 
-<<<<<<< HEAD
-#> Summary of sample sizes: 25965, 25965, 25966, 25964, 25964 
+#> Summary of sample sizes: 26085, 26085, 26086, 26084, 26084 
 #> Resampling results across tuning parameters:
 #> 
 #>   mincriterion  ROC        Sens       Spec     
-#>   0.01          0.8891238  0.7777305  0.8410156
-#>   0.50          0.8849898  0.7764977  0.8288758
-#>   0.99          0.8729268  0.7666361  0.8099585
-=======
-#> Summary of sample sizes: 25958, 25958, 25959, 25958, 25959 
-#> Resampling results across tuning parameters:
-#> 
-#>   mincriterion  ROC        Sens       Spec     
-#>   0.01          0.8898949  0.7771209  0.8441211
-#>   0.50          0.8874485  0.7674445  0.8451686
-#>   0.99          0.8721010  0.7760118  0.8047971
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#>   0.01          0.8899578  0.7753786  0.8432199
+#>   0.50          0.8850483  0.7671589  0.8378214
+#>   0.99          0.8698332  0.7677134  0.8079488
 #> 
 #> ROC was used to select the optimal model using the largest value.
 #> The final value used for the model was mincriterion = 0.01.
@@ -1149,56 +1055,34 @@ for predictive modeling of many.
 
 \begin{Schunk}
 \begin{Sinput}
-confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
+confusionMatrix(data = pred.decisionTreeModel.raw, testDataCopy$RainTomorrow)
 \end{Sinput}
 \begin{Soutput}
 #> Confusion Matrix and Statistics
 #> 
 #>           Reference
 #> Prediction   no  yes
-<<<<<<< HEAD
-#>        no  5462  521
-#>        yes 1492 1524
-#>                                           
-#>                Accuracy : 0.7763          
-#>                  95% CI : (0.7676, 0.7849)
-#>     No Information Rate : 0.7728          
-#>     P-Value [Acc > NIR] : 0.2143          
-#>                                           
-#>                   Kappa : 0.4545          
-#>  Mcnemar's Test P-Value : <2e-16          
-#>                                           
-#>             Sensitivity : 0.7854          
-#>             Specificity : 0.7452          
-#>          Pos Pred Value : 0.9129          
-#>          Neg Pred Value : 0.5053          
-#>              Prevalence : 0.7728          
-#>          Detection Rate : 0.6070          
-#>    Detection Prevalence : 0.6649          
-#>       Balanced Accuracy : 0.7653          
-=======
-#>        no  5421  539
-#>        yes 1531 1508
-#>                                           
-#>                Accuracy : 0.77            
-#>                  95% CI : (0.7611, 0.7786)
-#>     No Information Rate : 0.7725          
-#>     P-Value [Acc > NIR] : 0.7232          
-#>                                           
-#>                   Kappa : 0.4411          
-#>  Mcnemar's Test P-Value : <2e-16          
-#>                                           
-#>             Sensitivity : 0.7798          
-#>             Specificity : 0.7367          
-#>          Pos Pred Value : 0.9096          
-#>          Neg Pred Value : 0.4962          
-#>              Prevalence : 0.7725          
-#>          Detection Rate : 0.6024          
-#>    Detection Prevalence : 0.6623          
-#>       Balanced Accuracy : 0.7582          
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
-#>                                           
-#>        'Positive' Class : no              
+#>        no  5495  557
+#>        yes 1491 1456
+#>                                          
+#>                Accuracy : 0.7724         
+#>                  95% CI : (0.7636, 0.781)
+#>     No Information Rate : 0.7763         
+#>     P-Value [Acc > NIR] : 0.8155         
+#>                                          
+#>                   Kappa : 0.4376         
+#>  Mcnemar's Test P-Value : <2e-16         
+#>                                          
+#>             Sensitivity : 0.7866         
+#>             Specificity : 0.7233         
+#>          Pos Pred Value : 0.9080         
+#>          Neg Pred Value : 0.4941         
+#>              Prevalence : 0.7763         
+#>          Detection Rate : 0.6106         
+#>    Detection Prevalence : 0.6725         
+#>       Balanced Accuracy : 0.7549         
+#>                                          
+#>        'Positive' Class : no             
 #> 
 \end{Soutput}
 \end{Schunk}
@@ -1206,11 +1090,11 @@ confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
 \begin{Schunk}
 \begin{figure}[H]
 
-{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_classTree_ROC-1} 
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_decTree_ROC-1} 
 
 }
 
-\caption[Classification Tree Model AUC and ROC Curve]{Classification Tree Model AUC and ROC Curve}\label{fig:plot_classTree_ROC}
+\caption[Classification Tree Model AUC and ROC Curve]{Classification Tree Model AUC and ROC Curve}\label{fig:plot_decTree_ROC}
 \end{figure}
 \end{Schunk}
 
@@ -1235,32 +1119,18 @@ boosting machines) but is definitely worth having in our toolkit.
 \begin{Soutput}
 #> Naive Bayes 
 #> 
-<<<<<<< HEAD
-#> 32456 samples
+#> 32606 samples
 #>     9 predictor
-=======
-#> 32448 samples
-#>    10 predictor
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 #>     2 classes: 'no', 'yes' 
 #> 
 #> No pre-processing
 #> Resampling: Cross-Validated (5 fold) 
-<<<<<<< HEAD
-#> Summary of sample sizes: 25965, 25965, 25966, 25964, 25964 
+#> Summary of sample sizes: 26085, 26085, 26086, 26084, 26084 
 #> Resampling results across tuning parameters:
 #> 
 #>   usekernel  ROC        Sens       Spec     
-#>   FALSE      0.7402740  0.5754249  0.7620163
-#>    TRUE      0.8591623  0.7780383  0.7736615
-=======
-#> Summary of sample sizes: 25958, 25958, 25959, 25958, 25959 
-#> Resampling results across tuning parameters:
-#> 
-#>   usekernel  ROC        Sens       Spec     
-#>   FALSE      0.7384631  0.5742734  0.7494457
-#>    TRUE      0.8631145  0.7998647  0.7536364
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#>   FALSE      0.7331101  0.5941234  0.7440354
+#>    TRUE      0.8567077  0.7782632  0.7710855
 #> 
 #> Tuning parameter 'fL' was held constant at a value of 0
 #> Tuning
@@ -1280,51 +1150,27 @@ confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
 #> 
 #>           Reference
 #> Prediction   no  yes
-<<<<<<< HEAD
-#>        no  5510  469
-#>        yes 1444 1576
+#>        no  5513  478
+#>        yes 1473 1535
 #>                                           
-#>                Accuracy : 0.7874          
-#>                  95% CI : (0.7788, 0.7958)
-#>     No Information Rate : 0.7728          
-#>     P-Value [Acc > NIR] : 0.0004319       
+#>                Accuracy : 0.7832          
+#>                  95% CI : (0.7745, 0.7917)
+#>     No Information Rate : 0.7763          
+#>     P-Value [Acc > NIR] : 0.05949         
 #>                                           
-#>                   Kappa : 0.4819          
-#>  Mcnemar's Test P-Value : < 2.2e-16       
+#>                   Kappa : 0.4692          
+#>  Mcnemar's Test P-Value : < 2e-16         
 #>                                           
-#>             Sensitivity : 0.7923          
-#>             Specificity : 0.7707          
-#>          Pos Pred Value : 0.9216          
-#>          Neg Pred Value : 0.5219          
-#>              Prevalence : 0.7728          
-#>          Detection Rate : 0.6123          
-#>    Detection Prevalence : 0.6644          
-#>       Balanced Accuracy : 0.7815          
+#>             Sensitivity : 0.7891          
+#>             Specificity : 0.7625          
+#>          Pos Pred Value : 0.9202          
+#>          Neg Pred Value : 0.5103          
+#>              Prevalence : 0.7763          
+#>          Detection Rate : 0.6126          
+#>    Detection Prevalence : 0.6657          
+#>       Balanced Accuracy : 0.7758          
 #>                                           
 #>        'Positive' Class : no              
-=======
-#>        no  5569  484
-#>        yes 1383 1563
-#>                                          
-#>                Accuracy : 0.7925         
-#>                  95% CI : (0.784, 0.8009)
-#>     No Information Rate : 0.7725         
-#>     P-Value [Acc > NIR] : 2.555e-06      
-#>                                          
-#>                   Kappa : 0.4889         
-#>  Mcnemar's Test P-Value : < 2.2e-16      
-#>                                          
-#>             Sensitivity : 0.8011         
-#>             Specificity : 0.7636         
-#>          Pos Pred Value : 0.9200         
-#>          Neg Pred Value : 0.5305         
-#>              Prevalence : 0.7725         
-#>          Detection Rate : 0.6188         
-#>    Detection Prevalence : 0.6726         
-#>       Balanced Accuracy : 0.7823         
-#>                                          
-#>        'Positive' Class : no             
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 #> 
 \end{Soutput}
 \end{Schunk}
@@ -1358,49 +1204,27 @@ they are trained.
 \begin{Schunk}
 \begin{Soutput}
 #>    user  system elapsed 
-<<<<<<< HEAD
-#> 1094.91    3.42 1098.67
-=======
-#> 2567.85    5.86 3532.97
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#> 1132.47    3.36 1137.69
 \end{Soutput}
 \begin{Soutput}
 #> Random Forest 
 #> 
-<<<<<<< HEAD
-#> 32456 samples
+#> 32606 samples
 #>     9 predictor
-=======
-#> 32448 samples
-#>    10 predictor
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 #>     2 classes: 'no', 'yes' 
 #> 
 #> No pre-processing
 #> Resampling: Cross-Validated (3 fold) 
-<<<<<<< HEAD
-#> Summary of sample sizes: 21638, 21637, 21637 
+#> Summary of sample sizes: 21737, 21737, 21738 
 #> Resampling results across tuning parameters:
 #> 
 #>   mtry  ROC        Sens       Spec     
-#>    2    0.8848548  0.7910405  0.8086028
-#>   36    0.9810928  0.8829804  0.9655531
-#>   70    0.9795501  0.8762022  0.9654914
+#>    2    0.8810582  0.7988104  0.8051274
+#>   36    0.9834914  0.8825370  0.9670001
+#>   70    0.9820381  0.8754216  0.9685334
 #> 
 #> ROC was used to select the optimal model using the largest value.
 #> The final value used for the model was mtry = 36.
-=======
-#> Summary of sample sizes: 21632, 21632, 21632 
-#> Resampling results across tuning parameters:
-#> 
-#>   mtry  ROC        Sens       Spec     
-#>    2    0.8891944  0.7982618  0.8169995
-#>   43    0.9816232  0.8863412  0.9660380
-#>   85    0.9803239  0.8828279  0.9638807
-#> 
-#> ROC was used to select the optimal model using the largest value.
-#> The final value used for the model was mtry = 43.
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 \end{Soutput}
 \end{Schunk}
 
@@ -1413,47 +1237,25 @@ confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
 #> 
 #>           Reference
 #> Prediction   no  yes
-<<<<<<< HEAD
-#>        no  6311  725
-#>        yes  643 1320
+#>        no  6329  787
+#>        yes  657 1226
 #>                                           
-#>                Accuracy : 0.848           
-#>                  95% CI : (0.8404, 0.8553)
-#>     No Information Rate : 0.7728          
-#>     P-Value [Acc > NIR] : < 2e-16         
-#>                                           
-#>                   Kappa : 0.561           
-#>  Mcnemar's Test P-Value : 0.02853         
-#>                                           
-#>             Sensitivity : 0.9075          
-#>             Specificity : 0.6455          
-#>          Pos Pred Value : 0.8970          
-#>          Neg Pred Value : 0.6724          
-#>              Prevalence : 0.7728          
-#>          Detection Rate : 0.7013          
-#>    Detection Prevalence : 0.7819          
-#>       Balanced Accuracy : 0.7765          
-=======
-#>        no  6333  764
-#>        yes  619 1283
-#>                                           
-#>                Accuracy : 0.8463          
-#>                  95% CI : (0.8387, 0.8537)
-#>     No Information Rate : 0.7725          
+#>                Accuracy : 0.8395          
+#>                  95% CI : (0.8318, 0.8471)
+#>     No Information Rate : 0.7763          
 #>     P-Value [Acc > NIR] : < 2.2e-16       
 #>                                           
-#>                   Kappa : 0.5515          
-#>  Mcnemar's Test P-Value : 0.0001079       
+#>                   Kappa : 0.5271          
+#>  Mcnemar's Test P-Value : 0.0006869       
 #>                                           
-#>             Sensitivity : 0.9110          
-#>             Specificity : 0.6268          
-#>          Pos Pred Value : 0.8923          
-#>          Neg Pred Value : 0.6746          
-#>              Prevalence : 0.7725          
-#>          Detection Rate : 0.7037          
-#>    Detection Prevalence : 0.7886          
-#>       Balanced Accuracy : 0.7689          
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#>             Sensitivity : 0.9060          
+#>             Specificity : 0.6090          
+#>          Pos Pred Value : 0.8894          
+#>          Neg Pred Value : 0.6511          
+#>              Prevalence : 0.7763          
+#>          Detection Rate : 0.7033          
+#>    Detection Prevalence : 0.7908          
+#>       Balanced Accuracy : 0.7575          
 #>                                           
 #>        'Positive' Class : no              
 #> 
@@ -1493,51 +1295,27 @@ confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
 #> 
 #>           Reference
 #> Prediction    0    1
-<<<<<<< HEAD
-#>          0 5586  446
-#>          1 1368 1599
-#>                                         
-#>                Accuracy : 0.7984        
-#>                  95% CI : (0.79, 0.8067)
-#>     No Information Rate : 0.7728        
-#>     P-Value [Acc > NIR] : 2.083e-09     
-#>                                         
-#>                   Kappa : 0.5048        
-#>  Mcnemar's Test P-Value : < 2.2e-16     
-#>                                         
-#>             Sensitivity : 0.8033        
-#>             Specificity : 0.7819        
-#>          Pos Pred Value : 0.9261        
-#>          Neg Pred Value : 0.5389        
-#>              Prevalence : 0.7728        
-#>          Detection Rate : 0.6207        
-#>    Detection Prevalence : 0.6703        
-#>       Balanced Accuracy : 0.7926        
-#>                                         
-#>        'Positive' Class : 0             
-=======
-#>          0 5549  414
-#>          1 1403 1633
+#>          0 5572  440
+#>          1 1414 1573
 #>                                           
-#>                Accuracy : 0.7981          
-#>                  95% CI : (0.7896, 0.8063)
-#>     No Information Rate : 0.7725          
-#>     P-Value [Acc > NIR] : 2.466e-09       
+#>                Accuracy : 0.794           
+#>                  95% CI : (0.7855, 0.8023)
+#>     No Information Rate : 0.7763          
+#>     P-Value [Acc > NIR] : 2.604e-05       
 #>                                           
-#>                   Kappa : 0.5092          
+#>                   Kappa : 0.4939          
 #>  Mcnemar's Test P-Value : < 2.2e-16       
 #>                                           
-#>             Sensitivity : 0.7982          
-#>             Specificity : 0.7978          
-#>          Pos Pred Value : 0.9306          
-#>          Neg Pred Value : 0.5379          
-#>              Prevalence : 0.7725          
-#>          Detection Rate : 0.6166          
-#>    Detection Prevalence : 0.6626          
-#>       Balanced Accuracy : 0.7980          
+#>             Sensitivity : 0.7976          
+#>             Specificity : 0.7814          
+#>          Pos Pred Value : 0.9268          
+#>          Neg Pred Value : 0.5266          
+#>              Prevalence : 0.7763          
+#>          Detection Rate : 0.6192          
+#>    Detection Prevalence : 0.6681          
+#>       Balanced Accuracy : 0.7895          
 #>                                           
 #>        'Positive' Class : 0               
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 #> 
 \end{Soutput}
 \end{Schunk}
@@ -1579,17 +1357,10 @@ Now it is time to compare the models side by side and pick a winner.
 \end{figure}
 \begin{Soutput}
 #>               model       auc
-<<<<<<< HEAD
-#> 1       logRegModel 0.7925929
-#> 3   naiveBayesModel 0.7815049
-#> 4 randomForestModel 0.7765779
-#> 2    classTreeModel 0.7653397
-=======
-#> 1       logRegModel 0.7979702
-#> 3   naiveBayesModel 0.7823104
-#> 4 randomForestModel 0.7691536
-#> 2    classTreeModel 0.7582317
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
+#> 1       logRegModel 0.7895080
+#> 3   naiveBayesModel 0.7758466
+#> 4 randomForestModel 0.7573212
+#> 2 decisionTreeModel 0.7549359
 \end{Soutput}
 \end{Schunk}
 
@@ -1602,32 +1373,23 @@ classification algorithms. These two metrics measure how well the models
 distinguishing between the classes. The higher AUC the better model
 predicts positive and negative outcome.
 
-Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC},
+Figures \ref{fig:plot_decTree_ROC}, \ref{fig:plot_nb_ROC},
 \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data
-show that on the test data set the Random Forest model has the highest
-overall accuracy (85\%) but performs poorly predicting rainy days
-(63\%), thus the balanced accuracy is lower (about 76\%).
+show that on the test data set all the models demonstrated very close
+resuts. Random Forest has the highest overall accuracy (85\%) but
+performs poorly predicting rainy days (65\%), thus the balanced accuracy
+is lower (about 78\%).
 
-<<<<<<< HEAD
 Naive Bayes has lesser overall accuracy in comparison with the Random
-Forest one but is more balanced, demonstrating consistent power to
-predict rainy and sunny days with almost equal accuracy. It has balanced
-accuracy of 78\%.
+Forest but is more balanced, demonstrating consistent power to predict
+rainy and sunny days with almost equal accuracy. It scored over 78\% on
+the balanced accuracy.
 
 Logistic regression model scores the best having the highest AUC and all
-other metrics. It's balanced accuracy is over 80\%.
+other metrics. It's balanced accuracy is 80\%.
 
-The descision tree performance is close to the other models with the
+The Decision Tree performance is close to the other models with the
 balanced accuracy of 76\%.
-=======
-Naive Bayes and Decision Tree have lesser accuracy in comparison with
-the Random Forest one but way more balanced, demonstrating consistent
-power to predict rainy and sunny days with almost equal accuracy. They
-have balanced accuracy of 77\% and 75\% respectively.
-
-Logistic regression model scores the best having the highest AUC and all
-other metrics. It's balanced accuracy is over 78\%.
->>>>>>> dbed81f2355dd58cab7c28969b016a602389e42f
 
 \hypertarget{model-interpretibility}{%
 \paragraph{Model interpretibility}\label{model-interpretibility}}
