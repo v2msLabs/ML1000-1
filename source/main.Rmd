@@ -70,7 +70,7 @@ A very important component of modern weather forecasting is the use of numerical
 The objective of this research is to find a supervised, binary classification model that would provide accurate forecast of the rain in Australia next day, having today's weather observations and historical data. In addition to being accurate the model should be easily interpretable and flexible enough to accept limited number of input features without diminishing its prediction power. 
 
 
-# Data Analisys
+# Data Analysis
 
 The data set we are going to use for our research contains daily weather observations from numerous Australian weather stations collected from 2007 till 2017. There are over 142000 records. It has been sourced from [Kaggle](https://www.kaggle.com/jsphyg/weather-dataset-rattle-package)
 
@@ -350,7 +350,7 @@ This group of the method could be spit further as follows:
 
 The evaluation of various feature selection methods is not in the scope of this paper. Thus we opt for a recursive feature elimination method (Ref: Caret \cite{caret}) using accuracy as a target metric. 
 
-Before we precede any further let's ensure that all categorical values get converted back to the factors. This is useful for dimentiality reduction algorithms and model training.  
+Before we proceed any further let's ensure that all categorical values get converted back to the factors. This is useful for dimentiality reduction algorithms and model training.  
 
 ```{r}
 weatherSample = mutate(weatherSample, Location = as.factor(unclass(Location)), 
@@ -373,14 +373,14 @@ print(rfePrediction)
 ```{r plot_feature_selection,  echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.cap="Number of Predictors vs Accuracy", out.width="1.1\\linewidth"}
 plot(rfePrediction, type=c("g", "o"))
 ```
-Figure \ref{fig:plot_feature_selection} illustrates that the accuracy practically flattens out when a number of predictors reaches 10. The accuracy improves a bit more when a number of features reaches 15 but the gain is negligible. Here is the list of features ordered by importance. We take first ten for model training.
+Figure \ref{fig:plot_feature_selection} illustrates that the accuracy practically flattens out when a number of predictors reaches 9. The accuracy improves a bit more when a number of features reaches 15 but the gain is negligible. Here is the list of features ordered by importance. We take first nine for model training.
 ```{r echo=FALSE}
 print(predictors(rfePrediction))
 ```
 
 ```{r include=FALSE}
 len = length(predictors(rfePrediction))
-selectedPredictors =  predictors(rfePrediction)[1:ifelse(len < 10, len, 10)]
+selectedPredictors =  predictors(rfePrediction)[1:ifelse(len < 9, len, 9)]
 # remove useless variables
 rm(label,predictors,rfePrediction,len)
 ```
@@ -430,7 +430,7 @@ ctrl = trainControl(method="cv", number = 5,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 
-classTreeModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+classTreeModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "ctree", metric="ROC", trControl = ctrl)
 
 pred.classTreeModel.prob = predict(classTreeModel, newdata = testDataCopy, type="prob")
@@ -441,9 +441,6 @@ roc.classTreeModel = pROC::roc(testDataCopy$RainTomorrow,
 auc.classTreeModel = pROC::auc(roc.classTreeModel)
 
 classTreeModel
-
-# save the model. Do it once.
-save(classTreeModel, file="../data/classTreeModel.Rdata")
 ```
 ```{r}
 confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
@@ -473,7 +470,7 @@ ctrl = trainControl(method="cv", number = 5,
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 
-naiveBayesModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+naiveBayesModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "nb", metric="ROC", trControl = ctrl)
 
 pred.naiveBayesModel.prob = predict(naiveBayesModel, newdata = testDataCopy, type="prob")
@@ -484,8 +481,6 @@ roc.naiveBayesModel = pROC::roc(testDataCopy$RainTomorrow,
 auc.naiveBayesModel = pROC::auc(roc.naiveBayesModel)
 
 naiveBayesModel
-# save the model. Do it once.
-save(naiveBayesModel, file="../data/naiveBayesModel.Rdata")
 ```
 ```{r}
 confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
@@ -512,7 +507,7 @@ ctrl = trainControl(method = "cv", number = 3, # it takes forever for 10 - fold
     # Evaluate performance using the following function
     summaryFunction = twoClassSummary)
 ptm_rf <- proc.time()
-randomForestModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
+randomForestModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)), 
    data = trainDataCopy, method = "rf", metric="ROC", trControl = ctrl)
 proc.time() - ptm_rf
 pred.randomForestModel.prob = predict(randomForestModel, newdata = testDataCopy, type="prob")
@@ -522,8 +517,6 @@ roc.randomForestModel = pROC::roc(testDataCopy$RainTomorrow,
                                   as.vector(ifelse(pred.randomForestModel.prob[,"yes"] >0.5, 1,0)) )
 auc.randomForestModel = pROC::auc(roc.randomForestModel)
 randomForestModel
-# save the model. Do it once.
-save(randomForestModel, file="../data/randomForesrModel.Rdata")
 ```
 ```{r}
 confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
@@ -558,7 +551,7 @@ ctrl = trainControl(
   method="cv", number = 5,  
   savePredictions = T)
 
-logRegModel = train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
+logRegModel = caret::train(as.formula(paste('RainTomorrow ~', selectedPredictorsPlus)),
         data = trainDataCopy, method="glm", family = binomial(link = "logit"), 
         trControl = ctrl, preProc = c("BoxCox"))
 
@@ -570,6 +563,7 @@ auc.logRegModel = pROC::auc(roc.logRegModel)
 logRegModel
 # save the model. Do it once.
 save(logRegModel, file="../data/logRegModel.Rdata")
+saveRDS(logRegModel, file="../data/logRegModel.rda")
 ```
 ```{r}
 confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
@@ -605,11 +599,13 @@ print(modelsFace2Face)
 
 AUC stands for Area under the ROC Curve and ROC for Receiver operating characteristic curve. This is one of the most important KPIs of the classification algorithms. These two metrics measure how well the models distinguishing between the classes. The higher AUC the better model predicts positive and negative outcome. 
 
-Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the higher overall accuracy (83%) but performs poorly predicting rainy days (59%), thus the balanced accuracy is lower (about 75%). 
+Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC}, \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data show that on the test data set the Random Forest model has the highest overall accuracy (85%) but performs poorly predicting rainy days (63%), thus the balanced accuracy is lower (about 76%). 
 
-Naive Bayes and Decision Tree have lesser accuracy in comparison with the Random Forest one but way more balanced, demonstrating consistent power to predict rainy and sunny days with almost equal accuracy. They have balanced accuracy of 77% and 75% respectively.
+Naive Bayes has lesser overall accuracy in comparison with the Random Forest one but is more balanced, demonstrating consistent power to predict rainy and sunny days with almost equal accuracy. It has balanced accuracy of 78%.
 
-Logistic regression model scores the best having the highest AUC and all other metrics. It's balanced accuracy is over 78%.
+Logistic regression model scores the best having the highest AUC and all other metrics. It's balanced accuracy is over 80%.
+
+The descision tree performance is close to the other models with the balanced accuracy of 76%.
 
 #### Model interpretibility
 
