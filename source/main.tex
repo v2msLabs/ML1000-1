@@ -13,9 +13,10 @@ flowering of plants, hatching of insects, arrival of migratory birds,
 etc., which enables farmers to make adjustments in farming calendar and
 crop selection types in any given season. This indigenous knowledge was
 often passed down from one generation to the other. We are going to
-employ the latest scientific methods, prediction algorithms to achieve
-the same very goal without thorough knowledge of forces of nature,
-hopefully with the same accuracy as the aboriginal people
+employ CRISP-DM framework (Ref: \cite{mining}) along with the latest
+scientific methods and prediction algorithms to achieve the same very
+goal without thorough knowledge of forces of nature, hopefully with the
+same accuracy as the aboriginal people.
 }
 
 % Any extra LaTeX you need in the preamble
@@ -40,32 +41,32 @@ models processing the data. Current weather observations serve as input
 to the numerical computer models through a process known as data
 assimilation to produce outputs of temperature, precipitation, and
 hundreds of other meteorological elements from the oceans to the top of
-the atmosphere.
+the atmosphere. \cite{ams}
 
 \hypertarget{objective}{%
 \subsection{Objective}\label{objective}}
 
-The objective of this research is to find a numerical weather prediction
-model that would provide accurate forecast of possibility of the rain
-next day having today weather pattern observations. In addition to
-accuracy the model should be easily interpretable and flexible enough to
-accept limited number of input features without diminishing its
-prediction power.
+The objective of this research is to find a supervised, binary
+classification model that would provide accurate forecast of the rain in
+Australia next day, having today's weather observations and historical
+data. In addition to being accurate the model should be easily
+interpretable and flexible enough to accept limited number of input
+features without diminishing its prediction power.
 
-\hypertarget{data-analisys}{%
-\section{Data Analisys}\label{data-analisys}}
+\hypertarget{data-analysis}{%
+\section{Data Analysis}\label{data-analysis}}
 
 The data set we are going to use for our research contains daily weather
-observations from numerous Australian weather stations from 2007 till
-2017. There are over 142000 records. It has been sourced from
+observations from numerous Australian weather stations collected from
+2007 till 2017. There are over 142000 records. It has been sourced from
 \href{https://www.kaggle.com/jsphyg/weather-dataset-rattle-package}{Kaggle}
 
 \hypertarget{data-dictionary}{%
 \subsection{Data Dictionary}\label{data-dictionary}}
 
-We exclude the variable Risk-MM when training your binary classification
-model. If we don't exclude it, you will leak the answers to our model
-and reduce its predictability
+We exclude the variable \emph{Risk-MM} when training your binary
+classification model. If we don't exclude it, you will leak the answers
+to our model and reduce its predictability
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -199,9 +200,9 @@ Amount of rain. A kind of measure of the ``risk''. This column is
 redundant and will be dropped\strut
 \end{minipage}\tabularnewline
 \begin{minipage}[t]{0.52\columnwidth}\raggedright
-\textbf{RainTomorrowThe}\strut
+\textbf{RainTomorrow}\strut
 \end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright
-\textbf{Target variable. Will it rain tomorrow?}\strut
+\textbf{Class label. Will it rain tomorrow?}\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
@@ -210,8 +211,8 @@ redundant and will be dropped\strut
 \subsection{Data Exploration}\label{data-exploration}}
 
 Let's take a close look at the data set. We start with loading weather
-observations from the file into a data frame. We remove RISK\_MM as
-explained and convert Date column to \emph{date} format
+observations from the file into a data frame. We remove \emph{RISK\_MM}
+as explained and convert \emph{Date} column to ``date''" data type.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -221,8 +222,8 @@ weatherData$Date = as.Date(as.character(weatherData$Date),"%Y-%m-%d")
 \end{Sinput}
 \end{Schunk}
 
-Now let's load coordinates of the weather stations and have a bird-eye
-view of the weather station locations
+Now we are going to load coordinates of the weather stations and have a
+bird-eye view of the weather station locations.
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -235,11 +236,118 @@ view of the weather station locations
 \end{figure}
 \end{Schunk}
 
-Let's review data summary
+To have the full picture of the data let's print the data summary and
+sample.
 
-Data sample
+\begin{table}[ht]
+\centering
+\scalebox{0.7}{
+\begin{tabular}{llllllll}
+  \hline
+     Date &     Location &    MinTemp &    MaxTemp &    Rainfall &  Evaporation &    Sunshine &  WindGustDir \\ 
+  \hline
+Min.   :2007-11-01   & Canberra:  3418   & Min.   :-8.50   & Min.   :-4.80   & Min.   :  0.00   & Min.   :  0.00   & Min.   : 0.00   & W      : 9780   \\ 
+  1st Qu.:2011-01-06   & Sydney  :  3337   & 1st Qu.: 7.60   & 1st Qu.:17.90   & 1st Qu.:  0.00   & 1st Qu.:  2.60   & 1st Qu.: 4.90   & SE     : 9309   \\ 
+  Median :2013-05-27   & Perth   :  3193   & Median :12.00   & Median :22.60   & Median :  0.00   & Median :  4.80   & Median : 8.50   & E      : 9071   \\ 
+  Mean   :2013-04-01   & Darwin  :  3192   & Mean   :12.19   & Mean   :23.23   & Mean   :  2.35   & Mean   :  5.47   & Mean   : 7.62   & N      : 9033   \\ 
+  3rd Qu.:2015-06-12   & Hobart  :  3188   & 3rd Qu.:16.80   & 3rd Qu.:28.20   & 3rd Qu.:  0.80   & 3rd Qu.:  7.40   & 3rd Qu.:10.60   & SSE    : 8993   \\ 
+  Max.   :2017-06-25   & Brisbane:  3161   & Max.   :33.90   & Max.   :48.10   & Max.   :371.00   & Max.   :145.00   & Max.   :14.50   & (Other):86677   \\ 
+   & (Other) :122704   & NA's   :637   & NA's   :322   & NA's   :1406   & NA's   :60843   & NA's   :67816   & NA's   : 9330   \\ 
+   \hline
+\end{tabular}
+}
+\end{table}
+\begin{table}[ht]
+\centering
+\scalebox{0.7}{
+\begin{tabular}{llllllll}
+  \hline
+WindGustSpeed &   WindDir9am &   WindDir3pm &  WindSpeed9am &  WindSpeed3pm &  Humidity9am &  Humidity3pm &  Pressure9am \\ 
+  \hline
+Min.   :  6.00   & N      :11393   & SE     :10663   & Min.   :  0   & Min.   : 0.00   & Min.   :  0.00   & Min.   :  0.00   & Min.   : 980.5   \\ 
+  1st Qu.: 31.00   & SE     : 9162   & W      : 9911   & 1st Qu.:  7   & 1st Qu.:13.00   & 1st Qu.: 57.00   & 1st Qu.: 37.00   & 1st Qu.:1012.9   \\ 
+  Median : 39.00   & E      : 9024   & S      : 9598   & Median : 13   & Median :19.00   & Median : 70.00   & Median : 52.00   & Median :1017.6   \\ 
+  Mean   : 39.98   & SSE    : 8966   & WSW    : 9329   & Mean   : 14   & Mean   :18.64   & Mean   : 68.84   & Mean   : 51.48   & Mean   :1017.7   \\ 
+  3rd Qu.: 48.00   & NW     : 8552   & SW     : 9182   & 3rd Qu.: 19   & 3rd Qu.:24.00   & 3rd Qu.: 83.00   & 3rd Qu.: 66.00   & 3rd Qu.:1022.4   \\ 
+  Max.   :135.00   & (Other):85083   & (Other):89732   & Max.   :130   & Max.   :87.00   & Max.   :100.00   & Max.   :100.00   & Max.   :1041.0   \\ 
+  NA's   :9270   & NA's   :10013   & NA's   : 3778   & NA's   :1348   & NA's   :2630   & NA's   :1774   & NA's   :3610   & NA's   :14014   \\ 
+   \hline
+\end{tabular}
+}
+\end{table}
+\begin{table}[ht]
+\centering
+\scalebox{0.7}{
+\begin{tabular}{lllllll}
+  \hline
+ Pressure3pm &    Cloud9am &    Cloud3pm &    Temp9am &    Temp3pm & RainToday & RainTomorrow \\ 
+  \hline
+Min.   : 977.1   & Min.   :0.00   & Min.   :0.0   & Min.   :-7.20   & Min.   :-5.40   & No  :109332   & No :110316   \\ 
+  1st Qu.:1010.4   & 1st Qu.:1.00   & 1st Qu.:2.0   & 1st Qu.:12.30   & 1st Qu.:16.60   & Yes : 31455   & Yes: 31877   \\ 
+  Median :1015.2   & Median :5.00   & Median :5.0   & Median :16.70   & Median :21.10   & NA's:  1406   &  \\ 
+  Mean   :1015.3   & Mean   :4.44   & Mean   :4.5   & Mean   :16.99   & Mean   :21.69   &  &  \\ 
+  3rd Qu.:1020.0   & 3rd Qu.:7.00   & 3rd Qu.:7.0   & 3rd Qu.:21.60   & 3rd Qu.:26.40   &  &  \\ 
+  Max.   :1039.6   & Max.   :9.00   & Max.   :9.0   & Max.   :40.20   & Max.   :46.70   &  &  \\ 
+  NA's   :13981   & NA's   :53657   & NA's   :57094   & NA's   :904   & NA's   :2726   &  &  \\ 
+   \hline
+\end{tabular}
+}
+\caption{\tt Weather Obesrvations Data Summary} 
+\label{data_head}
+\end{table}
 
-Next set of plots renders distribution of a few selected features.
+\newpage
+\begin{table}[ht]
+\centering
+\scalebox{0.6}{
+\begin{tabular}{rrlrrrrrlrllr}
+  \hline
+ & Date & Location & MinTemp & MaxTemp & Rainfall & Evaporation & Sunshine & WindGustDir & WindGustSpeed & WindDir9am & WindDir3pm & WindSpeed9am \\ 
+  \hline
+1 & 14214.00 & Albury & 13.40 & 22.90 & 0.60 &  &  & W &  44 & W & WNW &  20 \\ 
+  2 & 14215.00 & Albury & 7.40 & 25.10 & 0.00 &  &  & WNW &  44 & NNW & WSW &   4 \\ 
+  3 & 14216.00 & Albury & 12.90 & 25.70 & 0.00 &  &  & WSW &  46 & W & WSW &  19 \\ 
+  4 & 14217.00 & Albury & 9.20 & 28.00 & 0.00 &  &  & NE &  24 & SE & E &  11 \\ 
+  5 & 14218.00 & Albury & 17.50 & 32.30 & 1.00 &  &  & W &  41 & ENE & NW &   7 \\ 
+  6 & 14219.00 & Albury & 14.60 & 29.70 & 0.20 &  &  & WNW &  56 & W & W &  19 \\ 
+  7 & 14220.00 & Albury & 14.30 & 25.00 & 0.00 &  &  & W &  50 & SW & W &  20 \\ 
+  8 & 14221.00 & Albury & 7.70 & 26.70 & 0.00 &  &  & W &  35 & SSE & W &   6 \\ 
+  9 & 14222.00 & Albury & 9.70 & 31.90 & 0.00 &  &  & NNW &  80 & SE & NW &   7 \\ 
+  10 & 14223.00 & Albury & 13.10 & 30.10 & 1.40 &  &  & W &  28 & S & SSE &  15 \\ 
+   \hline
+\end{tabular}
+}
+\end{table}
+\begin{table}[ht]
+\centering
+\scalebox{0.6}{
+\begin{tabular}{rrrrrrrrrll}
+  \hline
+WindSpeed3pm & Humidity9am & Humidity3pm & Pressure9am & Pressure3pm & Cloud9am & Cloud3pm & Temp9am & Temp3pm & RainToday & RainTomorrow \\ 
+  \hline
+ 24 &  71 &  22 & 1007.70 & 1007.10 &   8 &  & 16.90 & 21.80 & No & No \\ 
+   22 &  44 &  25 & 1010.60 & 1007.80 &  &  & 17.20 & 24.30 & No & No \\ 
+   26 &  38 &  30 & 1007.60 & 1008.70 &  &   2 & 21.00 & 23.20 & No & No \\ 
+    9 &  45 &  16 & 1017.60 & 1012.80 &  &  & 18.10 & 26.50 & No & No \\ 
+   20 &  82 &  33 & 1010.80 & 1006.00 &   7 &   8 & 17.80 & 29.70 & No & No \\ 
+   24 &  55 &  23 & 1009.20 & 1005.40 &  &  & 20.60 & 28.90 & No & No \\ 
+   24 &  49 &  19 & 1009.60 & 1008.20 &   1 &  & 18.10 & 24.60 & No & No \\ 
+   17 &  48 &  19 & 1013.40 & 1010.10 &  &  & 16.30 & 25.50 & No & No \\ 
+   28 &  42 &   9 & 1008.90 & 1003.60 &  &  & 18.30 & 30.20 & No & Yes \\ 
+   11 &  58 &  27 & 1007.00 & 1005.70 &  &  & 20.10 & 28.20 & Yes & No \\ 
+   \hline
+\end{tabular}
+}
+\caption{\tt Weather Obesrvations Data Sample} 
+\label{data_head}
+\end{table}
+
+Next set of plots renders distribution of a few important features.
+Overall all the features of the data set could be split into a few
+groups: temperature observations, humidity, wind speed, wind direction,
+cloud coverage, pressure, evaporation and sunshine. We picked one
+parameter from each group assuming that they represent well the
+remaining group attributes.
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -248,20 +356,20 @@ Next set of plots renders distribution of a few selected features.
 
 }
 
-\caption[Observations Distribution]{Observations Distribution}\label{fig:feature_distribution}
+\caption[ Distribution of Important Features]{ Distribution of Important Features}\label{fig:feature_distribution}
 \end{figure}
 \end{Schunk}
 
 \hypertarget{missing-data}{%
 \subsubsection{Missing Data}\label{missing-data}}
 
-Further analysis of data shows that many features are missing. Some data
-losses are very significant. We are going to identify what data is
-missing and if it is feasible to recover the data.
+Data summary shows that some features miss data. Some data losses are
+very significant. We are going to identify what data is missing and if
+it is feasible to recover the missing data.
 
 \begin{Schunk}
 \begin{Sinput}
-print(sort(colSums(is.na(weatherData)), decreasing = T))
+sort(colSums(is.na(weatherData)), decreasing = T)
 \end{Sinput}
 \begin{Soutput}
 #>      Sunshine   Evaporation      Cloud3pm      Cloud9am   Pressure9am 
@@ -278,7 +386,7 @@ print(sort(colSums(is.na(weatherData)), decreasing = T))
 \end{Schunk}
 
 To speed up data processing and plot rendering we are going to use a
-data sample. For population of 142K observations, 20K sample size would
+data sample. For population of 142K observations, 30K sample size would
 be sufficient for 99\% confidence level with the confidence interval 1.
 
 \begin{Schunk}
@@ -297,39 +405,40 @@ aggr(weatherSample, numbers = F, prop = T, col = mainPalette, sortVars = T, bars
 \begin{Soutput}
 #> 
 #>  Variables sorted by number of missings: 
-#>       Variable  Count
-#>       Sunshine 0.4760
-#>    Evaporation 0.4326
-#>       Cloud3pm 0.4038
-#>       Cloud9am 0.3843
-#>    Pressure3pm 0.0946
-#>    Pressure9am 0.0945
-#>     WindDir9am 0.0694
-#>    WindGustDir 0.0682
-#>  WindGustSpeed 0.0678
-#>     WindDir3pm 0.0254
-#>    Humidity3pm 0.0237
-#>        Temp3pm 0.0173
-#>   WindSpeed3pm 0.0167
-#>    Humidity9am 0.0133
-#>       Rainfall 0.0099
-#>   WindSpeed9am 0.0099
-#>      RainToday 0.0099
-#>        Temp9am 0.0069
-#>        MinTemp 0.0048
-#>        MaxTemp 0.0022
-#>           Date 0.0000
-#>       Location 0.0000
-#>   RainTomorrow 0.0000
+#>       Variable       Count
+#>       Sunshine 0.477500000
+#>    Evaporation 0.429600000
+#>       Cloud3pm 0.401966667
+#>       Cloud9am 0.379733333
+#>    Pressure9am 0.100133333
+#>    Pressure3pm 0.099833333
+#>     WindDir9am 0.071866667
+#>    WindGustDir 0.065633333
+#>  WindGustSpeed 0.065033333
+#>     WindDir3pm 0.027733333
+#>    Humidity3pm 0.025900000
+#>        Temp3pm 0.019400000
+#>   WindSpeed3pm 0.019100000
+#>    Humidity9am 0.013400000
+#>       Rainfall 0.010633333
+#>   WindSpeed9am 0.010633333
+#>      RainToday 0.010633333
+#>        Temp9am 0.006966667
+#>        MinTemp 0.004566667
+#>        MaxTemp 0.002600000
+#>           Date 0.000000000
+#>       Location 0.000000000
+#>   RainTomorrow 0.000000000
 \end{Soutput}
 \end{Schunk}
 
 As demonstrated in Figure \ref{fig:plot_aggr_missing} \emph{Sunshine},
-\emph{Evaporation} and \emph{Clouds} columns safer the loss of data
+\emph{Evaporation} and \emph{Clouds} attributes suffer the loss of data
 between \textbf{48\%} and \textbf{38\%}. This is significant! Since we
-are dealing with the weather patterns we should be observing cyclical
-data patterns. Let's review data distribution of features that damaged
-the most.
+are dealing with the weather we should be observing cyclical patterns.
+The next group of plots illustrate missing data distribution for the
+most damaged features. We employ VIM (Ref: \cite{vim}) package to plot
+the missing data.
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -366,22 +475,23 @@ the most.
 
 So what do the margin plots tell us? First of all let's take a look at
 \emph{Date} axis. The \emph{Date} has been converted to number to ensure
-continuous flow of the data . All features we picked exhibit cyclical
+continuous flow of the data. All features we picked exhibit cyclical
 pattern as expected. Along the vertical axis we observe the box plot of
 the respective feature. \emph{Evaporaton} data is quite remarkable
 (Figure \ref{fig:plot_margin1}); it has very narrow distribution and a
-lot of so-called outliers. Though forces of nature follow seasonal
+lot of so-called outliers. Though the forces of nature follow seasonal
 patters they often exhibit wide range of seasonal anomalies, which the
-plots highlight. The distribution of the missing data of a given feature
-is depicted along the horizontal axis. In all three cases the missing
-data is randomly distributed along observed date range. Along the
-horizontal axis we may see box plots of the date and a given feature.
-\emph{Presure9am} ((Figure \ref{fig:plot_margin3})) distributed evenly
-across the observed date frame. \emph{Evaporation} and \emph{Sunshine}
-exhibit more data losses towards the end of the observed period
+plots highlight. Thus we opt to keep the data as is. The distribution of
+the missing data of a given feature is depicted along the horizontal
+axis. In all three cases the missing data is randomly distributed over
+the observed date range. Along the horizontal axis we may see the box
+plots of the date and a given feature. Pressure readings at 9 AM
+\emph{Presure9am} (Figure \ref{fig:plot_margin3}) distributed evenly
+across the observed date range. \emph{Evaporation} and \emph{Sunshine}
+exhibit more data losses towards the end of the observed period.
 
-Let's examine one more dimension of the missing data, namely features vs
-feature vs location
+The next plot examines another dimension of the missing data, namely
+missing date grouped by location.
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -394,21 +504,24 @@ feature vs location
 \end{figure}
 \end{Schunk}
 
-Remarkably Figure \ref{fig:plot_missLocation} shows that \textbf{6460}
-observations are missing on average per location. Though if we take a
-second look at the weather station map \ref{fig:map} we would see that
-Mount Gini (the station that miss the most data), Bendigo and Ballarat
-are close to Melbrun, where the staff has kept observing data on regular
-basis. Newcastle to Sydney and so on\ldots{}
+Figure \ref{fig:plot_missLocation} shows that on average a location
+misses \textbf{6460} observations. This is significant! Though if we
+take a second look at the weather station map \ref{fig:map} we would see
+that Mount Gini (the station that misses the most data), Bendigo and
+Ballarat are close to Melbrun, where the staff kept observing data on
+regular basis. Newcastle to Sydney and so on\ldots{} Thus knowing that
+the stations are relatively close geographically we could potentially
+employ the weather reading collected by one station to approximate the
+missing data of the other station, provided they are located nearby.
 
 \hypertarget{data-correlation-and-other-observations}{%
 \subsubsection{Data correlation and other
 observations}\label{data-correlation-and-other-observations}}
 
 Let's examine how the features are correlated to each other. Knowing
-weather we can make an accurate prediction that the temperature features
-should be highly correlated, as well as pressure, wind speed, clouds and
-humidity groups
+weather we can make an assumption that the temperature features should
+be highly correlated, as well as pressure, wind speed, clouds and
+humidity groups.
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -423,7 +536,7 @@ humidity groups
 
 Figure \ref{fig:plot_corr} confirms our initial guess. This observation
 will help us to eliminate redundant features later when we get to the
-point of selecting useful predictors for our model
+point of selecting useful predictors for our model.
 
 \hypertarget{takeaways-from-data-exploration-excersize}{%
 \paragraph{Takeaways from Data Exploration
@@ -432,87 +545,143 @@ Excersize}\label{takeaways-from-data-exploration-excersize}}
 \begin{itemize}
 \tightlist
 \item
-  The data we are dealing with suffers major observation losses (Figure
+  The data we are dealing with suffer major observation losses (Figure
   \ref{fig:plot_aggr_missing})
 \item
   The least represented features are
-\item
-  \emph{Sunshine} \textbf{48\%}
-\item
-  \emph{Evaporation} \textbf{43\%}
-\item
-  \emph{Cloud} group (\textbf{40\%} and \textbf{38\%} respectively)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Sunshine} \textbf{48\%}.
+  \item
+    \emph{Evaporation} \textbf{43\%}.
+  \item
+    \emph{Cloud} group (\textbf{40\%} and \textbf{38\%} respectively).
+  \end{itemize}
 \item
   The rest of the features exhibit medium to minor data losses, where
   \emph{Pressure} group leads the way with 10\%
 \item
   The missing data is distributed randomly over the observed time frame
   (Figures \ref{fig:plot_margin1}, \ref{fig:plot_margin2},
-  \ref{fig:plot_margin3})
+  \ref{fig:plot_margin3}).
 \item
   We also witnessed that some weather stations recorded less data and
   some were almost prefect at record keeping (Figure
-  \ref{fig:plot_missLocation}). Luckily many majority weather stations
+  \ref{fig:plot_missLocation}). Luckily majority of the weather stations
   situate relatively close to each other (see figure \ref{fig:map}).
   Thus if a station has data gaps the neighboring station data could be
-  used to approximate the missing data with plausible accuracy
+  used to approximate the missing data with plausible accuracy.
 \item
   We have also noticed that many features are either positively or
   negatively correlated (Figure \ref{fig:plot_corr}), where
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{MaxTemp}, \emph{Temp3pm} and \emph{Temp9am} exhibit
+    correlation of \textbf{0.86} to \textbf{0.98}.
+  \item
+    \emph{Pressure9am} and \emph{Pressure3pm} have correlation
+    coefficient of \textbf{0.96}.
+  \item
+    \emph{Sunshine} and \emph{Cloud} group correlated negatively with
+    coefficient of \textbf{-0.7}.
+  \item
+    \emph{Rainfall} feature is of particular interest since this is what
+    we are trying to predict. Unfortunately it does not demonstrate any
+    strong correlations with any other features.
+  \end{itemize}
 \item
-  \emph{MaxTemp}, \emph{Temp3pm} and \emph{Temp9am} exhibits correlation
-  of \textbf{0.86} to \textbf{0.98}
-\item
-  \emph{Pressure9am} and \emph{Pressure3pm} have correlation coefficient
-  of \textbf{0.96}
-\item
-  \emph{Sunshine} and \emph{Cloud} group correlated negatively with
-  coefficient of \textbf{-0.7}
-\item
-  \emph{Rainfall} feature is of particular interest since this is what
-  we are trying to predict. Unfortunately it does not demonstrate any
-  strong correlations with any other feature
-\item
-  Doing the data analysis we have also seen seasonal patterns and data
+  Examining the data we have also seen seasonal patterns and the data
   that fall outside of the normal distribution range by far (outliers).
-  Those are anomalies of nature.
+  Those are anomalies of nature which we opt to keep.
 \item
-  The last but not least the target feature (the value we are trying to
-  predict) is unbalanced. so we are dealing with unbalanced data set.
-  See Figure \ref{fig:feature_distribution} \emph{RainTomorrow} plot
+  The last but not least the target feature \emph{RainTomorrow} (the
+  value we are trying to predict) is unbalanced. So we are dealing with
+  unbalanced data set. See Figure \ref{fig:feature_distribution}.
 \end{itemize}
 
 \hypertarget{data-preparation}{%
 \subsection{Data Preparation}\label{data-preparation}}
 
-Data exploration confirmed that despite of significant data loss we
-should be able to impute data with high degree of plausibility
+Data exploration confirmed that despite significant data loss we should
+be able to impute missing data with high degree of accuracy.
 
-\hypertarget{datas-imputing}{%
-\subsubsection{Datas Imputing}\label{datas-imputing}}
+\hypertarget{data-imputing}{%
+\subsubsection{Data Imputing}\label{data-imputing}}
 
-Before we start dealing with missing observations let's do some feature
-engineering, which will + improve imputation processing speed + improve
-model training performance and hopefully accuracy
+To impute the missing data we employ \textbf{MICE} package (Ref:
+\cite{mice}). Our imputation strategy is to employ \textbf{Predictive
+mean matching} model. It is a robust, fast imputation algorithm that
+works with numeric values. Prior to applying the algorithm we have to do
+some data transformations, which will
+
+\begin{itemize}
+\tightlist
+\item
+  Increase imputation processing speed.
+\item
+  Improve model training performance and hopefully accuracy.
+\end{itemize}
 
 First of all let's get rid of \emph{Date} column. Outside of the
 presentation it does not carry too mach information. What would be
-useful indeed is a feature that captures seasonal observation
-fluctuations. That would bee \emph{month} and \emph{day} combined,
-giving us year-round (365) days of observations
+useful indeed is a feature that captures seasonal fluctuations. That
+would bee \emph{month} and \emph{day} combined, giving us year-round
+(365) days of observations.
 
-Secondly we convert categorical features to numbers. But before we do so
-we would like to ponder about \emph{Location}. We have couple options
-here. Either we convert the locations to the numbers or we can replace
-them with the real geographical coordinates. After some deliberation we
-can conclude that the coordinates will not add too much knowledge in the
-context of the model training. But they will certainly break this
-categorical feature (coordinates have 4,6 decimal places, which
-effectively make them continuous). So we stick with categories.
+Secondly we convert \emph{Location} categorical feature (Factor) to
+plain numeric column. Indeed there are 49 locations. If we dummy-encode
+locations how much would it improve the performance of the imputation
+algorithm and the processing speed (we are talking about 49 new
+columns\ldots{})? We believe it is more harmful than helpful. Thus we go
+for numeric presentation. Another topic for pondering is whether we
+shall employ weather station coordinates\ldots{} After some deliberation
+we can conclude that the coordinates will not add much knowledge in the
+context of the model training. But they will certainly break the
+categorical nature of the locations. Each coordinates have 4 - 6 decimal
+places, which effectively makes them continuous. So we stick with
+numeric presentation of the locations.
 
-This is our original set:
+We also convert other factor data types to numbers in order to make
+\emph{MICE} pick \textbf{Predictive mean matching} model (vs
+\emph{Multinomial logit} model, that exhibits poor speed and low
+performance dealing with the categorical features of 20 levels or more).
 
-Transformation
+This is our original set.
+
+\begin{Schunk}
+\begin{Soutput}
+#> 'data.frame':    142193 obs. of  23 variables:
+#>  $ Date         : Date, format: "2008-12-01" "2008-12-02" ...
+#>  $ Location     : Factor w/ 49 levels "Adelaide","Albany",..: 3 3 3 3 3 3 3 3 3 3 ...
+#>  $ MinTemp      : num  13.4 7.4 12.9 9.2 17.5 14.6 14.3 7.7 9.7 13.1 ...
+#>  $ MaxTemp      : num  22.9 25.1 25.7 28 32.3 29.7 25 26.7 31.9 30.1 ...
+#>  $ Rainfall     : num  0.6 0 0 0 1 0.2 0 0 0 1.4 ...
+#>  $ Evaporation  : num  NA NA NA NA NA NA NA NA NA NA ...
+#>  $ Sunshine     : num  NA NA NA NA NA NA NA NA NA NA ...
+#>  $ WindGustDir  : Factor w/ 16 levels "E","ENE","ESE",..: 14 15 16 5 14 15 14 14 7 14 ...
+#>  $ WindGustSpeed: int  44 44 46 24 41 56 50 35 80 28 ...
+#>  $ WindDir9am   : Factor w/ 16 levels "E","ENE","ESE",..: 14 7 14 10 2 14 13 11 10 9 ...
+#>  $ WindDir3pm   : Factor w/ 16 levels "E","ENE","ESE",..: 15 16 16 1 8 14 14 14 8 11 ...
+#>  $ WindSpeed9am : int  20 4 19 11 7 19 20 6 7 15 ...
+#>  $ WindSpeed3pm : int  24 22 26 9 20 24 24 17 28 11 ...
+#>  $ Humidity9am  : int  71 44 38 45 82 55 49 48 42 58 ...
+#>  $ Humidity3pm  : int  22 25 30 16 33 23 19 19 9 27 ...
+#>  $ Pressure9am  : num  1008 1011 1008 1018 1011 ...
+#>  $ Pressure3pm  : num  1007 1008 1009 1013 1006 ...
+#>  $ Cloud9am     : int  8 NA NA NA 7 NA 1 NA NA NA ...
+#>  $ Cloud3pm     : int  NA NA 2 NA 8 NA NA NA NA NA ...
+#>  $ Temp9am      : num  16.9 17.2 21 18.1 17.8 20.6 18.1 16.3 18.3 20.1 ...
+#>  $ Temp3pm      : num  21.8 24.3 23.2 26.5 29.7 28.9 24.6 25.5 30.2 28.2 ...
+#>  $ RainToday    : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 2 ...
+#>  $ RainTomorrow : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 2 1 ...
+\end{Soutput}
+\end{Schunk}
+
+Transformation.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -524,17 +693,42 @@ data =  subset(data, select = -Date)
 \end{Sinput}
 \end{Schunk}
 
-Resulting data frame structure:
+Resulting data frame structure.
 
-To impute the missing data we employ \textbf{MICE} package. Our
-imputation strategy is to employ \textbf{Predictive mean matching} model
-which is a robust, fast imputation algorithm that works with numeric
-values ( this is why we have converted all data to the numeric values)
+\begin{Schunk}
+\begin{Soutput}
+#> 'data.frame':    142193 obs. of  23 variables:
+#>  $ Location     : int  3 3 3 3 3 3 3 3 3 3 ...
+#>  $ MinTemp      : num  13.4 7.4 12.9 9.2 17.5 14.6 14.3 7.7 9.7 13.1 ...
+#>  $ MaxTemp      : num  22.9 25.1 25.7 28 32.3 29.7 25 26.7 31.9 30.1 ...
+#>  $ Rainfall     : num  0.6 0 0 0 1 0.2 0 0 0 1.4 ...
+#>  $ Evaporation  : num  NA NA NA NA NA NA NA NA NA NA ...
+#>  $ Sunshine     : num  NA NA NA NA NA NA NA NA NA NA ...
+#>  $ WindGustDir  : int  14 15 16 5 14 15 14 14 7 14 ...
+#>  $ WindGustSpeed: int  44 44 46 24 41 56 50 35 80 28 ...
+#>  $ WindDir9am   : int  14 7 14 10 2 14 13 11 10 9 ...
+#>  $ WindDir3pm   : int  15 16 16 1 8 14 14 14 8 11 ...
+#>  $ WindSpeed9am : int  20 4 19 11 7 19 20 6 7 15 ...
+#>  $ WindSpeed3pm : int  24 22 26 9 20 24 24 17 28 11 ...
+#>  $ Humidity9am  : int  71 44 38 45 82 55 49 48 42 58 ...
+#>  $ Humidity3pm  : int  22 25 30 16 33 23 19 19 9 27 ...
+#>  $ Pressure9am  : num  1008 1011 1008 1018 1011 ...
+#>  $ Pressure3pm  : num  1007 1008 1009 1013 1006 ...
+#>  $ Cloud9am     : int  8 NA NA NA 7 NA 1 NA NA NA ...
+#>  $ Cloud3pm     : int  NA NA 2 NA 8 NA NA NA NA NA ...
+#>  $ Temp9am      : num  16.9 17.2 21 18.1 17.8 20.6 18.1 16.3 18.3 20.1 ...
+#>  $ Temp3pm      : num  21.8 24.3 23.2 26.5 29.7 28.9 24.6 25.5 30.2 28.2 ...
+#>  $ RainToday    : num  0 0 0 0 0 0 0 0 0 1 ...
+#>  $ RainTomorrow : num  0 0 0 0 0 0 0 0 1 0 ...
+#>  $ MMDD         : num  1201 1202 1203 1204 1205 ...
+\end{Soutput}
+\end{Schunk}
+
 Lets do a dry run first to see what predictors and methods for each
-feature to cure \emph{MICE} software chooses. As before we will be
-working with a 20K data sample. Imputation process on the whole set take
-about 3 hours and 20 minutes to complete! In addition we let \emph{MICE}
-to choose predictors for us running \textbf{quickpred()} method
+target feature \emph{MICE} software chooses. we will be employing
+\textbf{quickpred()} method of the \emph{MICE} package. As before we
+will be working with a 30K data sample. Imputation process on the whole
+set takes about 3 hours and 20 minutes to complete!
 
 \begin{Schunk}
 \begin{Sinput}
@@ -542,28 +736,44 @@ meta = mice(data, maxit = 0, print = FALSE)
 weatherSample = sample_n(data, SampleSize)
 methods = meta$method
 predictors = quickpred(data) 
+print(methods)
 \end{Sinput}
+\begin{Soutput}
+#>      Location       MinTemp       MaxTemp      Rainfall   Evaporation 
+#>            ""         "pmm"         "pmm"         "pmm"         "pmm" 
+#>      Sunshine   WindGustDir WindGustSpeed    WindDir9am    WindDir3pm 
+#>         "pmm"         "pmm"         "pmm"         "pmm"         "pmm" 
+#>  WindSpeed9am  WindSpeed3pm   Humidity9am   Humidity3pm   Pressure9am 
+#>         "pmm"         "pmm"         "pmm"         "pmm"         "pmm" 
+#>   Pressure3pm      Cloud9am      Cloud3pm       Temp9am       Temp3pm 
+#>         "pmm"         "pmm"         "pmm"         "pmm"         "pmm" 
+#>     RainToday  RainTomorrow          MMDD 
+#>         "pmm"            ""            ""
+\end{Soutput}
 \end{Schunk}
 
-Let's review the methods chosen by the software making sure that they
-meet our requirements highlighted prior in the imputation strategy
-paragraph
+The code output above shows that
 
-The code output above shows that 1 the features without missing data
-will not be imputed 2 The imputation targets will all be treated with
-\emph{Predictive mean matching} algorithm (``pmm'')
+\begin{itemize}
+\tightlist
+\item
+  the features without missing data will not be imputed.
+\item
+  the imputation targets will all be treated with \emph{Predictive mean
+  matching} algorithm (``pmm'').
+\end{itemize}
 
-This is exactly what we need. Now let's review the predictors (\emph{The
-command output is not included into report to save space })
+This is exactly what we need. Now let's review the predictors
+(\emph{Code output is not included into report to save space}).
 
 The matrix of predictors has the predictors in the columns and the
-features to be imputed in the rows. If the cell value equals has
-\textbf{1} the predictor will be employed in calculations for the
-respective imputation target. Surprisingly \textbf{MMDD} is not used
-widely to predict the missing data, nether do the \textbf{Location}.
+features to be imputed in the rows. If the cell value equals \textbf{1}
+the predictor will be employed in calculations of the respective
+imputation target. Surprisingly \emph{MMDD} is not used widely to
+predict the missing data, nether do the \emph{Location}.
 
 Now we are going to start the imputation process. \textbf{Note: it might
-take about 4 - 5 minutes even for a smaple}. We have disabled the output
+take about 4 - 5 minutes even for a sample}. We have disabled the output
 of the function as we do not want to pollute the report with irrelevant
 messages
 
@@ -595,14 +805,14 @@ time, patience\ldots{}}).
 
 Figure \ref{fig:imputed_density} illustrates imputed value distribution
 for each imputed feature vs observed data. The fat green line renders
-the real data distribution and the thin lines of the other colors the
-distribution of imputed values after each imputation cycle (\emph{there
-are five of them by default}). Where the last one is yellow. The yellow
-line should be shadowing the contour of the green one as close as
-possible, which give us an indication that the result of the imputation
-is plausible. Looking at the charts we can conclude that the imputation
-has been successful! Let's apply imputed values to our sample set and
-verify if there are any \emph{NAs} left
+the real data distribution and the thin lines of other colors show the
+distribution of the imputed data after each imputation cycle
+(\emph{there are five of them by default}). The last imputation run is
+rendered in yellow; it should be shadowing the contour of the green one
+as close as possible. And it does which give us an indication that the
+result of the imputation is plausible. So looking at the charts we can
+conclude that the imputation has been successful! Let's apply imputed
+values to our sample set and verify if there are any \emph{NAs} left.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -624,7 +834,7 @@ print(colSums(is.na(weatherSample)))
 \end{Schunk}
 
 Outstanding! There are no missing values. Now we move on to the next
-part - model training
+part - model training.
 
 \hypertarget{modeling-and-evalutation}{%
 \section{Modeling and Evalutation}\label{modeling-and-evalutation}}
@@ -640,31 +850,36 @@ employing sophisticated imputation technique.
 
 The weather observation data set originally had 24 features. We have
 removed \emph{RISK\_MM} and \emph{Date} as explained earlier and added
-\emph{MMDD}. Now the data set has 22 features and one label. Let's see
-if we can reduce the number of predictors without significant
-information loss. This would make our models faster and more
-interpretable for users. We shall keep in mind that at the data
-exploration phase we have discovered that many features are correlated
-(Figure \ref{fig:plot_corr}). hopefully this knowledge will help us
+\emph{MMDD}. Now the data set has 22 features and one label -
+\emph{RainTomorrow}. Let's see if we can reduce the number of predictors
+without significant information loss. This would make our models faster
+and more interpretable for users. We shall keep in mind that at the data
+exploration phase we discovered that many features were correlated
+(Figure \ref{fig:plot_corr}). Hopefully this knowledge will help us to
 identify and remove redundant features.
 
 Generally speaking feature evaluation methods can be separated into two
 groups: those that use the model information and those that do not.
-Clearly at this stage the models are not ready. Thus we will be
-exploring the methods that do not require model.
+Clearly at this stage of our research the models are not ready. Thus we
+will be exploring the methods that do not require model.
 
 This group of the method could be spit further as follows:
 
 \begin{itemize}
+\tightlist
 \item
   wrapper methods that evaluate multiple models adding and/or removing
   predictors. These are some examples:
-\item
-  recursive feature elimination
-\item
-  genetic algorithms
-\item
-  simulated annealing
+
+  \begin{itemize}
+  \tightlist
+  \item
+    recursive feature elimination
+  \item
+    genetic algorithms
+  \item
+    simulated annealing
+  \end{itemize}
 \item
   filter methods which evaluate the relevance of the predictors outside
   of the predictive models.
@@ -672,11 +887,11 @@ This group of the method could be spit further as follows:
 
 The evaluation of various feature selection methods is not in the scope
 of this paper. Thus we opt for a recursive feature elimination method
-using accuracy as a target metric.
+(Ref: Caret \cite{caret}) using accuracy as a target metric.
 
-Before we precede any further let's ensure that all categorical values
-get converted to factors. This is useful for dimentiality reduction
-algorithms and model training.
+Before we proceed any further let's ensure that all categorical values
+get converted back to the factors. This is useful for dimentiality
+reduction algorithms and model training.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -687,7 +902,7 @@ weatherSample = mutate(weatherSample, Location = as.factor(unclass(Location)),
 \end{Sinput}
 \end{Schunk}
 
-Let's run feature selection algorithm
+It is time to run feature selection algorithm.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -707,32 +922,32 @@ print(rfePrediction)
 #> 
 #> Resampling performance over subset size:
 #> 
-#>  Variables Accuracy  Kappa AccuracySD KappaSD Selected
-#>          1   0.8231 0.3732   0.002468 0.01553         
-#>          2   0.8146 0.3843   0.005100 0.02274         
-#>          3   0.8283 0.4546   0.007749 0.02330         
-#>          4   0.8302 0.4752   0.012749 0.04676         
-#>          5   0.8327 0.4899   0.007866 0.02774         
-#>          6   0.8407 0.5218   0.007640 0.02944         
-#>          7   0.8467 0.5377   0.003886 0.02030         
-#>          8   0.8490 0.5438   0.006280 0.02311         
-#>          9   0.8476 0.5377   0.005532 0.02489         
-#>         10   0.8476 0.5376   0.004424 0.02519         
-#>         11   0.8486 0.5409   0.004924 0.02723         
-#>         12   0.8519 0.5514   0.002697 0.01732        *
-#>         13   0.8495 0.5461   0.001724 0.02027         
-#>         14   0.8486 0.5445   0.003151 0.02161         
-#>         15   0.8484 0.5458   0.002949 0.01751         
-#>         16   0.8496 0.5484   0.002086 0.01604         
-#>         17   0.8509 0.5497   0.002641 0.01616         
-#>         18   0.8511 0.5518   0.001401 0.01339         
-#>         19   0.8507 0.5504   0.002615 0.01296         
-#>         20   0.8514 0.5503   0.001546 0.01198         
-#>         21   0.8516 0.5502   0.003429 0.01777         
-#>         22   0.8512 0.5488   0.003117 0.01604         
+#>  Variables Accuracy  Kappa AccuracySD  KappaSD Selected
+#>          1   0.8239 0.3824   0.003156 0.005120         
+#>          2   0.8229 0.4016   0.001930 0.002715         
+#>          3   0.8348 0.4591   0.002117 0.009350         
+#>          4   0.8350 0.4963   0.001992 0.008231         
+#>          5   0.8430 0.5209   0.004011 0.015115         
+#>          6   0.8448 0.5269   0.003188 0.011539         
+#>          7   0.8473 0.5344   0.003765 0.014302         
+#>          8   0.8476 0.5361   0.005006 0.012184         
+#>          9   0.8505 0.5451   0.004431 0.011577         
+#>         10   0.8505 0.5476   0.003219 0.003521         
+#>         11   0.8516 0.5535   0.004804 0.010157         
+#>         12   0.8525 0.5548   0.006170 0.014015         
+#>         13   0.8528 0.5549   0.003915 0.012523         
+#>         14   0.8519 0.5515   0.005151 0.015502         
+#>         15   0.8526 0.5537   0.006482 0.016001         
+#>         16   0.8520 0.5537   0.004650 0.014008         
+#>         17   0.8517 0.5515   0.005014 0.016318         
+#>         18   0.8523 0.5517   0.004277 0.013635         
+#>         19   0.8526 0.5526   0.004095 0.012150         
+#>         20   0.8527 0.5520   0.004366 0.013160         
+#>         21   0.8538 0.5547   0.003837 0.010955         
+#>         22   0.8542 0.5539   0.004900 0.014628        *
 #> 
-#> The top 5 variables (out of 12):
-#>    Humidity3pm, Sunshine, WindGustSpeed, Location, Cloud3pm
+#> The top 5 variables (out of 22):
+#>    Humidity3pm, Sunshine, WindGustSpeed, Location, Pressure3pm
 \end{Soutput}
 \end{Schunk}
 
@@ -747,54 +962,91 @@ print(rfePrediction)
 \end{figure}
 \end{Schunk}
 
-Figure \ref{fig:plot_feature_selection} shows that accuracy peaks a few
-times: with 9 predictors, 14 and tops at 22.The accuracy gain between 9
-and 22 is negligible. Here is the list of features ordered by
+Figure \ref{fig:plot_feature_selection} illustrates that the accuracy
+practically flattens out when a number of predictors reaches 9. The
+accuracy improves a bit more when a number of features reaches 15 but
+the gain is negligible. Here is the list of features ordered by
 importance. We take first nine for model training.
+
+\begin{Schunk}
+\begin{Soutput}
+#>  [1] "Humidity3pm"   "Sunshine"      "WindGustSpeed" "Location"     
+#>  [5] "Pressure3pm"   "Cloud3pm"      "Pressure9am"   "Rainfall"     
+#>  [9] "WindDir3pm"    "Humidity9am"   "Cloud9am"      "WindGustDir"  
+#> [13] "MinTemp"       "WindSpeed3pm"  "WindDir9am"    "Temp9am"      
+#> [17] "RainToday"     "Temp3pm"       "MMDD"          "WindSpeed9am" 
+#> [21] "Evaporation"   "MaxTemp"
+\end{Soutput}
+\end{Schunk}
+
+It is counterintuitive that none of the temperature readings made it to
+the top, nether did our synthetic \emph{MMDD} feature. Biases destroyed!
 
 \hypertarget{data-upsampling}{%
 \subsubsection{Data Upsampling}\label{data-upsampling}}
 
-There is one more step before we get to the model training. As shown in
-Figure \ref{fig:feature_distribution} our data set is unbalanced. This
-could cause model over-fitting. So let's split the data into the
-training and testing sets and up-sample the training set
+There is one more step to make before we get to the model training. As
+shown in Figure \ref{fig:feature_distribution} our data set is
+unbalanced. This could cause model over-fitting. So let's split the data
+into the training and testing sets and up-sample the training set.
 
 \begin{Schunk}
+\begin{Sinput}
+set.seed(1608)
+
+# keep only the selected features
+finalSample = weatherSample %>% dplyr::select(c(selectedPredictors,"RainTomorrow"));
+
+splitIdx = createDataPartition(finalSample$RainTomorrow, p=0.7, list = F)  # 70% training data
+trainData = finalSample[splitIdx, ]
+testData = finalSample[-splitIdx, ]
+
+set.seed(590045)
+columns = colnames(trainData)
+trainData = upSample(x = trainData[, columns[columns != "RainTomorrow"] ], 
+      y = trainData$RainTomorrow, list = F, yname = "RainTomorrow")
+
+rm(splitIdx, columns, finalSample)
+print(table(trainData$RainTomorrow))
+\end{Sinput}
 \begin{Soutput}
 #> 
-#>    0    1 
-#> 5432 5432
+#>     0     1 
+#> 16303 16303
 \end{Soutput}
 \end{Schunk}
 
-As we can see the training set is balanced.
+As we can see now the training set is balanced.
 
 Thus we have prepared our training and test data sets. We have
 identified the most important features. We are ready to work on the
-prediction models
+prediction models.
 
-\hypertarget{classification-decision-tree-model}{%
-\subsection{Classification (Decision) Tree
-Model}\label{classification-decision-tree-model}}
+\hypertarget{decision-tree-model}{%
+\subsection{Decision Tree Model}\label{decision-tree-model}}
+
+Decision Tree algorithm is simple to understand, interpret and
+visualize. Effort required for data preparation is minimal. This is
+probably why the Decision Tree model tends to be the method of choice
+for predictive modeling of many.
 
 \begin{Schunk}
 \begin{Soutput}
 #> Conditional Inference Tree 
 #> 
-#> 10864 samples
+#> 32606 samples
 #>     9 predictor
 #>     2 classes: 'no', 'yes' 
 #> 
 #> No pre-processing
 #> Resampling: Cross-Validated (5 fold) 
-#> Summary of sample sizes: 8692, 8690, 8691, 8692, 8691 
+#> Summary of sample sizes: 26085, 26085, 26086, 26084, 26084 
 #> Resampling results across tuning parameters:
 #> 
 #>   mincriterion  ROC        Sens       Spec     
-#>   0.01          0.8929945  0.7916029  0.8317392
-#>   0.50          0.8890711  0.7816611  0.8337681
-#>   0.99          0.8782693  0.7814832  0.8022821
+#>   0.01          0.8899578  0.7753786  0.8432199
+#>   0.50          0.8850483  0.7671589  0.8378214
+#>   0.99          0.8698332  0.7677134  0.8079488
 #> 
 #> ROC was used to select the optimal model using the largest value.
 #> The final value used for the model was mincriterion = 0.01.
@@ -803,34 +1055,34 @@ Model}\label{classification-decision-tree-model}}
 
 \begin{Schunk}
 \begin{Sinput}
-confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
+confusionMatrix(data = pred.decisionTreeModel.raw, testDataCopy$RainTomorrow)
 \end{Sinput}
 \begin{Soutput}
 #> Confusion Matrix and Statistics
 #> 
 #>           Reference
 #> Prediction   no  yes
-#>        no  1837  187
-#>        yes  490  485
-#>                                           
-#>                Accuracy : 0.7743          
-#>                  95% CI : (0.7589, 0.7891)
-#>     No Information Rate : 0.7759          
-#>     P-Value [Acc > NIR] : 0.5966          
-#>                                           
-#>                   Kappa : 0.4405          
-#>  Mcnemar's Test P-Value : <2e-16          
-#>                                           
-#>             Sensitivity : 0.7894          
-#>             Specificity : 0.7217          
-#>          Pos Pred Value : 0.9076          
-#>          Neg Pred Value : 0.4974          
-#>              Prevalence : 0.7759          
-#>          Detection Rate : 0.6125          
-#>    Detection Prevalence : 0.6749          
-#>       Balanced Accuracy : 0.7556          
-#>                                           
-#>        'Positive' Class : no              
+#>        no  5495  557
+#>        yes 1491 1456
+#>                                          
+#>                Accuracy : 0.7724         
+#>                  95% CI : (0.7636, 0.781)
+#>     No Information Rate : 0.7763         
+#>     P-Value [Acc > NIR] : 0.8155         
+#>                                          
+#>                   Kappa : 0.4376         
+#>  Mcnemar's Test P-Value : <2e-16         
+#>                                          
+#>             Sensitivity : 0.7866         
+#>             Specificity : 0.7233         
+#>          Pos Pred Value : 0.9080         
+#>          Neg Pred Value : 0.4941         
+#>              Prevalence : 0.7763         
+#>          Detection Rate : 0.6106         
+#>    Detection Prevalence : 0.6725         
+#>       Balanced Accuracy : 0.7549         
+#>                                          
+#>        'Positive' Class : no             
 #> 
 \end{Soutput}
 \end{Schunk}
@@ -838,33 +1090,47 @@ confusionMatrix(data = pred.classTreeModel.raw, testDataCopy$RainTomorrow)
 \begin{Schunk}
 \begin{figure}[H]
 
-{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_classTree_ROC-1} 
+{\centering \includegraphics[width=1.1\linewidth]{main_files/figure-latex/plot_decTree_ROC-1} 
 
 }
 
-\caption[Classification Tree Model AUC and ROC Curve]{Classification Tree Model AUC and ROC Curve}\label{fig:plot_classTree_ROC}
+\caption[Classification Tree Model AUC and ROC Curve]{Classification Tree Model AUC and ROC Curve}\label{fig:plot_decTree_ROC}
 \end{figure}
 \end{Schunk}
 
 \hypertarget{naive-bayes-model}{%
 \subsection{Naive Bayes Model}\label{naive-bayes-model}}
 
+Naïve Bayes classification is a kind of simple probabilistic
+classification methods based on Bayes' theorem with the assumption of
+independence between features.
+
+It is simple (both intuitively and computationally), fast, performs well
+with small amounts of training data, and scales well to large data sets.
+The greatest weakness of the naïve Bayes classifier is that it relies on
+an often-faulty assumption of equally important and independent features
+which results in biased posterior probabilities. Although this
+assumption is rarely met, in practice, this algorithm works surprisingly
+well and accurate; however, on average it rarely can compete with the
+accuracy of advanced tree-based methods (random forests \& gradient
+boosting machines) but is definitely worth having in our toolkit.
+
 \begin{Schunk}
 \begin{Soutput}
 #> Naive Bayes 
 #> 
-#> 10864 samples
+#> 32606 samples
 #>     9 predictor
 #>     2 classes: 'no', 'yes' 
 #> 
 #> No pre-processing
 #> Resampling: Cross-Validated (5 fold) 
-#> Summary of sample sizes: 8692, 8690, 8691, 8692, 8691 
+#> Summary of sample sizes: 26085, 26085, 26086, 26084, 26084 
 #> Resampling results across tuning parameters:
 #> 
 #>   usekernel  ROC        Sens       Spec     
-#>   FALSE      0.7469454  0.5716072  0.7711680
-#>    TRUE      0.8669656  0.6923751  0.8562226
+#>   FALSE      0.7331101  0.5941234  0.7440354
+#>    TRUE      0.8567077  0.7782632  0.7710855
 #> 
 #> Tuning parameter 'fL' was held constant at a value of 0
 #> Tuning
@@ -884,25 +1150,25 @@ confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
 #> 
 #>           Reference
 #> Prediction   no  yes
-#>        no  1624  128
-#>        yes  703  544
+#>        no  5513  478
+#>        yes 1473 1535
 #>                                           
-#>                Accuracy : 0.7229          
-#>                  95% CI : (0.7065, 0.7389)
-#>     No Information Rate : 0.7759          
-#>     P-Value [Acc > NIR] : 1               
+#>                Accuracy : 0.7832          
+#>                  95% CI : (0.7745, 0.7917)
+#>     No Information Rate : 0.7763          
+#>     P-Value [Acc > NIR] : 0.05949         
 #>                                           
-#>                   Kappa : 0.389           
-#>  Mcnemar's Test P-Value : <2e-16          
+#>                   Kappa : 0.4692          
+#>  Mcnemar's Test P-Value : < 2e-16         
 #>                                           
-#>             Sensitivity : 0.6979          
-#>             Specificity : 0.8095          
-#>          Pos Pred Value : 0.9269          
-#>          Neg Pred Value : 0.4362          
-#>              Prevalence : 0.7759          
-#>          Detection Rate : 0.5415          
-#>    Detection Prevalence : 0.5842          
-#>       Balanced Accuracy : 0.7537          
+#>             Sensitivity : 0.7891          
+#>             Specificity : 0.7625          
+#>          Pos Pred Value : 0.9202          
+#>          Neg Pred Value : 0.5103          
+#>              Prevalence : 0.7763          
+#>          Detection Rate : 0.6126          
+#>    Detection Prevalence : 0.6657          
+#>       Balanced Accuracy : 0.7758          
 #>                                           
 #>        'Positive' Class : no              
 #> 
@@ -923,26 +1189,42 @@ confusionMatrix(data = pred.naiveBayesModel.raw, testDataCopy$RainTomorrow)
 \hypertarget{random-forest-model}{%
 \subsection{Random Forest Model}\label{random-forest-model}}
 
+Random Forest is also considered as a very handy and easy to use
+algorithm, because it's default hyperparameters often produce a good
+prediction result. Random Forest adds additional randomness to the
+model, while growing the trees. Instead of searching for the most
+important feature while splitting a node, it searches for the best
+feature among a random subset of features. This results in a wide
+diversity that generally results in a better model. The main limitation
+of Random Forest is that a large number of trees can make the algorithm
+to slow and ineffective for real-time predictions. In general, these
+algorithms are fast to train, but quite slow to create predictions once
+they are trained.
+
 \begin{Schunk}
+\begin{Soutput}
+#>    user  system elapsed 
+#> 1132.47    3.36 1137.69
+\end{Soutput}
 \begin{Soutput}
 #> Random Forest 
 #> 
-#> 10864 samples
+#> 32606 samples
 #>     9 predictor
 #>     2 classes: 'no', 'yes' 
 #> 
 #> No pre-processing
-#> Resampling: Cross-Validated (2 fold) 
-#> Summary of sample sizes: 5432, 5432 
+#> Resampling: Cross-Validated (3 fold) 
+#> Summary of sample sizes: 21737, 21737, 21738 
 #> Resampling results across tuning parameters:
 #> 
 #>   mtry  ROC        Sens       Spec     
-#>    2    0.8972216  0.7873711  0.8438881
-#>   29    0.9664085  0.8630339  0.9401694
-#>   56    0.9638440  0.8599043  0.9401694
+#>    2    0.8810582  0.7988104  0.8051274
+#>   36    0.9834914  0.8825370  0.9670001
+#>   70    0.9820381  0.8754216  0.9685334
 #> 
 #> ROC was used to select the optimal model using the largest value.
-#> The final value used for the model was mtry = 29.
+#> The final value used for the model was mtry = 36.
 \end{Soutput}
 \end{Schunk}
 
@@ -955,25 +1237,25 @@ confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
 #> 
 #>           Reference
 #> Prediction   no  yes
-#>        no  2093  274
-#>        yes  234  398
+#>        no  6329  787
+#>        yes  657 1226
 #>                                           
-#>                Accuracy : 0.8306          
-#>                  95% CI : (0.8167, 0.8439)
-#>     No Information Rate : 0.7759          
-#>     P-Value [Acc > NIR] : 7.273e-14       
+#>                Accuracy : 0.8395          
+#>                  95% CI : (0.8318, 0.8471)
+#>     No Information Rate : 0.7763          
+#>     P-Value [Acc > NIR] : < 2.2e-16       
 #>                                           
-#>                   Kappa : 0.5023          
-#>  Mcnemar's Test P-Value : 0.08357         
+#>                   Kappa : 0.5271          
+#>  Mcnemar's Test P-Value : 0.0006869       
 #>                                           
-#>             Sensitivity : 0.8994          
-#>             Specificity : 0.5923          
-#>          Pos Pred Value : 0.8842          
-#>          Neg Pred Value : 0.6297          
-#>              Prevalence : 0.7759          
-#>          Detection Rate : 0.6979          
-#>    Detection Prevalence : 0.7893          
-#>       Balanced Accuracy : 0.7459          
+#>             Sensitivity : 0.9060          
+#>             Specificity : 0.6090          
+#>          Pos Pred Value : 0.8894          
+#>          Neg Pred Value : 0.6511          
+#>              Prevalence : 0.7763          
+#>          Detection Rate : 0.7033          
+#>    Detection Prevalence : 0.7908          
+#>       Balanced Accuracy : 0.7575          
 #>                                           
 #>        'Positive' Class : no              
 #> 
@@ -994,15 +1276,15 @@ confusionMatrix(data = pred.randomForestModel.raw, testDataCopy$RainTomorrow)
 \hypertarget{logistic-regression-model}{%
 \subsection{Logistic Regression Model}\label{logistic-regression-model}}
 
-Logistic regression is an efficient, interpretable and reasonably
-accurate method, which fits quickly with minimal tuning. Logistic
-regression prediction accuracy will benefit if the data is close to
-Gaussian distribution. Thus we apply addition transformation to the
-training data set. We will also be employing 5-fold cross validation
-resampling procedure to improve the model. In addition to the above we
-are going to convert **Location* categorical value to numeric data type.
-We could have used dummy encoding but having 49 locations this approach
-does not seem beneficial.
+Logistic regression is an efficient, interpretable and accurate method,
+which fits quickly with minimal tuning. Logistic regression prediction
+accuracy will benefit if the data is close to Gaussian distribution.
+Thus we apply addition transformation to the training data set. We will
+also be employing 5-fold cross-validation resampling procedure to
+improve the model. In addition to the above we are going to convert
+\emph{Location} categorical value to numeric data type. We could have
+used dummy encoding but having 49 locations such approach does not seem
+beneficial.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -1013,25 +1295,25 @@ confusionMatrix(data = pred.logRegModel.raw, testDataCopy$RainTomorrow)
 #> 
 #>           Reference
 #> Prediction    0    1
-#>          0 1859  167
-#>          1  468  505
+#>          0 5572  440
+#>          1 1414 1573
 #>                                           
-#>                Accuracy : 0.7883          
-#>                  95% CI : (0.7732, 0.8028)
-#>     No Information Rate : 0.7759          
-#>     P-Value [Acc > NIR] : 0.05426         
+#>                Accuracy : 0.794           
+#>                  95% CI : (0.7855, 0.8023)
+#>     No Information Rate : 0.7763          
+#>     P-Value [Acc > NIR] : 2.604e-05       
 #>                                           
-#>                   Kappa : 0.4748          
-#>  Mcnemar's Test P-Value : < 2e-16         
+#>                   Kappa : 0.4939          
+#>  Mcnemar's Test P-Value : < 2.2e-16       
 #>                                           
-#>             Sensitivity : 0.7989          
-#>             Specificity : 0.7515          
-#>          Pos Pred Value : 0.9176          
-#>          Neg Pred Value : 0.5190          
-#>              Prevalence : 0.7759          
-#>          Detection Rate : 0.6199          
-#>    Detection Prevalence : 0.6756          
-#>       Balanced Accuracy : 0.7752          
+#>             Sensitivity : 0.7976          
+#>             Specificity : 0.7814          
+#>          Pos Pred Value : 0.9268          
+#>          Neg Pred Value : 0.5266          
+#>              Prevalence : 0.7763          
+#>          Detection Rate : 0.6192          
+#>    Detection Prevalence : 0.6681          
+#>       Balanced Accuracy : 0.7895          
 #>                                           
 #>        'Positive' Class : 0               
 #> 
@@ -1062,7 +1344,7 @@ the model does a good job in discriminating between the two categories.
 \hypertarget{model-comparison}{%
 \subsection{Model Comparison}\label{model-comparison}}
 
-Not it is time to compare the models side by side and pick a winner.
+Now it is time to compare the models side by side and pick a winner.
 
 \begin{Schunk}
 \begin{figure}[H]
@@ -1071,84 +1353,138 @@ Not it is time to compare the models side by side and pick a winner.
 
 }
 
-\caption[Model Accuracy Comparison]{Model Accuracy Comparison}\label{fig:plot_model_comp}
+\caption[Model AUC Comparison]{Model AUC Comparison}\label{fig:plot_model_comp}
 \end{figure}
 \begin{Soutput}
 #>               model       auc
-#> 1       logRegModel 0.7751854
-#> 2    classTreeModel 0.7555773
-#> 3   naiveBayesModel 0.7537090
-#> 4 randomForestModel 0.7445784
+#> 1       logRegModel 0.7895080
+#> 3   naiveBayesModel 0.7758466
+#> 4 randomForestModel 0.7573212
+#> 2 decisionTreeModel 0.7549359
 \end{Soutput}
 \end{Schunk}
 
-Let's review model metrics.
-
 \hypertarget{auc---roc-perfomance}{%
-\subsubsection{AUC - ROC perfomance}\label{auc---roc-perfomance}}
+\paragraph{AUC - ROC perfomance}\label{auc---roc-perfomance}}
 
 AUC stands for Area under the ROC Curve and ROC for Receiver operating
 characteristic curve. This is one of the most important KPIs of the
-classification algorithms. This two metrics measure how well the models
-distinguishing between the classes. separates positive and negative
-outcome. The higher AUC the better model predicts positive and negative
-outcome.
+classification algorithms. These two metrics measure how well the models
+distinguishing between the classes. The higher AUC the better model
+predicts positive and negative outcome.
 
-Figures \ref{fig:plot_classTree_ROC}, \ref{fig:plot_nb_ROC},
+Figures \ref{fig:plot_decTree_ROC}, \ref{fig:plot_nb_ROC},
 \ref{fig:plot_rf_ROC}, \ref{fig:plot_logReg_ROC} and accompanying data
-show that on the test data set the Random Forest model has the higher
-overall accuracy (83\%) but performs poorly predicting rainy days
-(59\%), thus balanced accuracy is lower (about 75\%).
+show that on the test data set all the models demonstrated very close
+resuts. Random Forest has the highest overall accuracy (85\%) but
+performs poorly predicting rainy days (65\%), thus the balanced accuracy
+is lower (about 78\%).
 
-Naive Bayes and Decision Tree are less accurate models in comparison
-with the Random Forest one but way more balanced demonstrating
-consistent power to predict rainy and sunny days with equal accuracy.
-They have balanced accuracy of 74\% and 79\% respectively.
+Naive Bayes has lesser overall accuracy in comparison with the Random
+Forest but is more balanced, demonstrating consistent power to predict
+rainy and sunny days with almost equal accuracy. It scored over 78\% on
+the balanced accuracy.
 
 Logistic regression model scores the best having the highest AUC and all
-other metrics around 80\%.
+other metrics. It's balanced accuracy is 80\%.
+
+The Decision Tree performance is close to the other models with the
+balanced accuracy of 76\%.
 
 \hypertarget{model-interpretibility}{%
-\subsubsection{Model interpretibility}\label{model-interpretibility}}
+\paragraph{Model interpretibility}\label{model-interpretibility}}
 
 Logistic Regression, Decision Tree and Naive Bayes are all highly
 interpreatable models. It is easy to explain to the business what impact
-each input parameter has. The decision tree could be even visualized (
-if it is not too large).
+each input parameter has. The decision tree could be visualized
+(provided if it is not too large).
 
 Random Forest on the other hand is a black-box model, complex algorithm
 which is difficult to explain in simple terms.
 
 \hypertarget{data-preparation-1}{%
-\subsubsection{Data Preparation}\label{data-preparation-1}}
+\paragraph{Data Preparation}\label{data-preparation-1}}
 
 Decision Tree, Random Forest and Naive Bayes can deal with missing data,
-outliers, numeric and alphanumeric values. In simple terms they are not
+outliers, numeric and alphanumeric values. Simply speaking they are not
 very demanding for data quality. It would be interesting to see how they
-perform on the original data set without data cleaning. but this is
-subject of another research.
+perform on the original data set without data cleaning. But this is
+subject of another research\ldots{}
 
 Logistic regression does require conversion of alphanumeric values to
 numeric, struggles dealing with the outliers and performs best when
-dealing with the data that have normal distribution.
+fitted with the data that have normal distribution.
 
-\hypertarget{verdict-to-be-finalized}{%
-\subsubsection{Verdict (To be
-finalized)}\label{verdict-to-be-finalized}}
+\hypertarget{verdict}{%
+\paragraph{Verdict}\label{verdict}}
 
-Despite sensitivity to data quality Logistic regression outperforms
-other models in all other categories.
+Despite sensitivity to data quality Logistic Regression outperforms
+other models in all other major categories. This is our choice!
 
 \hypertarget{model-deployment}{%
 \section{Model Deployment}\label{model-deployment}}
 
+Without a doubt it would be a stretch to compare our model to the
+production numerical weather prediction models. But we do believe it
+might have a real live application as an educational tool. The model can
+demonstrate how various weather elements affect the probability of the
+rain.
+
+It is simple to understand and deploy. The model does not require
+frequent updates because the weather patterns tend to be stable for a
+given geographical area (though this statement might be compromised in
+the context of the global warming). The model would benefit greatly if
+more complete data was available. Recall that we had to impute a lot of
+missing values.
+
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-\hypertarget{bibliography}{%
-\section{Bibliography}\label{bibliography}}
+Through exploring weather observations collected by 49 stations in
+Australia from 2007 to 2017 we selected and tuned a model to predict a
+rainy day tomorrow employing current day observations and historical
+data.
 
-\newpage
+We commenced our research analyzing and understanding available data and
+geography of the weather stations. Then we identified the missing data,
+its distribution and feasibility of imputing it. We applied
+sophisticated data imputation algorithm to attack the problem. We
+continued our research selecting the most impactful data attributes to
+use as an input for our future model. Again we apply the feature
+identification algorithm to do the job.
+
+When the data preparation phase was finished we picked and analysed four
+different classification models: Decision Tree, Naive Bayes, Random
+Forest and Logistic Regression. We conducted comparative analysis of the
+models, reviewed their strength and weaknesses. We fitted each model
+using K-fold cross-validation technique. Subsequently we evaluated
+performance of each model applying them to the test data set and
+comparing AUC - ROC and balanced accuracy metrics.
+
+Finally we moved to identifying a winning model. In order to so we
+reviewed each model from different angles namely:
+
+\begin{itemize}
+\tightlist
+\item
+  performance
+\item
+  interpretability
+\item
+  data quality sensitivity and data preparation effort
+\end{itemize}
+
+The winning model scored the highest in the majority of the categories.
+It was Logistic Regression, which we employed to build a Shiny App Web
+application.
+
+We consider the project to be a success. Being easily understood, with a
+balanced accuracy of 80\% we conclude than our model could be applied
+for a short-term rain forecast. The last but not least we are confident
+that the model can predict the rain better than aboriginal
+``rainmakers''. \newpage
+
+\bibliography{RJreferences}
 
 \hypertarget{note-from-the-authors}{%
 \section{Note from the Authors}\label{note-from-the-authors}}
