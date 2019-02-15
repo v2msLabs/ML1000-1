@@ -1,0 +1,12 @@
+name: rain-in-australia
+title: rain-in-australia
+username:
+account: v2ms-labs
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 718171
+bundleId: 1877446
+url: https://v2ms-labs.shinyapps.io/rain-in-australia/
+when: 1550199826.79319
+asMultiple: FALSE
+asStatic: FALSE

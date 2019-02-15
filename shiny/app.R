@@ -3,9 +3,10 @@ library(shinyBS)
 library(leaflet)
 library(dplyr)
 library(tidyr)
+library(caret)
 
 # read data
-locationsData <- read.csv("../data/AusCoordinates.csv", header = TRUE, sep=",")
+locationsData <- read.csv("./www/AusCoordinates.csv", header = TRUE, sep=",")
 # named vector of laction IDs
 locations <- setNames(unclass(locationsData$Location), c(levels(locationsData$Location)) )
 
@@ -17,7 +18,7 @@ directions = c("E"=1, "ENE"=2, "ESE"=3, "N"=4,  "NE"=5, "NNE"=6, "NNW"=7, "NW"=8
 currStation = locationsData[1,]
 
 # lod model: logRegModel
-load("../data/logRegModel.Rdata");
+load("./www/logRegModel.Rdata");
 
 # colors usd to highlight location: sunshine: fill, color. rain: fill, color
 colors = c("#FFE700","#00b253","#b7dfe7","#A3BED6")
@@ -31,9 +32,9 @@ ui <- bootstrapPage( theme = "styles.css",
                           
                           absolutePanel( id = "controls", class = "control-panel", 
                                          
-                                         titlePanel("title" = "Rain in Australia"),
+                                         h3("Rain in Australia"),
                                          
-                                         h3("Predict rain tomorrow moving a few sliders today!"),
+                                         h4("Predict rain tomorrow moving a few sliders today!"),
                                          
                                          #6 Input: location value ----
                                          selectInput('Location', 'Location', locations),
